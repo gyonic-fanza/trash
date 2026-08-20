@@ -135,7 +135,7 @@ html[data-theme="high-contrast"][data-mode="dark"] {
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { margin: 0; width: 100%; min-height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); overscroll-behavior: none; }
+html, body { margin: 0; width: 100%; min-height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); letter-spacing: .015em; overscroll-behavior: none; }
 body { overflow-x: hidden; }
 button, input, select { font: inherit; color: inherit; }
 button { border: 0; }
@@ -466,7 +466,7 @@ html[data-player-names="off"] .lp-button { padding-top: 0; }
   font-size: clamp(16px, 3.7vw, 22px);
   line-height: .82;
   font-weight: 850;
-  letter-spacing: -.015em;
+  letter-spacing: 0em;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   overflow: visible;
@@ -475,9 +475,9 @@ html[data-clock-format="24hs"] .header-clock,
 html[data-clock-format="12hs"] .header-clock { font-size: clamp(14px, 3.2vw, 19px); }
 html[data-clock-format="date"] .header-clock { font-size: clamp(12px, 2.7vw, 17px); }
 html[data-clock-format="datetime24"] .header-clock,
-html[data-clock-format="datetime12"] .header-clock { font-size: clamp(10px, 2.2vw, 14px); letter-spacing: -.035em; }
+html[data-clock-format="datetime12"] .header-clock { font-size: clamp(10px, 2.2vw, 14px); letter-spacing: -.02em; }
 html[data-clock-format="datetime24s"] .header-clock,
-html[data-clock-format="datetime12s"] .header-clock { font-size: clamp(9px, 1.95vw, 12px); letter-spacing: -.045em; }
+html[data-clock-format="datetime12s"] .header-clock { font-size: clamp(9px, 1.95vw, 12px); letter-spacing: -.03em; }
 .header-clock.clock-off { visibility: hidden; pointer-events: none; }
 .header-center {
   min-width: 0;
@@ -497,10 +497,10 @@ html[data-clock-format="datetime12s"] .header-clock { font-size: clamp(9px, 1.95
 }
 .turn-display .turn-label {
   padding-bottom: 2px; font-size: 8px; line-height: .9; font-weight: 900;
-  letter-spacing: .11em; opacity: .76;
+  letter-spacing: .125em; opacity: .76;
 }
 .turn-display .turn-number {
-  font-size: 27px; line-height: .78; font-weight: 950; letter-spacing: -.06em;
+  font-size: 27px; line-height: .78; font-weight: 950; letter-spacing: -.045em;
 }
 .turn-display:active { opacity:.72; transform:scale(.97); }
 .header-separator {
@@ -515,7 +515,7 @@ html[data-clock-format="datetime12s"] .header-clock { font-size: clamp(9px, 1.95
   min-width: 76px; height: 34px; display: flex; align-items: flex-end; justify-content: center;
   padding: 0 0 2px; text-align: center; font-variant-numeric: tabular-nums;
   font-size: clamp(28px, 6.4vw, 36px); line-height: .74; font-weight: 900;
-  letter-spacing: -.02em; color: var(--accent-contrast); white-space: nowrap;
+  letter-spacing: -.005em; color: var(--accent-contrast); white-space: nowrap;
 }
 .header-action-btn {
   width: clamp(44px, 11.8vw, 58px); height: 34px; padding: 0; border-radius: 9px;
@@ -627,7 +627,7 @@ html[data-clock-format="datetime12s"] .header-clock { font-size: clamp(9px, 1.95
   z-index: 20;
   top: 4px;
   left: 7px;
-  right: clamp(68px, 16vw, 86px);
+  right: clamp(84px, 20vw, 108px);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -638,26 +638,26 @@ html[data-clock-format="datetime12s"] .header-clock { font-size: clamp(9px, 1.95
   max-width: 80%;
   font-size: clamp(14px, 3.8vw, 22px);
   font-weight: 900;
-  letter-spacing: .03em;
+  letter-spacing: .045em;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.player-tag { font-size: 10px; font-weight: 900; letter-spacing: .12em; color: var(--player-color); }
+.player-tag { font-size: 10px; font-weight: 900; letter-spacing: .135em; color: var(--player-color); }
 .turn-order-btn {
   position: absolute;
   z-index: 42;
   top: 4px;
   right: 7px;
-  min-width: clamp(54px, 13vw, 72px);
-  height: clamp(26px, 6.5vw, 32px);
-  padding: 0 8px;
+  min-width: clamp(68px, 17vw, 92px);
+  height: clamp(32px, 8vw, 40px);
+  padding: 0 12px;
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--player-color) 62%, var(--border));
   display: inline-grid;
   place-items: center;
-  font-size: clamp(10px, 2.7vw, 13px);
+  font-size: clamp(12px, 3.2vw, 15px);
   line-height: 1;
   font-weight: 950;
-  letter-spacing: .08em;
+  letter-spacing: .095em;
   cursor: pointer;
   touch-action: manipulation;
   box-shadow: 0 2px 8px rgba(0,0,0,.12);
@@ -702,7 +702,7 @@ html[data-turn-order="off"] .player-head { right: 7px; }
 .dominus-placeholder {
   font-size: clamp(8px, 2.15vw, 11px);
   font-weight: 900;
-  letter-spacing: .12em;
+  letter-spacing: .135em;
   color: var(--muted);
   opacity: .58;
 }
@@ -792,7 +792,7 @@ html[data-turn-order="off"] .player-head { right: 7px; }
   margin-bottom: 8px;
   font-size: 11px;
   font-weight: 900;
-  letter-spacing: .08em;
+  letter-spacing: .095em;
   color: var(--muted);
 }
 .dominus-preset-grid {
@@ -866,7 +866,7 @@ html[data-turn-order="off"] .player-head { right: 7px; }
   font-size: 200px;
   line-height: .82;
   font-weight: 850;
-  letter-spacing: -.05em;
+  letter-spacing: -.035em;
   font-variant-numeric: tabular-nums;
   transform-origin: center;
   will-change: transform, color, filter;
@@ -913,7 +913,7 @@ html[data-turn-order="off"] .player-head { right: 7px; }
   border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
   font-size: 12px;
   font-weight: 800;
-  letter-spacing: .04em;
+  letter-spacing: .055em;
   cursor: pointer;
 }
 .action-btn.primary { background: var(--accent); color: var(--accent-contrast); }
@@ -952,7 +952,7 @@ html[data-turn-order="off"] .player-head { right: 7px; }
   cursor: pointer;
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: .03em;
+  letter-spacing: .045em;
 }
 .nav-btn .nav-icon, .footer-toggle-btn .nav-icon { font-size: 20px; line-height: 1; }
 .nav-btn.active { color: var(--accent-contrast); background: var(--accent); }
@@ -980,6 +980,47 @@ html[data-turn-order="off"] .player-head { right: 7px; }
 .app.footer-collapsed .footer-toggle-btn .nav-icon { font-size:22px; }
 
 .section-title { margin: 4px 0 12px; font-size: 19px; font-weight: 850; color: var(--accent); }
+
+.history-title-row {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:4px 0 12px;
+}
+.history-title-row .section-title { margin:0; }
+.history-export-trigger {
+  min-height:38px;
+  padding:0 14px;
+  border-radius:11px;
+  border:1px solid color-mix(in srgb, var(--accent) 38%, var(--border));
+  background:color-mix(in srgb, var(--accent) 14%, var(--surface));
+  color:var(--accent);
+  font-size:11px;
+  font-weight:950;
+  letter-spacing: .095em;
+  cursor:pointer;
+}
+.export-choice-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+.export-choice-btn {
+  min-height:72px;
+  border-radius:15px;
+  border:1px solid var(--border);
+  background:var(--surface-2);
+  display:grid;
+  place-items:center;
+  align-content:center;
+  gap:4px;
+  cursor:pointer;
+  font-weight:950;
+}
+.export-choice-btn strong { font-size:18px; letter-spacing: .075em; }
+.export-choice-btn span { font-size:10px; color:var(--muted); font-weight:800; }
 .panel {
   background: color-mix(in srgb, var(--accent) 7%, var(--surface));
   border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
@@ -1013,9 +1054,10 @@ html[data-turn-order="off"] .player-head { right: 7px; }
   vertical-align: middle;
 }
 .history-table tr:last-child td { border-bottom: 0; }
+.history-table tbody tr:not(.history-game-row):not(.history-turn-row) > td:not(.time-col) { vertical-align: bottom; }
 .history-table th {
   font-size: 11px;
-  letter-spacing: .08em;
+  letter-spacing: .095em;
   font-weight: 900;
   background: color-mix(in srgb, var(--accent) 10%, var(--surface));
 }
@@ -1029,7 +1071,7 @@ html[data-turn-order="off"] .player-head { right: 7px; }
   color: var(--accent-contrast);
   font-size: 13px;
   font-weight: 950;
-  letter-spacing: .16em;
+  letter-spacing: .175em;
   text-align: center;
   border-bottom: 1px solid var(--border);
 }
@@ -1039,7 +1081,7 @@ html[data-turn-order="off"] .player-head { right: 7px; }
   color: var(--accent);
   font-size: 12px;
   font-weight: 950;
-  letter-spacing: .12em;
+  letter-spacing: .135em;
   text-align: center;
   border-bottom: 1px solid var(--border);
 }
@@ -1055,11 +1097,11 @@ html[data-turn-order="off"] .player-head { right: 7px; }
   padding: 7px 6px;
   display: grid;
   gap: 2px;
-  align-content: center;
+  align-content: end;
 }
 .history-cell.p1 { background: color-mix(in srgb, var(--p1) 14%, transparent); }
 .history-cell.p2 { background: color-mix(in srgb, var(--p2) 14%, transparent); }
-.history-lp { font-size: 22px; line-height: 1; font-weight: 950; letter-spacing: -.02em; }
+.history-lp { font-size: 22px; line-height: 1; font-weight: 950; letter-spacing: -.005em; }
 .history-cell.initial { min-height: 62px; }
 .history-cell.initial .history-lp { font-size: 24px; }
 .history-order {
@@ -1070,7 +1112,7 @@ html[data-turn-order="off"] .player-head { right: 7px; }
   font-size: 9px;
   line-height: 1.1;
   font-weight: 950;
-  letter-spacing: .08em;
+  letter-spacing: .095em;
   border: 1px solid currentColor;
 }
 .history-order.first { color: var(--success); background: color-mix(in srgb, var(--success) 12%, transparent); }
@@ -1272,7 +1314,7 @@ html[data-mode="dark"] .die { background: linear-gradient(145deg, #f5f5f5, #bfc5
   font-size:11px;
   font-weight:950;
   color:var(--accent);
-  letter-spacing:.08em;
+  letter-spacing: .095em;
 }
 .token-value-number {
   width:100%;
@@ -1284,7 +1326,7 @@ html[data-mode="dark"] .die { background: linear-gradient(145deg, #f5f5f5, #bfc5
   font-size:clamp(28px, 7vw, 44px);
   line-height:1;
   font-weight:950;
-  letter-spacing:-.055em;
+  letter-spacing: -.04em;
   font-variant-numeric:tabular-nums;
   color:var(--text);
 }
@@ -1476,7 +1518,7 @@ select, .text-input {
   padding: 11px 14px;
   font-size: 13px;
   font-weight: 950;
-  letter-spacing: .05em;
+  letter-spacing: .065em;
   color: var(--accent);
   user-select: none;
 }
@@ -1668,7 +1710,7 @@ select, .text-input {
   font-size: 40px !important;
   line-height: .68;
   font-weight: 950;
-  letter-spacing: -.045em;
+  letter-spacing: -.03em;
   padding-bottom: 1px;
 }
 .topbar .timer-wrap.timer-warning .timer {
@@ -1762,7 +1804,10 @@ select, .text-input {
     </section>
 
     <section class="screen hidden" data-screen="history">
-      <div class="section-title" data-i18n="history">履歴</div>
+      <div class="history-title-row">
+        <div class="section-title" data-i18n="history">履歴</div>
+        <button type="button" class="history-export-trigger" id="openHistoryExport">⇩ EXPORT</button>
+      </div>
       <div id="historyContainer"></div>
     </section>
 
@@ -2041,6 +2086,12 @@ select, .text-input {
           <div class="manual-chapter"><h3 data-i18n="manualStorageShortTitle">保存</h3><p data-i18n="manualStorageShort">永続保存されるのはプレイヤー名と設定のみです。LPや履歴、UTILITYの対戦情報は再読み込みで初期化されます。</p></div>
           <div class="manual-chapter manual-version manual-changelog">
             <h3 data-i18n="manualVersionTitle">VERSION / 更新履歴</h3>
+            <p><strong>v1.1.0</strong> <span class="manual-version-date" data-i18n="manualVersionDateV110">2026/08/21</span></p>
+            <ul>
+              <li data-i18n="manualChangelogV110A">HISTORYのHTML／PDFエクスポート機能を追加し、ライト配色固定で出力するよう対応</li>
+              <li data-i18n="manualChangelogV110B">HISTORYの先攻表示、LP配置、増減値表示を改善</li>
+              <li data-i18n="manualChangelogV110C">先攻／後攻ボタンの操作性と全体の文字間隔を調整</li>
+            </ul>
             <p><strong>v1.0.2</strong> <span class="manual-version-date" data-i18n="manualVersionDateV102">2026/08/21</span></p>
             <ul>
               <li data-i18n="manualChangelogV102A">GAME履歴とRESET時のゲーム進行・初期化処理を改善</li>
@@ -2182,7 +2233,7 @@ select, .text-input {
       cardCounters:'カードカウンター', addCard:'＋ カードを追加', cardName:'カード名', deleteCard:'このカードを削除', counterCount:'カウンター数', counterMinus:'カウンターを1減らす', counterPlus:'カウンターを1増やす', counterEmpty:'「＋ カードを追加」からカウンターを記録するカードを追加できます。', duelMemo:'メモ', memoPlaceholder:'対戦中の確認事項などを自由に入力', clearMemo:'メモを消去', memoCleared:'メモを消去しました',
       player1Name:'PLAYER 1 名', player2Name:'PLAYER 2 名', savedBrowser:'ブラウザに保存します', appearance:'表示モード', appearanceDesc:'OS設定または明暗を選択', designTheme:'デザインテーマ', themeDesc:'配色テーマを選択', fontFamily:'フォント', fontFamilyDesc:'LP・ヘッダーを含む表示フォントを選択', playerNameDisplay:'プレイヤー名表示', playerNameDisplayDesc:'基本画面のプレイヤー名を表示', turnOrderDisplay:'先攻・後攻表示', turnOrderDisplayDesc:'LIFE・HISTORYのFIRST / SECOND表示を使用', dominusDisplay:'ドミナス制約表示', dominusDisplayDesc:'LIFE画面の属性制約表示を使用', dynamicBackground:'背景効果', dynamicBackgroundDesc:'テーマ色に連動した背景効果', backgroundAnimation:'背景アニメーション', backgroundAnimationDesc:'背景効果を残したまま動きだけ停止', dynamicBackgroundPattern:'背景アニメーション', dynamicBackgroundPatternDesc:'OFFまたはループアニメーションを選択', clockDisplay:'時計表示', clockDisplayDesc:'ヘッダー左端に現在時刻を表示', clockFormat:'時計形式', clockFormatDesc:'時刻・秒・日付を含む表示形式を選択', language:'言語', languageDesc:'表示言語を選択', system:'システム', light:'ライト', dark:'ダーク',
       timer:'対戦タイマー', timerStart:'タイマー開始', timerPause:'タイマー一時停止', timerResume:'タイマー再開', collapseHeader:'ヘッダーを閉じる', expandHeader:'ヘッダーを開く', collapseFooter:'フッターを閉じる', expandFooter:'フッターを開く', undo:'1操作元に戻す', resetMatch:'対戦をリセット', swapPlayers:'P1とP2を入れ替え', playersSwapped:'P1とP2を入れ替えました', wakeLock:'画面スリープ防止', wakeLockDesc:'対応ブラウザで対戦中の画面スリープを防止', wakeUnsupported:'このブラウザは画面スリープ防止に対応していません', orientationLock:'画面向き固定', orientationLockDesc:'現在の縦／横向きを固定（対応ブラウザのみ）', orientationUnsupported:'このブラウザは画面向き固定に対応していません', orientationLockFailed:'画面向きを固定できませんでした。ブラウザによってはフルスクリーンが必要です', orientationLocked:'現在の画面向きを固定しました', orientationUnlocked:'画面向き固定を解除しました',
-      historyAria:'LP変更履歴', calculator:'LIFE CALCULATOR', lpCalculator:'LP電卓', close:'閉じる', currentLP:'現在LP', currentTimes2:'現在LP ×2', currentHalf:'現在LP ÷2', setLP:'指定LP', applyLP:'LPへ反映', resultAfter:'反映後', enterNumber:'数値を入力してください', noChange:'LPは変更されませんでした', noUndo:'元に戻せる操作がありません', undoDone:(p,lp)=>`${p} を ${lp} LP に戻しました`,
+      historyAria:'LP変更履歴', historyExportTitle:'HISTORYを書き出す', historyExportHtml:'HTML', historyExportHtmlDesc:'表示用HTMLファイル', historyExportPdf:'PDF', historyExportPdfDesc:'印刷画面からPDF保存', historyExportPdfHint:'PDFは印刷画面を開きます。端末の「PDFとして保存」または共有機能を使用してください。', historyExportHtmlDone:'HISTORYのHTMLを書き出しました', historyExportPopupBlocked:'PDF表示を開けませんでした。ポップアップを許可してください。', calculator:'LIFE CALCULATOR', lpCalculator:'LP電卓', close:'閉じる', currentLP:'現在LP', currentTimes2:'現在LP ×2', currentHalf:'現在LP ÷2', setLP:'指定LP', applyLP:'LPへ反映', resultAfter:'反映後', enterNumber:'数値を入力してください', noChange:'LPは変更されませんでした', noUndo:'元に戻せる操作がありません', undoDone:(p,lp)=>`${p} を ${lp} LP に戻しました`,
       confirm:'確定', dominusTitle:'ドミナス属性制約', dominusHint:'モンスター効果を発動できない属性をまとめて選択してください。基本画面には発動不可の属性だけを表示します。', dominusClear:'全て発動可', maxRows:n=>`最大${n}件までです`, keepOneToken:'トークンは1件以上残してください', tokenStatInput:(stat)=>`トークン${stat}入力`,
       timerTarget:'タイマー目標時間 A', timerTargetDesc:'この時間を基準に強調表示します（分）', timerWarningLead:'強調開始 B', timerWarningLeadDesc:'目標時間Aの何分前から強調するか（分）',
       settingsPlayers:'プレイヤー', settingsDisplay:'表示・操作', settingsTimerScreen:'タイマー・画面', settingsData:'設定データ',
@@ -2198,7 +2249,7 @@ select, .text-input {
       manualStorageTitle:'10. 保存される情報', manualStorageBody:'ブラウザへ永続保存するのはプレイヤー名と各種設定だけです。現在LP、タイマー、履歴、トークン、カードカウンターなどの対戦データはページ再読み込み後には保持されません。「全ての設定を削除」は保存済み設定だけを初期値へ戻し、現在進行中の対戦データには影響しません。',
       manualWakeTitle:'11. 画面スリープ防止', manualWakeBody:'ON時はScreen Wake Lock APIに対応するブラウザで画面点灯を維持します。ブラウザやOSが非対応の場合は利用できず、タブを離れた後に戻った場合は可能な範囲で再取得します。',
       manualNote:'大会・イベントのルールや端末利用可否は主催者の案内を優先してください。端末の省電力設定やブラウザ仕様により、一部機能の動作が異なる場合があります。',
-      manualTitle:'操作マニュアル', manualLifeShortTitle:'LP', manualTimerShortTitle:'タイマー', manualControlsShortTitle:'基本操作', manualStorageShortTitle:'保存', manualUtilityTitle:'UTILITY', manualStorageShort:'保存されるのはプレイヤー名と設定のみ。LP・ターン・タイマー・履歴・UTILITY・MEMOは再読み込みで初期化されます。', manualNoteShort:'大会・イベントでは主催者の端末利用ルールを優先してください。', manualVersionTitle:'VERSION / 更新履歴', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'GAME履歴とRESET時のゲーム進行・初期化処理を改善', manualChangelogV102B:'UTILITY・SETTINGSのハッチ開閉状態をリロードまで保持するよう変更', manualChangelogV102C:'コイン・ダイス結果表示とトークン数値表示を調整', manualChangelogV102D:'ヘッダー内のタイマー・TURN・操作ボタン配置を調整', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'更新履歴', manualChangelogV101A:'iPhone等のノッチ／Dynamic Islandを考慮した余白と画面回転時のLP再描画を追加', manualChangelogV101D:'FIRST / SECOND表示をLIFE・HISTORYへ追加', manualChangelogV100:'リリース', manualLife:'先攻・後攻表示がONの時はFIRST / SECONDをタップして入れ替えられます。LPをタップして計算します。1〜2桁は末尾00を補助し、＋／－／×2／÷2／指定LPに対応。LP下部のDOMINUS欄をタップすると6属性（光・闇・地・水・炎・風）の発動不可状態を一括編集でき、基本画面には発動不可属性だけを丸型アイコンで表示します。表示自体は設定からOFFにできます。', manualTimer:'TURNをタップしてターン進行。対戦タイマーは右側の再生／一時停止アイコンで操作し、設定AのB分前以降は強調表示されます。左の時計は表示形式とON/OFFを変更できます。', manualHeader:'ヘッダーは常時表示。右側の各アイコンからP1/P2入れ替え、UNDO、RESETを操作できます。フッターはHIDE／SHOWで開閉できます。背景アニメーションは設定のプルダウンからOFFまたはパターンを選択します。', manualHistory:'HISTORYはGAME→TURNの順に区切り、先攻・後攻表示がONの場合は各GAMEの初期行にFIRST / SECONDと8000/8000を表示します。タイマーを維持してRESETすると次のGAMEへ進み、開始時刻・TURN 1・初期LPを記録します。タイマーもリセットするとGAME 1へ戻り、履歴も新しいマッチとして初期化されます。', manualUtility:'UTILITYではコイン／ダイス、複数トークン、カードカウンターを利用できます。MEMOは独立タブです。', manualWake:'画面スリープ防止と画面向き固定は対応ブラウザでのみ動作します。iPhone Safariなどでは向き固定を利用できない場合があります。', creator:'制作者：GYONIC', clearAllSettings:'全ての設定を削除', clearSettingsTitle:'設定を初期化', clearSettingsBody:'プレイヤーネームを含む、ブラウザに保存されている全ての設定を初期値へ戻します。現在のLP・タイマー・履歴・トークン・カウンターの対戦情報は変更しません。', clearSettingsDone:'保存済み設定を初期化しました',
+      manualTitle:'操作マニュアル', manualLifeShortTitle:'LP', manualTimerShortTitle:'タイマー', manualControlsShortTitle:'基本操作', manualStorageShortTitle:'保存', manualUtilityTitle:'UTILITY', manualStorageShort:'保存されるのはプレイヤー名と設定のみ。LP・ターン・タイマー・履歴・UTILITY・MEMOは再読み込みで初期化されます。', manualNoteShort:'大会・イベントでは主催者の端末利用ルールを優先してください。', manualVersionTitle:'VERSION / 更新履歴', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'HISTORYのHTML／PDFエクスポート機能を追加し、ライト配色固定で出力するよう対応', manualChangelogV110B:'HISTORYの先攻表示、LP配置、増減値表示を改善', manualChangelogV110C:'先攻／後攻ボタンの操作性と全体の文字間隔を調整', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'GAME履歴とRESET時のゲーム進行・初期化処理を改善', manualChangelogV102B:'UTILITY・SETTINGSのハッチ開閉状態をリロードまで保持するよう変更', manualChangelogV102C:'コイン・ダイス結果表示とトークン数値表示を調整', manualChangelogV102D:'ヘッダー内のタイマー・TURN・操作ボタン配置を調整', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'更新履歴', manualChangelogV101A:'iPhone等のノッチ／Dynamic Islandを考慮した余白と画面回転時のLP再描画を追加', manualChangelogV101D:'FIRST / SECOND表示をLIFE・HISTORYへ追加', manualChangelogV100:'リリース', manualLife:'先攻・後攻表示がONの時はFIRST / SECONDをタップして入れ替えられます。LPをタップして計算します。1〜2桁は末尾00を補助し、＋／－／×2／÷2／指定LPに対応。LP下部のDOMINUS欄をタップすると6属性（光・闇・地・水・炎・風）の発動不可状態を一括編集でき、基本画面には発動不可属性だけを丸型アイコンで表示します。表示自体は設定からOFFにできます。', manualTimer:'TURNをタップしてターン進行。対戦タイマーは右側の再生／一時停止アイコンで操作し、設定AのB分前以降は強調表示されます。左の時計は表示形式とON/OFFを変更できます。', manualHeader:'ヘッダーは常時表示。右側の各アイコンからP1/P2入れ替え、UNDO、RESETを操作できます。フッターはHIDE／SHOWで開閉できます。背景アニメーションは設定のプルダウンからOFFまたはパターンを選択します。', manualHistory:'HISTORYはGAME→TURNの順に区切り、先攻・後攻表示がONの場合は各GAMEの初期行で先攻側にのみFIRSTと8000/8000を表示します。LP変動は増減値を上段、変更後LPを下段に表示します。タイマーを維持してRESETすると次のGAMEへ進み、開始時刻・TURN 1・初期LPを記録します。タイマーもリセットするとGAME 1へ戻り、履歴も新しいマッチとして初期化されます。', manualUtility:'UTILITYではコイン／ダイス、複数トークン、カードカウンターを利用できます。MEMOは独立タブです。', manualWake:'画面スリープ防止と画面向き固定は対応ブラウザでのみ動作します。iPhone Safariなどでは向き固定を利用できない場合があります。', creator:'制作者：GYONIC', clearAllSettings:'全ての設定を削除', clearSettingsTitle:'設定を初期化', clearSettingsBody:'プレイヤーネームを含む、ブラウザに保存されている全ての設定を初期値へ戻します。現在のLP・タイマー・履歴・トークン・カウンターの対戦情報は変更しません。', clearSettingsDone:'保存済み設定を初期化しました',
       resetTitle:'RESET LIFE', resetBody:'PLAYER 1 / PLAYER 2 のLPを8000へ戻し、TURN 1へ戻します。タイマーを維持する場合は次のGAMEへ進み、履歴を継続します。タイマーもリセットする場合はGAME 1へ戻り、履歴を新しいマッチとして初期化します。トークン／カウンターは名称を残して数値のみ初期化します。', resetTimerToo:'タイマーもリセットする', cancel:'キャンセル', reset:'リセット', resetBoth:'LPとタイマーをリセットしました', resetLP:'LPをリセットしました'
     },
     en: {
@@ -2209,7 +2260,7 @@ select, .text-input {
       cardCounters:'CARD COUNTERS', addCard:'+ ADD CARD', cardName:'Card name', deleteCard:'Delete this card', counterCount:'Counter count', counterMinus:'Decrease counter by 1', counterPlus:'Increase counter by 1', counterEmpty:'Add a card to record its counters.', duelMemo:'MEMO', memoPlaceholder:'Write any duel notes here', clearMemo:'CLEAR MEMO', memoCleared:'Memo cleared',
       player1Name:'PLAYER 1 NAME', player2Name:'PLAYER 2 NAME', savedBrowser:'Saved in this browser', appearance:'APPEARANCE', appearanceDesc:'Use system, light, or dark mode', designTheme:'DESIGN THEME', themeDesc:'Choose a color theme', fontFamily:'FONT', fontFamilyDesc:'Choose the font used for LP and the header', playerNameDisplay:'PLAYER NAMES', playerNameDisplayDesc:'Show player names on the LIFE screen', turnOrderDisplay:'FIRST / SECOND', turnOrderDisplayDesc:'Show first/second indicators on LIFE and HISTORY', dominusDisplay:'DOMINUS DISPLAY', dominusDisplayDesc:'Show attribute restrictions on the LIFE screen', dynamicBackground:'BACKGROUND EFFECT', dynamicBackgroundDesc:'Show a theme-colored background effect', backgroundAnimation:'BACKGROUND ANIMATION', backgroundAnimationDesc:'Keep the background effect but stop its motion', dynamicBackgroundPattern:'BACKGROUND MOTION', dynamicBackgroundPatternDesc:'Choose OFF or a looping animation pattern', clockDisplay:'CLOCK', clockDisplayDesc:'Show the current time at the left of the header', clockFormat:'CLOCK FORMAT', clockFormatDesc:'Choose time, seconds, date, and 12/24-hour formats', language:'LANGUAGE', languageDesc:'Choose display language', system:'SYSTEM', light:'LIGHT', dark:'DARK',
       timer:'Duel timer', timerStart:'Start timer', timerPause:'Pause timer', timerResume:'Resume timer', collapseHeader:'Collapse header', expandHeader:'Expand header', collapseFooter:'Collapse footer', expandFooter:'Expand footer', undo:'Undo last LP change', resetMatch:'Reset duel', swapPlayers:'Swap P1 and P2', playersSwapped:'P1 and P2 swapped', wakeLock:'PREVENT SLEEP', wakeLockDesc:'Keep the screen awake during a duel on supported browsers', wakeUnsupported:'Screen wake lock is not supported by this browser', orientationLock:'LOCK ORIENTATION', orientationLockDesc:'Lock the current portrait / landscape orientation when supported', orientationUnsupported:'Screen orientation lock is not supported by this browser', orientationLockFailed:'Could not lock the screen orientation. Some browsers require fullscreen mode', orientationLocked:'Current screen orientation locked', orientationUnlocked:'Screen orientation unlocked',
-      historyAria:'LP change history', calculator:'LIFE CALCULATOR', lpCalculator:'LP calculator', close:'Close', currentLP:'CURRENT LP', currentTimes2:'CURRENT LP ×2', currentHalf:'CURRENT LP ÷2', setLP:'SET LP', applyLP:'APPLY TO LP', resultAfter:'After', enterNumber:'Enter a number', noChange:'LP did not change', noUndo:'Nothing to undo', undoDone:(p,lp)=>`${p} restored to ${lp} LP`,
+      historyAria:'LP change history', historyExportTitle:'EXPORT HISTORY', historyExportHtml:'HTML', historyExportHtmlDesc:'Standalone history file', historyExportPdf:'PDF', historyExportPdfDesc:'Save from print view', historyExportPdfHint:'PDF opens a print view. Choose Save as PDF or the device sharing option.', historyExportHtmlDone:'History HTML exported', historyExportPopupBlocked:'Could not open the PDF view. Allow pop-ups and try again.', calculator:'LIFE CALCULATOR', lpCalculator:'LP calculator', close:'Close', currentLP:'CURRENT LP', currentTimes2:'CURRENT LP ×2', currentHalf:'CURRENT LP ÷2', setLP:'SET LP', applyLP:'APPLY TO LP', resultAfter:'After', enterNumber:'Enter a number', noChange:'LP did not change', noUndo:'Nothing to undo', undoDone:(p,lp)=>`${p} restored to ${lp} LP`,
       confirm:'CONFIRM', dominusTitle:'DOMINUS RESTRICTIONS', dominusHint:'Select every attribute whose monster effects cannot be activated. Only blocked attributes are shown on the LIFE screen.', dominusClear:'ALLOW ALL', maxRows:n=>`Maximum ${n} entries`, keepOneToken:'At least one token must remain', tokenStatInput:(stat)=>`Token ${stat} input`,
       timerTarget:'TIMER TARGET A', timerTargetDesc:'Minutes used as the timer target', timerWarningLead:'WARNING LEAD B', timerWarningLeadDesc:'Highlight this many minutes before target A',
       settingsPlayers:'PLAYERS', settingsDisplay:'DISPLAY / CONTROLS', settingsTimerScreen:'TIMER / SCREEN', settingsData:'SAVED SETTINGS',
@@ -2225,7 +2276,7 @@ select, .text-input {
       manualStorageTitle:'10. What is saved', manualStorageBody:'Only player names and settings are stored persistently in the browser. Duel data such as current LP, timer, history, tokens, and card counters is not retained after a page reload. DELETE ALL SETTINGS resets saved preferences only and does not alter the duel currently in progress.',
       manualWakeTitle:'11. Prevent sleep', manualWakeBody:'When enabled, the app requests Screen Wake Lock on supported browsers to keep the display awake. It cannot work when the browser or OS does not support the API. After returning to the tab, the app attempts to reacquire the lock when possible.',
       manualNote:'Always follow the organizer’s rules on device use at tournaments or events. Power-saving settings and browser behavior can affect some features.',
-      manualTitle:'USER MANUAL', manualLifeShortTitle:'LP', manualTimerShortTitle:'Timer', manualControlsShortTitle:'Controls', manualStorageShortTitle:'Storage', manualUtilityTitle:'UTILITY', manualStorageShort:'Only player names and settings are saved. LP, turn, timer, history, UTILITY, and MEMO reset when the page reloads.', manualNoteShort:'Follow the organizer’s rules on device use at tournaments and events.', manualVersionTitle:'VERSION / CHANGELOG', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'Improved GAME history and game progression / initialization behavior on RESET', manualChangelogV102B:'UTILITY and SETTINGS hatch states now persist until page reload', manualChangelogV102C:'Refined coin / dice result layout and token value sizing', manualChangelogV102D:'Adjusted timer, TURN, and header control layout', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'CHANGELOG', manualChangelogV101A:'Added safer spacing for iPhone notches / Dynamic Island and LP redraw on orientation changes', manualChangelogV101D:'Added FIRST / SECOND indicators to LIFE and HISTORY', manualChangelogV100:'Release', manualLife:'When FIRST / SECOND display is enabled, tap it to swap who goes first. Tap an LP value to calculate. One- or two-digit input appends 00. +, −, ×2, ÷2, and SET LP are supported. Tap the DOMINUS area below LP to edit blocked attributes together. Six attributes are supported (LIGHT, DARK, EARTH, WATER, FIRE, and WIND), and only blocked attributes appear as round icons on the LIFE screen. The display can be disabled in Settings.', manualTimer:'Tap TURN to advance the turn. Use the play/pause icon to control the duel timer; it is highlighted from B minutes before target A. The left clock supports multiple formats and can be hidden.', manualHeader:'The header is always shown. Use its icons to swap P1/P2, undo, or reset. Use HIDE / SHOW for the footer. Choose OFF or a looping background animation from the Settings dropdown.', manualHistory:'HISTORY is grouped by GAME and TURN. When FIRST / SECOND display is enabled, each GAME starts with FIRST / SECOND and 8000 / 8000. Reset while keeping the timer running to advance to the next GAME and record its start time, TURN 1, and initial LP. Resetting the timer returns to GAME 1 and starts a fresh match history.', manualUtility:'UTILITY provides coin/dice, multiple token tools, and card counters. MEMO has its own tab.', manualWake:'Prevent Sleep and orientation lock work only in supported browsers. Orientation lock may be unavailable in iPhone Safari.', creator:'Creator: GYONIC', clearAllSettings:'DELETE ALL SETTINGS', clearSettingsTitle:'RESET SETTINGS', clearSettingsBody:'Reset every saved preference, including player names, to its default. Current LP, timer, history, token, and counter duel data are not changed.', clearSettingsDone:'Saved settings were reset',
+      manualTitle:'USER MANUAL', manualLifeShortTitle:'LP', manualTimerShortTitle:'Timer', manualControlsShortTitle:'Controls', manualStorageShortTitle:'Storage', manualUtilityTitle:'UTILITY', manualStorageShort:'Only player names and settings are saved. LP, turn, timer, history, UTILITY, and MEMO reset when the page reloads.', manualNoteShort:'Follow the organizer’s rules on device use at tournaments and events.', manualVersionTitle:'VERSION / CHANGELOG', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'Added HTML / PDF export for HISTORY with fixed light-mode output', manualChangelogV110B:'Improved FIRST indication, LP alignment, and delta presentation in HISTORY', manualChangelogV110C:'Improved FIRST / SECOND button usability and adjusted global letter spacing', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'Improved GAME history and game progression / initialization behavior on RESET', manualChangelogV102B:'UTILITY and SETTINGS hatch states now persist until page reload', manualChangelogV102C:'Refined coin / dice result layout and token value sizing', manualChangelogV102D:'Adjusted timer, TURN, and header control layout', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'CHANGELOG', manualChangelogV101A:'Added safer spacing for iPhone notches / Dynamic Island and LP redraw on orientation changes', manualChangelogV101D:'Added FIRST / SECOND indicators to LIFE and HISTORY', manualChangelogV100:'Release', manualLife:'When FIRST / SECOND display is enabled, tap it to swap who goes first. Tap an LP value to calculate. One- or two-digit input appends 00. +, −, ×2, ÷2, and SET LP are supported. Tap the DOMINUS area below LP to edit blocked attributes together. Six attributes are supported (LIGHT, DARK, EARTH, WATER, FIRE, and WIND), and only blocked attributes appear as round icons on the LIFE screen. The display can be disabled in Settings.', manualTimer:'Tap TURN to advance the turn. Use the play/pause icon to control the duel timer; it is highlighted from B minutes before target A. The left clock supports multiple formats and can be hidden.', manualHeader:'The header is always shown. Use its icons to swap P1/P2, undo, or reset. Use HIDE / SHOW for the footer. Choose OFF or a looping background animation from the Settings dropdown.', manualHistory:'HISTORY is grouped by GAME and TURN. When FIRST / SECOND display is enabled, each GAME shows FIRST only on the player going first, together with 8000 / 8000. LP changes show the delta on the upper line and the resulting LP below it. Reset while keeping the timer running to advance to the next GAME and record its start time, TURN 1, and initial LP. Resetting the timer returns to GAME 1. EXPORT saves the current view as HTML or opens a print-ready view for PDF saving.', manualUtility:'UTILITY provides coin/dice, multiple token tools, and card counters. MEMO has its own tab.', manualWake:'Prevent Sleep and orientation lock work only in supported browsers. Orientation lock may be unavailable in iPhone Safari.', creator:'Creator: GYONIC', clearAllSettings:'DELETE ALL SETTINGS', clearSettingsTitle:'RESET SETTINGS', clearSettingsBody:'Reset every saved preference, including player names, to its default. Current LP, timer, history, token, and counter duel data are not changed.', clearSettingsDone:'Saved settings were reset',
       resetTitle:'RESET LIFE', resetBody:'Return both players to 8000 LP and TURN 1. If the timer is kept, advance to the next GAME and keep the match history. If the timer is also reset, return to GAME 1 and start a fresh match history. Token and counter names are kept while their values are cleared.', resetTimerToo:'Reset timer too', cancel:'CANCEL', reset:'RESET', resetBoth:'LP and timer reset', resetLP:'LP reset'
     },
     ko: {
@@ -2236,7 +2287,7 @@ select, .text-input {
       cardCounters:'카드 카운터', addCard:'+ 카드 추가', cardName:'카드 이름', deleteCard:'이 카드 삭제', counterCount:'카운터 수', counterMinus:'카운터 1 감소', counterPlus:'카운터 1 증가', counterEmpty:'카운터를 기록할 카드를 추가하세요.', duelMemo:'메모', memoPlaceholder:'듀얼 중 확인할 내용을 자유롭게 입력', clearMemo:'메모 지우기', memoCleared:'메모를 지웠습니다',
       player1Name:'PLAYER 1 이름', player2Name:'PLAYER 2 이름', savedBrowser:'브라우저에 저장됩니다', appearance:'화면 모드', appearanceDesc:'시스템·라이트·다크 선택', designTheme:'디자인 테마', themeDesc:'색상 테마 선택', fontFamily:'글꼴', fontFamilyDesc:'LP와 헤더에 사용할 표시 글꼴 선택', playerNameDisplay:'플레이어 이름 표시', playerNameDisplayDesc:'LIFE 화면에 플레이어 이름 표시', dominusDisplay:'도미나스 제약 표시', dominusDisplayDesc:'LIFE 화면의 속성 제약 표시 사용', dynamicBackground:'배경 효과', dynamicBackgroundDesc:'테마 색상에 맞춘 배경 효과 표시', backgroundAnimation:'배경 애니메이션', backgroundAnimationDesc:'배경 효과는 유지하고 움직임만 정지', dynamicBackgroundPattern:'배경 애니메이션', dynamicBackgroundPatternDesc:'OFF 또는 반복 애니메이션 패턴 선택', clockDisplay:'시계 표시', clockDisplayDesc:'헤더 왼쪽에 현재 시간을 표시', clockFormat:'시계 형식', clockFormatDesc:'시간·초·날짜 및 12/24시간 형식 선택', language:'언어', languageDesc:'표시 언어 선택', system:'시스템', light:'라이트', dark:'다크',
       timer:'듀얼 타이머', timerStart:'타이머 시작', timerPause:'타이머 일시정지', timerResume:'타이머 재개', collapseHeader:'헤더 접기', expandHeader:'헤더 열기', collapseFooter:'푸터 접기', expandFooter:'푸터 열기', undo:'마지막 LP 변경 취소', resetMatch:'듀얼 리셋', swapPlayers:'P1과 P2 바꾸기', playersSwapped:'P1과 P2를 바꿨습니다', wakeLock:'화면 절전 방지', wakeLockDesc:'지원 브라우저에서 듀얼 중 화면이 꺼지지 않도록 유지', wakeUnsupported:'이 브라우저는 화면 절전 방지를 지원하지 않습니다', orientationLock:'화면 방향 고정', orientationLockDesc:'지원 브라우저에서 현재 세로／가로 방향 고정', orientationUnsupported:'이 브라우저는 화면 방향 고정을 지원하지 않습니다', orientationLockFailed:'화면 방향을 고정할 수 없습니다. 일부 브라우저에서는 전체 화면이 필요합니다', orientationLocked:'현재 화면 방향을 고정했습니다', orientationUnlocked:'화면 방향 고정을 해제했습니다',
-      historyAria:'LP 변경 기록', calculator:'LIFE CALCULATOR', lpCalculator:'LP 계산기', close:'닫기', currentLP:'현재 LP', currentTimes2:'현재 LP ×2', currentHalf:'현재 LP ÷2', setLP:'LP 지정', applyLP:'LP에 적용', resultAfter:'적용 후', enterNumber:'숫자를 입력하세요', noChange:'LP가 변경되지 않았습니다', noUndo:'되돌릴 변경이 없습니다', undoDone:(p,lp)=>`${p}를 ${lp} LP로 되돌렸습니다`,
+      historyAria:'LP 변경 기록', historyExportTitle:'HISTORY 내보내기', historyExportHtml:'HTML', historyExportHtmlDesc:'기록 표시용 HTML 파일', historyExportPdf:'PDF', historyExportPdfDesc:'인쇄 화면에서 PDF 저장', historyExportPdfHint:'PDF는 인쇄 화면을 엽니다. PDF로 저장 또는 기기의 공유 기능을 사용하세요.', historyExportHtmlDone:'HISTORY HTML을 내보냈습니다', historyExportPopupBlocked:'PDF 화면을 열 수 없습니다. 팝업을 허용해 주세요.', calculator:'LIFE CALCULATOR', lpCalculator:'LP 계산기', close:'닫기', currentLP:'현재 LP', currentTimes2:'현재 LP ×2', currentHalf:'현재 LP ÷2', setLP:'LP 지정', applyLP:'LP에 적용', resultAfter:'적용 후', enterNumber:'숫자를 입력하세요', noChange:'LP가 변경되지 않았습니다', noUndo:'되돌릴 변경이 없습니다', undoDone:(p,lp)=>`${p}를 ${lp} LP로 되돌렸습니다`,
       confirm:'확정', dominusTitle:'도미나스 속성 제약', dominusHint:'몬스터 효과를 발동할 수 없는 속성을 한 번에 선택하세요. LIFE 화면에는 발동 불가 속성만 표시됩니다.', dominusClear:'모두 허용', maxRows:n=>`최대 ${n}개까지 가능합니다`, keepOneToken:'토큰은 1개 이상 남겨야 합니다', tokenStatInput:(stat)=>`토큰 ${stat} 입력`,
       timerTarget:'타이머 목표 시간 A', timerTargetDesc:'강조 표시 기준 시간(분)', timerWarningLead:'강조 시작 B', timerWarningLeadDesc:'목표 시간 A의 몇 분 전부터 강조할지 설정',
       settingsPlayers:'플레이어', settingsDisplay:'표시 / 조작', settingsTimerScreen:'타이머 / 화면', settingsData:'저장 설정',
@@ -2252,7 +2303,7 @@ select, .text-input {
       manualStorageTitle:'10. 저장되는 정보', manualStorageBody:'브라우저에 계속 저장되는 것은 플레이어 이름과 각종 설정뿐입니다. 현재 LP, 타이머, 기록, 토큰, 카드 카운터 등의 듀얼 데이터는 페이지를 새로고침하면 유지되지 않습니다. 모든 설정 삭제는 저장된 설정만 초기화하며 현재 진행 중인 듀얼 데이터에는 영향을 주지 않습니다.',
       manualWakeTitle:'11. 화면 절전 방지', manualWakeBody:'ON이면 지원 브라우저에서 Screen Wake Lock을 요청해 화면을 켜 둡니다. 브라우저나 OS가 지원하지 않으면 사용할 수 없습니다. 다른 탭에서 돌아오면 가능한 경우 다시 잠금을 요청합니다.',
       manualNote:'대회나 이벤트에서의 단말기 사용 가능 여부는 반드시 주최 측 규정을 우선해 주세요. 절전 설정이나 브라우저 사양에 따라 일부 기능의 동작이 달라질 수 있습니다.',
-      manualTitle:'사용 설명서', manualLifeShortTitle:'LP', manualTimerShortTitle:'타이머', manualControlsShortTitle:'기본 조작', manualStorageShortTitle:'저장', manualUtilityTitle:'UTILITY', manualStorageShort:'저장되는 것은 플레이어 이름과 설정뿐입니다. LP, 턴, 타이머, 기록, UTILITY, MEMO는 새로고침하면 초기화됩니다.', manualNoteShort:'대회·이벤트에서는 주최 측의 단말기 사용 규정을 우선해 주세요.', manualVersionTitle:'VERSION / 업데이트 내역', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'GAME 기록과 RESET 시 게임 진행·초기화 동작 개선', manualChangelogV102B:'UTILITY·SETTINGS 해치 열림 상태를 새로고침 전까지 유지하도록 변경', manualChangelogV102C:'코인·주사위 결과 표시와 토큰 수치 표시 조정', manualChangelogV102D:'헤더의 타이머·TURN·조작 버튼 배치 조정', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'업데이트 내역', manualChangelogV101A:'iPhone 노치／Dynamic Island 대응 여백과 화면 회전 시 LP 재렌더링 추가', manualChangelogV101D:'LIFE와 HISTORY에 FIRST / SECOND 표시 추가', manualChangelogV100:'릴리스', manualLife:'선공 / 후공 표시가 ON일 때 FIRST / SECOND를 탭하면 선공·후공을 바꿀 수 있습니다. LP를 탭해 계산합니다. 1~2자리 입력은 뒤에 00을 보조하며 +, −, ×2, ÷2, LP 지정이 가능합니다. LP는 0 아래로 내려가지 않습니다. LP 아래 DOMINUS 영역을 탭하면 빛·어둠·땅·물·불·바람 6속성의 발동 불가 상태를 한 번에 편집할 수 있으며, LIFE 화면에는 발동 불가 속성만 원형 아이콘으로 표시됩니다. 표시 기능은 설정에서 끌 수 있습니다.', manualTimer:'TURN을 탭해 턴을 진행합니다. 듀얼 타이머는 재생/일시정지 아이콘으로 조작하고 목표 A의 B분 전부터 강조됩니다. 왼쪽 시계는 형식과 표시 여부를 변경할 수 있습니다.', manualHeader:'헤더는 항상 표시되며 아이콘으로 P1/P2 교체, UNDO, RESET을 조작합니다. 푸터는 HIDE / SHOW로 접고 펼칩니다. 배경 애니메이션은 설정의 드롭다운에서 OFF 또는 반복 패턴을 선택합니다.', manualHistory:'HISTORY는 GAME→TURN 순서로 구분되며 선공 / 후공 표시가 ON이면 각 GAME의 초기 행에 FIRST / SECOND와 8000 / 8000을 표시합니다. 타이머를 유지한 채 RESET하면 다음 GAME으로 진행하고 시작 시간·TURN 1·초기 LP를 기록합니다. 타이머도 리셋하면 GAME 1로 돌아가 새 매치 기록으로 초기화됩니다.', manualUtility:'UTILITY에서 코인/주사위, 여러 토큰, 카드 카운터를 사용할 수 있으며 MEMO는 독립 탭입니다.', manualWake:'화면 절전 방지와 화면 방향 고정은 지원 브라우저에서만 작동합니다. iPhone Safari에서는 방향 고정을 사용할 수 없을 수 있습니다.', creator:'제작자: GYONIC', clearAllSettings:'모든 설정 삭제', clearSettingsTitle:'설정 초기화', clearSettingsBody:'플레이어 이름을 포함한 저장된 모든 설정을 초기값으로 되돌립니다. 현재 LP, 타이머, 기록, 토큰, 카운터의 듀얼 정보는 변경하지 않습니다.', clearSettingsDone:'저장된 설정을 초기화했습니다',
+      manualTitle:'사용 설명서', manualLifeShortTitle:'LP', manualTimerShortTitle:'타이머', manualControlsShortTitle:'기본 조작', manualStorageShortTitle:'저장', manualUtilityTitle:'UTILITY', manualStorageShort:'저장되는 것은 플레이어 이름과 설정뿐입니다. LP, 턴, 타이머, 기록, UTILITY, MEMO는 새로고침하면 초기화됩니다.', manualNoteShort:'대회·이벤트에서는 주최 측의 단말기 사용 규정을 우선해 주세요.', manualVersionTitle:'VERSION / 업데이트 내역', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'HISTORY HTML / PDF 내보내기 기능을 추가하고 라이트 배색으로 고정 출력하도록 개선', manualChangelogV110B:'HISTORY의 FIRST 표시, LP 정렬, 증감값 표시를 개선', manualChangelogV110C:'FIRST / SECOND 버튼 조작성과 전체 자간을 조정', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'GAME 기록과 RESET 시 게임 진행·초기화 동작 개선', manualChangelogV102B:'UTILITY·SETTINGS 해치 열림 상태를 새로고침 전까지 유지하도록 변경', manualChangelogV102C:'코인·주사위 결과 표시와 토큰 수치 표시 조정', manualChangelogV102D:'헤더의 타이머·TURN·조작 버튼 배치 조정', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'업데이트 내역', manualChangelogV101A:'iPhone 노치／Dynamic Island 대응 여백과 화면 회전 시 LP 재렌더링 추가', manualChangelogV101D:'LIFE와 HISTORY에 FIRST / SECOND 표시 추가', manualChangelogV100:'릴리스', manualLife:'선공 / 후공 표시가 ON일 때 FIRST / SECOND를 탭하면 선공·후공을 바꿀 수 있습니다. LP를 탭해 계산합니다. 1~2자리 입력은 뒤에 00을 보조하며 +, −, ×2, ÷2, LP 지정이 가능합니다. LP는 0 아래로 내려가지 않습니다. LP 아래 DOMINUS 영역을 탭하면 빛·어둠·땅·물·불·바람 6속성의 발동 불가 상태를 한 번에 편집할 수 있으며, LIFE 화면에는 발동 불가 속성만 원형 아이콘으로 표시됩니다. 표시 기능은 설정에서 끌 수 있습니다.', manualTimer:'TURN을 탭해 턴을 진행합니다. 듀얼 타이머는 재생/일시정지 아이콘으로 조작하고 목표 A의 B분 전부터 강조됩니다. 왼쪽 시계는 형식과 표시 여부를 변경할 수 있습니다.', manualHeader:'헤더는 항상 표시되며 아이콘으로 P1/P2 교체, UNDO, RESET을 조작합니다. 푸터는 HIDE / SHOW로 접고 펼칩니다. 배경 애니메이션은 설정의 드롭다운에서 OFF 또는 반복 패턴을 선택합니다.', manualHistory:'HISTORY는 GAME→TURN 순서로 구분되며 선공 / 후공 표시가 ON이면 각 GAME의 초기 행에서 선공 플레이어에만 FIRST와 8000 / 8000을 표시합니다. LP 변동은 증감값을 위쪽 줄에, 변경 후 LP를 아래쪽 줄에 표시합니다. 타이머를 유지한 채 RESET하면 다음 GAME으로 진행하고 시작 시간·TURN 1·초기 LP를 기록합니다. 타이머도 리셋하면 GAME 1로 돌아갑니다. EXPORT에서 현재 표시를 HTML로 저장하거나 인쇄 화면을 통해 PDF로 저장할 수 있습니다.', manualUtility:'UTILITY에서 코인/주사위, 여러 토큰, 카드 카운터를 사용할 수 있으며 MEMO는 독립 탭입니다.', manualWake:'화면 절전 방지와 화면 방향 고정은 지원 브라우저에서만 작동합니다. iPhone Safari에서는 방향 고정을 사용할 수 없을 수 있습니다.', creator:'제작자: GYONIC', clearAllSettings:'모든 설정 삭제', clearSettingsTitle:'설정 초기화', clearSettingsBody:'플레이어 이름을 포함한 저장된 모든 설정을 초기값으로 되돌립니다. 현재 LP, 타이머, 기록, 토큰, 카운터의 듀얼 정보는 변경하지 않습니다.', clearSettingsDone:'저장된 설정을 초기화했습니다',
       resetTitle:'RESET LIFE', resetBody:'양쪽 LP를 8000으로 되돌리고 TURN 1로 초기화합니다. 타이머를 유지하면 다음 GAME으로 진행하며 HISTORY를 계속 유지합니다. 타이머도 리셋하면 GAME 1로 돌아가 새 매치 기록으로 초기화합니다. 토큰/카운터는 이름을 남기고 수치만 초기화합니다.', resetTimerToo:'타이머도 리셋', cancel:'취소', reset:'리셋', resetBoth:'LP와 타이머를 리셋했습니다', resetLP:'LP를 리셋했습니다'
     }
   };
@@ -2665,7 +2716,7 @@ select, .text-input {
         const order = getGameTurnOrder(game);
         const start = (Store.state.gameStarts || []).find(item => Math.max(1, Math.trunc(item.game || 1)) === game);
         const startTimerMs = Math.max(0, Math.trunc(start?.timerMs || 0));
-        const orderBadge = role => `<div class="history-order ${role}">${role === 'first' ? 'FIRST' : 'SECOND'}</div>`;
+        const orderBadge = role => role === 'first' ? '<div class="history-order first">FIRST</div>' : '';
         rows.push(`
           <tr>
             <td><div class="history-cell p1 initial">${orderBadge(order.p1)}<div class="history-lp">8000</div></div></td>
@@ -2688,8 +2739,8 @@ select, .text-input {
           }
           const cell = `
             <div class="history-cell ${h.player}">
-              <div class="history-lp">${h.after}</div>
               <div class="history-delta ${h.delta >= 0 ? 'pos' : 'neg'}">${signed(h.delta)}</div>
+              <div class="history-lp">${h.after}</div>
             </div>`;
           rows.push(`
             <tr>
@@ -2723,6 +2774,137 @@ select, .text-input {
       UI.renderLP();
       UI.syncUndoButtons();
       toast(t('history') + ' cleared');
+    }
+  };
+
+  const HistoryExport = {
+    timestamp() {
+      const d = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      return `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}`;
+    },
+    filename(ext) {
+      return `OCG_History_${this.timestamp()}.${ext}`;
+    },
+    documentHtml({ printMode = false } = {}) {
+      History.render();
+      const source = $('#historyContainer');
+      const cloned = source ? source.cloneNode(true) : document.createElement('div');
+      if (Store.state.settings.turnOrderVisible === false) {
+        cloned.querySelectorAll('.history-order').forEach(el => el.remove());
+      }
+
+      const pageStyle = document.querySelector('style')?.textContent || '';
+      const fontLinks = [...document.querySelectorAll('link[rel="preconnect"], link[rel="stylesheet"]')]
+        .map(link => link.outerHTML)
+        .join('\n');
+      const root = document.documentElement;
+      const attrs = {
+        // Export is always rendered in light mode regardless of the app appearance.
+        mode: 'light',
+        theme: root.dataset.theme || 'standard',
+        font: root.dataset.font || 'system',
+        turnOrder: Store.state.settings.turnOrderVisible === false ? 'off' : 'on'
+      };
+      const title = `${Store.state.names.p1} vs ${Store.state.names.p2} - HISTORY`;
+      const lang = Store.state.settings.language || 'ja';
+      const printScript = printMode ? `<script>window.addEventListener('load',()=>setTimeout(()=>{window.focus();window.print();},250));<\/script>` : '';
+
+      return `<!DOCTYPE html>
+<html lang="${escapeHTML(lang)}" data-mode="${escapeHTML(attrs.mode)}" data-theme="${escapeHTML(attrs.theme)}" data-font="${escapeHTML(attrs.font)}" data-turn-order="${escapeHTML(attrs.turnOrder)}" data-dynamic-bg="off" data-bg-pattern="off">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${escapeHTML(title)}</title>
+${fontLinks}
+<style>${pageStyle}</style>
+<style>
+:root{color-scheme:light!important;}
+html,body{min-height:100%;height:auto;overflow:auto!important;background:var(--bg)!important;color:var(--text)!important;}
+body{margin:0;padding:24px;font-family:var(--font);-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.export-history-shell{width:min(100%,760px);margin:0 auto;}
+.export-history-title{margin:0 0 14px;font-family:var(--display-font);font-size:22px;font-weight:950;color:var(--accent);letter-spacing: .055em;}
+.export-history-meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:-6px 0 14px;color:var(--muted);font-size:10px;font-weight:800;}
+.export-history-shell .history-table-wrap{background:var(--surface);box-shadow:none;}
+.export-history-shell .history-table{width:100%;}
+.export-history-shell .history-table tr{break-inside:avoid;page-break-inside:avoid;}
+.export-history-shell .history-table thead{display:table-header-group;}
+@page{size:A4 portrait;margin:12mm;}
+@media print{
+  html,body{background:var(--bg)!important;}
+  body{padding:0;}
+  .export-history-shell{width:100%;max-width:none;}
+  .export-history-title{font-size:18px;margin-bottom:10px;}
+  .export-history-meta{font-size:9px;margin-bottom:10px;}
+  .history-table th,.history-table td{padding:8px 6px;}
+}
+</style>
+</head>
+<body>
+<main class="export-history-shell">
+  <h1 class="export-history-title">HISTORY</h1>
+  <div class="export-history-meta">
+    <span>${escapeHTML(Store.state.names.p1)} vs ${escapeHTML(Store.state.names.p2)}</span>
+    <span>${escapeHTML(new Date().toLocaleString())}</span>
+  </div>
+  ${cloned.innerHTML}
+</main>
+${printScript}
+</body>
+</html>`;
+    },
+    downloadHtml() {
+      const html = this.documentHtml();
+      const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = this.filename('html');
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1200);
+      toast(t('historyExportHtmlDone'));
+    },
+    printPdf() {
+      const popup = window.open('', '_blank');
+      if (!popup) {
+        toast(t('historyExportPopupBlocked'));
+        return;
+      }
+      popup.document.open();
+      popup.document.write(this.documentHtml({ printMode: true }));
+      popup.document.close();
+    },
+    open() {
+      Modal.show(`
+        <div class="modal small" role="dialog" aria-modal="true" aria-label="${escapeHTML(t('historyExportTitle'))}">
+          <div class="modal-head">
+            <div class="modal-title">${escapeHTML(t('historyExportTitle'))}</div>
+            <button class="close-btn" data-modal-close aria-label="${escapeHTML(t('close'))}">×</button>
+          </div>
+          <div class="export-choice-grid">
+            <button type="button" class="export-choice-btn" id="exportHistoryHtml">
+              <strong>${escapeHTML(t('historyExportHtml'))}</strong>
+              <span>${escapeHTML(t('historyExportHtmlDesc'))}</span>
+            </button>
+            <button type="button" class="export-choice-btn" id="exportHistoryPdf">
+              <strong>${escapeHTML(t('historyExportPdf'))}</strong>
+              <span>${escapeHTML(t('historyExportPdfDesc'))}</span>
+            </button>
+          </div>
+          <div class="confirm-text" style="margin-top:12px">${escapeHTML(t('historyExportPdfHint'))}</div>
+        </div>
+      `, () => {
+        $('#exportHistoryHtml')?.addEventListener('click', () => {
+          this.downloadHtml();
+          Modal.close();
+        });
+        $('#exportHistoryPdf')?.addEventListener('click', () => {
+          this.printPdf();
+          Modal.close();
+        });
+      });
     }
   };
 
@@ -3908,6 +4090,7 @@ select, .text-input {
       };
       bindLPButton('#p1LPButton', 'p1');
       bindLPButton('#p2LPButton', 'p2');
+      $('#openHistoryExport')?.addEventListener('click', () => HistoryExport.open());
       $('#timerToggle').addEventListener('click', () => Timer.toggle());
       $('#turnDisplay').addEventListener('click', () => this.nextTurn());
       $$('.turn-order-btn').forEach(btn => btn.addEventListener('click', event => {
