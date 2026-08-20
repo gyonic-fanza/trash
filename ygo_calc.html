@@ -1,0 +1,3636 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<meta name="color-scheme" content="light dark" />
+<title>OCG Life Counter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800;900&family=Noto+Sans+JP:wght@400;700;800;900&family=Noto+Sans+KR:wght@400;700;800;900&family=Noto+Serif+JP:wght@400;700;900&family=Noto+Serif+KR:wght@400;700;900&family=Orbitron:wght@400;600;700;800;900&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f3f4f6;
+  --surface: #ffffff;
+  --surface-2: #e9ebef;
+  --text: #111318;
+  --muted: #666d78;
+  --border: rgba(17, 19, 24, .12);
+  --accent: #242933;
+  --accent-contrast: #ffffff;
+  --p1: #3a5f88;
+  --p2: #805443;
+  --danger: #b3261e;
+  --success: #2e7d32;
+  --shadow: 0 10px 30px rgba(0,0,0,.10);
+  --radius: 18px;
+  --tap: rgba(0,0,0,.06);
+  --nav-h: 70px;
+  --timer-h: 52px;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --display-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+html[data-font="system"] { --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Yu Gothic", "Malgun Gothic", Helvetica, Arial, sans-serif; --display-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Yu Gothic", "Malgun Gothic", Helvetica, Arial, sans-serif; }
+html[data-font="sans"] { --font: "Noto Sans JP", "Noto Sans KR", sans-serif; --display-font: "Noto Sans JP", "Noto Sans KR", sans-serif; }
+html[data-font="serif"] { --font: "Noto Serif JP", "Noto Serif KR", serif; --display-font: "Noto Serif JP", "Noto Serif KR", serif; }
+html[data-font="mono"] { --font: "Roboto Mono", "Noto Sans JP", "Noto Sans KR", monospace; --display-font: "Roboto Mono", "Noto Sans JP", "Noto Sans KR", monospace; }
+html[data-font="rounded"] { --font: "M PLUS Rounded 1c", "Noto Sans KR", sans-serif; --display-font: "M PLUS Rounded 1c", "Noto Sans KR", sans-serif; }
+html[data-font="orbitron"] { --font: "Noto Sans JP", "Noto Sans KR", sans-serif; --display-font: "Orbitron", "Noto Sans JP", "Noto Sans KR", sans-serif; }
+html[data-font="rajdhani"] { --font: "Noto Sans JP", "Noto Sans KR", sans-serif; --display-font: "Rajdhani", "Noto Sans JP", "Noto Sans KR", sans-serif; }
+
+html[data-mode="dark"] {
+  --bg: #0f1115;
+  --surface: #181b21;
+  --surface-2: #22262e;
+  --text: #f5f7fa;
+  --muted: #a4abb6;
+  --border: rgba(255,255,255,.12);
+  --accent: #e3e7ee;
+  --accent-contrast: #121418;
+  --danger: #ff8a80;
+  --success: #81c784;
+  --shadow: 0 12px 34px rgba(0,0,0,.34);
+  --tap: rgba(255,255,255,.08);
+}
+
+html[data-theme="red"] {
+  --accent: #a61e2d;
+  --p1: #8f2431;
+  --p2: #5f4044;
+}
+html[data-theme="blue"] {
+  --accent: #1e5ea8;
+  --p1: #1e66b3;
+  --p2: #415f80;
+}
+html[data-theme="green"] {
+  --accent: #237a4b;
+  --p1: #2f8757;
+  --p2: #4f6f5d;
+}
+html[data-theme="purple"] {
+  --accent: #7045a8;
+  --p1: #7650a8;
+  --p2: #5e5278;
+}
+html[data-theme="amber"] {
+  --accent: #9a6500;
+  --p1: #a96d00;
+  --p2: #7a6541;
+}
+html[data-theme="teal"] {
+  --accent: #087a7a;
+  --p1: #0c8585;
+  --p2: #426f73;
+}
+html[data-theme="versus"] {
+  --accent: #6c4aa3;
+  --p1: #b22a3a;
+  --p2: #2368b5;
+}
+html[data-theme="monochrome"] {
+  --accent: #111111;
+  --p1: #343434;
+  --p2: #666666;
+}
+html[data-theme="monochrome"][data-mode="dark"] {
+  --bg: #090909;
+  --surface: #171717;
+  --surface-2: #292929;
+  --text: #f7f7f7;
+  --muted: #c3c3c3;
+  --border: rgba(255,255,255,.22);
+  --accent: #f2f2f2;
+  --accent-contrast: #111111;
+  --p1: #d8d8d8;
+  --p2: #929292;
+}
+html[data-theme="monochrome"][data-mode="dark"] .player-card.p1,
+html[data-theme="monochrome"][data-mode="dark"] .player-card.p2 { color: var(--text); }
+html[data-theme="high-contrast"] {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f0f0f0;
+  --text: #000000;
+  --muted: #222222;
+  --border: #000000;
+  --accent: #000000;
+  --accent-contrast: #ffffff;
+  --p1: #003e7e;
+  --p2: #7c2500;
+  --shadow: none;
+}
+html[data-theme="high-contrast"][data-mode="dark"] {
+  --bg: #000000;
+  --surface: #000000;
+  --surface-2: #121212;
+  --text: #ffffff;
+  --muted: #dedede;
+  --border: #ffffff;
+  --accent: #ffffff;
+  --accent-contrast: #000000;
+  --p1: #5bb8ff;
+  --p2: #ff9d75;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; width: 100%; min-height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); overscroll-behavior: none; }
+body { overflow-x: hidden; }
+button, input, select { font: inherit; color: inherit; }
+button { border: 0; }
+button:active { transform: translateY(1px); filter: brightness(.97); }
+.hidden { display: none !important; }
+
+.app {
+  --header-current-h: calc(var(--timer-h) + env(safe-area-inset-top));
+  --footer-current-h: calc(var(--nav-h) + env(safe-area-inset-bottom));
+  position: relative;
+  isolation: isolate;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 520px;
+  background: color-mix(in srgb, var(--accent) 12%, var(--bg));
+  overflow: hidden;
+}
+.app::before, .app::after {
+  content: "";
+  position: fixed;
+  z-index: 0;
+  pointer-events: none;
+  inset: -30%;
+  opacity: 0;
+  transition: opacity .3s ease;
+  will-change: transform, opacity;
+}
+
+/* DRIFT: soft moving color fields */
+html[data-dynamic-bg="on"][data-bg-pattern="drift"] .app::before {
+  opacity: .92;
+  background:
+    radial-gradient(circle at 22% 28%, color-mix(in srgb, var(--p1) 88%, transparent) 0 13%, transparent 37%),
+    radial-gradient(circle at 78% 70%, color-mix(in srgb, var(--p2) 88%, transparent) 0 13%, transparent 37%),
+    radial-gradient(circle at 50% 48%, color-mix(in srgb, var(--accent) 52%, transparent) 0 12%, transparent 36%);
+  filter: blur(16px) saturate(1.22);
+  animation: dynamicBgDriftA 15s ease-in-out infinite;
+}
+html[data-dynamic-bg="on"][data-bg-pattern="drift"] .app::after {
+  opacity: .62;
+  inset: -18%;
+  background: conic-gradient(from 20deg at 50% 50%, transparent 0 18%, color-mix(in srgb, var(--p1) 58%, transparent) 29%, transparent 40% 56%, color-mix(in srgb, var(--p2) 58%, transparent) 68%, transparent 82% 100%);
+  filter: blur(30px);
+  animation: dynamicBgDriftB 23s linear infinite;
+}
+
+/* AURORA: broad luminous bands */
+html[data-dynamic-bg="on"][data-bg-pattern="aurora"] .app::before {
+  opacity: .94;
+  inset: -18%;
+  background: linear-gradient(115deg,
+    color-mix(in srgb, var(--p1) 72%, transparent) 5%,
+    transparent 30%,
+    color-mix(in srgb, var(--accent) 56%, transparent) 49%,
+    transparent 67%,
+    color-mix(in srgb, var(--p2) 72%, transparent) 92%);
+  filter: blur(28px) saturate(1.3);
+  animation: dynamicBgAurora 12s ease-in-out infinite;
+}
+html[data-dynamic-bg="on"][data-bg-pattern="aurora"] .app::after {
+  opacity: .68;
+  inset: -26%;
+  background:
+    radial-gradient(ellipse at 30% 50%, color-mix(in srgb, var(--p1) 55%, transparent), transparent 48%),
+    radial-gradient(ellipse at 72% 48%, color-mix(in srgb, var(--p2) 55%, transparent), transparent 48%);
+  filter: blur(34px);
+  animation: dynamicBgAuroraB 18s ease-in-out infinite;
+}
+
+/* WAVES: flowing rings */
+html[data-dynamic-bg="on"][data-bg-pattern="waves"] .app::before {
+  opacity: .84;
+  inset: -12%;
+  background: repeating-radial-gradient(ellipse at 28% 50%,
+    color-mix(in srgb, var(--p1) 46%, transparent) 0 6%,
+    transparent 9% 16%,
+    color-mix(in srgb, var(--p2) 34%, transparent) 19% 24%,
+    transparent 27% 35%);
+  filter: blur(10px) saturate(1.15);
+  animation: dynamicBgWaves 16s linear infinite;
+}
+html[data-dynamic-bg="on"][data-bg-pattern="waves"] .app::after {
+  opacity: .58;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--p1) 36%, transparent),
+    transparent 42% 58%,
+    color-mix(in srgb, var(--p2) 36%, transparent));
+  filter: blur(24px);
+  animation: dynamicBgWavesB 10s ease-in-out infinite;
+}
+
+/* PULSE: breathing center glow */
+html[data-dynamic-bg="on"][data-bg-pattern="pulse"] .app::before {
+  opacity: .94;
+  inset: -8%;
+  background:
+    radial-gradient(circle at 28% 50%, color-mix(in srgb, var(--p1) 74%, transparent) 0 12%, transparent 38%),
+    radial-gradient(circle at 72% 50%, color-mix(in srgb, var(--p2) 74%, transparent) 0 12%, transparent 38%);
+  filter: blur(18px) saturate(1.25);
+  animation: dynamicBgPulse 5.5s ease-in-out infinite;
+}
+html[data-dynamic-bg="on"][data-bg-pattern="pulse"] .app::after {
+  opacity: .68;
+  inset: -10%;
+  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent) 62%, transparent) 0 8%, transparent 34%);
+  filter: blur(20px);
+  animation: dynamicBgPulseB 7.5s ease-in-out infinite;
+}
+
+/* NEBULA: saturated clouds that sweep across the field */
+html[data-dynamic-bg="on"][data-bg-pattern="nebula"] .app::before {
+  opacity: .96;
+  inset: -20%;
+  background:
+    radial-gradient(ellipse at 18% 34%, color-mix(in srgb, var(--p1) 92%, transparent) 0 16%, transparent 42%),
+    radial-gradient(ellipse at 82% 66%, color-mix(in srgb, var(--p2) 92%, transparent) 0 16%, transparent 42%),
+    radial-gradient(circle at 54% 38%, color-mix(in srgb, var(--accent) 72%, transparent) 0 10%, transparent 32%);
+  filter: blur(20px) saturate(1.65) contrast(1.08);
+  animation: dynamicBgNebulaA 9s ease-in-out infinite;
+}
+html[data-dynamic-bg="on"][data-bg-pattern="nebula"] .app::after {
+  opacity: .72;
+  inset: -28%;
+  background: conic-gradient(from 0deg at 50% 50%,
+    color-mix(in srgb, var(--p1) 52%, transparent), transparent 18%,
+    color-mix(in srgb, var(--accent) 48%, transparent) 32%, transparent 52%,
+    color-mix(in srgb, var(--p2) 58%, transparent) 70%, transparent 88%);
+  filter: blur(34px) saturate(1.5);
+  animation: dynamicBgNebulaB 14s linear infinite;
+}
+
+/* BEAMS: bright diagonal light bars crossing the duel field */
+html[data-dynamic-bg="on"][data-bg-pattern="beams"] .app::before {
+  opacity: .9;
+  inset: -12% -35%;
+  background: repeating-linear-gradient(118deg,
+    transparent 0 9%,
+    color-mix(in srgb, var(--p1) 68%, transparent) 11% 15%,
+    transparent 18% 29%,
+    color-mix(in srgb, var(--p2) 68%, transparent) 31% 35%,
+    transparent 38% 50%);
+  filter: blur(7px) saturate(1.45);
+  animation: dynamicBgBeamsA 7s linear infinite;
+}
+html[data-dynamic-bg="on"][data-bg-pattern="beams"] .app::after {
+  opacity: .58;
+  inset: -20%;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--p1) 52%, transparent),
+    transparent 40% 60%,
+    color-mix(in srgb, var(--p2) 52%, transparent));
+  filter: blur(20px);
+  animation: dynamicBgBeamsB 4.8s ease-in-out infinite;
+}
+
+/* ORBIT: rotating rings around the center */
+html[data-dynamic-bg="on"][data-bg-pattern="orbit"] .app::before {
+  opacity: .92;
+  inset: -25%;
+  background: repeating-radial-gradient(circle at 50% 50%,
+    transparent 0 8%,
+    color-mix(in srgb, var(--accent) 54%, transparent) 9% 12%,
+    transparent 13% 20%,
+    color-mix(in srgb, var(--p1) 48%, transparent) 21% 24%,
+    transparent 25% 32%,
+    color-mix(in srgb, var(--p2) 48%, transparent) 33% 36%,
+    transparent 37% 44%);
+  filter: blur(5px) saturate(1.5);
+  animation: dynamicBgOrbitA 11s linear infinite;
+}
+html[data-dynamic-bg="on"][data-bg-pattern="orbit"] .app::after {
+  opacity: .72;
+  inset: -15%;
+  background:
+    radial-gradient(circle at 25% 50%, color-mix(in srgb, var(--p1) 80%, transparent), transparent 30%),
+    radial-gradient(circle at 75% 50%, color-mix(in srgb, var(--p2) 80%, transparent), transparent 30%);
+  filter: blur(18px);
+  animation: dynamicBgOrbitB 6s ease-in-out infinite;
+}
+
+/* DUEL: strong P1/P2 color hand-off from side to side */
+html[data-dynamic-bg="on"][data-bg-pattern="duel"] .app::before {
+  opacity: .98;
+  inset: -10%;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--p1) 92%, transparent) 0%,
+    color-mix(in srgb, var(--p1) 56%, transparent) 34%,
+    transparent 48% 52%,
+    color-mix(in srgb, var(--p2) 56%, transparent) 66%,
+    color-mix(in srgb, var(--p2) 92%, transparent) 100%);
+  filter: saturate(1.45) contrast(1.08);
+  animation: dynamicBgDuelA 5.8s ease-in-out infinite;
+}
+html[data-dynamic-bg="on"][data-bg-pattern="duel"] .app::after {
+  opacity: .64;
+  inset: -12%;
+  background: linear-gradient(110deg,
+    transparent 30%,
+    color-mix(in srgb, var(--accent) 72%, transparent) 45% 55%,
+    transparent 70%);
+  filter: blur(15px);
+  animation: dynamicBgDuelB 3.8s ease-in-out infinite;
+}
+
+@keyframes dynamicBgDriftA {
+  0%,100% { transform: translate3d(-5%,-4%,0) scale(1.08) rotate(0deg); }
+  50% { transform: translate3d(7%,6%,0) scale(1.16) rotate(5deg); }
+}
+@keyframes dynamicBgDriftB {
+  from { transform: rotate(0deg) scale(1.06); }
+  to { transform: rotate(360deg) scale(1.06); }
+}
+@keyframes dynamicBgAurora {
+  0%,100% { transform: translate3d(-10%,0,0) skewX(-8deg) scale(1.08); }
+  50% { transform: translate3d(10%,3%,0) skewX(8deg) scale(1.14); }
+}
+@keyframes dynamicBgAuroraB {
+  0%,100% { transform: translate3d(0,-8%,0) scale(1.04); }
+  50% { transform: translate3d(0,8%,0) scale(1.15); }
+}
+@keyframes dynamicBgWaves {
+  from { transform: rotate(0deg) scale(1.02); background-position: 0 0; }
+  to { transform: rotate(360deg) scale(1.02); background-position: 180px 120px; }
+}
+@keyframes dynamicBgWavesB {
+  0%,100% { transform: translateX(-8%) scaleX(1.04); }
+  50% { transform: translateX(8%) scaleX(1.14); }
+}
+@keyframes dynamicBgPulse {
+  0%,100% { transform: scale(1); opacity:.78; }
+  50% { transform: scale(1.18); opacity:1; }
+}
+@keyframes dynamicBgPulseB {
+  0%,100% { transform: scale(.92) rotate(0deg); opacity:.58; }
+  50% { transform: scale(1.22) rotate(180deg); opacity:1; }
+}
+@keyframes dynamicBgNebulaA {
+  0%,100% { transform: translate3d(-6%,-5%,0) scale(1.06) rotate(0deg); }
+  50% { transform: translate3d(7%,7%,0) scale(1.18) rotate(8deg); }
+}
+@keyframes dynamicBgNebulaB {
+  from { transform: rotate(0deg) scale(1.08); }
+  to { transform: rotate(360deg) scale(1.08); }
+}
+@keyframes dynamicBgBeamsA {
+  from { background-position: 0 0; transform: translate3d(-4%,0,0); }
+  to { background-position: 320px 0; transform: translate3d(-4%,0,0); }
+}
+@keyframes dynamicBgBeamsB {
+  0%,100% { transform: scaleX(.92) translateX(-6%); opacity:.68; }
+  50% { transform: scaleX(1.14) translateX(6%); opacity:1; }
+}
+@keyframes dynamicBgOrbitA {
+  from { transform: rotate(0deg) scale(1.02); }
+  to { transform: rotate(360deg) scale(1.02); }
+}
+@keyframes dynamicBgOrbitB {
+  0%,100% { transform: translateY(-6%) scale(.96); }
+  50% { transform: translateY(6%) scale(1.14); }
+}
+@keyframes dynamicBgDuelA {
+  0%,100% { transform: translateX(-8%) scaleX(1.12); }
+  50% { transform: translateX(8%) scaleX(.96); }
+}
+@keyframes dynamicBgDuelB {
+  0%,100% { transform: translateX(-12%) skewX(-8deg); opacity:.68; }
+  50% { transform: translateX(12%) skewX(8deg); opacity:1; }
+}
+
+/* When motion is enabled, everything between header and footer becomes translucent
+   so the animated canvas remains visibly present behind the UI. */
+html[data-dynamic-bg="on"] .main .player-card,
+html[data-dynamic-bg="on"] .main .panel,
+html[data-dynamic-bg="on"] .main .history-table-wrap,
+html[data-dynamic-bg="on"] .main .utility-section,
+html[data-dynamic-bg="on"] .main .result-box,
+html[data-dynamic-bg="on"] .main .memo-textarea,
+html[data-dynamic-bg="on"] .main .token-card,
+html[data-dynamic-bg="on"] .main .counter-row {
+  background: color-mix(in srgb, var(--surface) 44%, transparent) !important;
+  backdrop-filter: blur(5px) saturate(1.14);
+  -webkit-backdrop-filter: blur(5px) saturate(1.14);
+}
+html[data-dynamic-bg="on"] .screen.life-screen {
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--p1) 8%, transparent) 0 50%,
+    color-mix(in srgb, var(--p2) 8%, transparent) 50% 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-dynamic-bg="on"] .app::before,
+  html[data-dynamic-bg="on"] .app::after { animation: none !important; }
+}
+
+html[data-player-names="off"] .player-head { display: none; }
+html[data-player-names="off"] .lp-button { padding-top: 0; }
+.app.footer-collapsed { --footer-current-h: env(safe-area-inset-bottom); }
+
+/* Display font is explicitly applied to the duel-critical areas. */
+.topbar, .topbar button, .topbar .timer, .topbar .turn-display,
+.player-name, .lp-number {
+  font-family: var(--display-font) !important;
+}
+
+.topbar {
+  position: fixed;
+  z-index: 900;
+  top: 0; left: 0; right: 0;
+  height: var(--header-current-h);
+  display: grid;
+  grid-template-columns: minmax(0, .82fr) auto minmax(96px, .82fr);
+  align-items: end;
+  gap: 5px;
+  padding: calc(3px + env(safe-area-inset-top)) 6px 3px;
+  border-bottom: 1px solid var(--border);
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+.header-clock {
+  min-width: 0;
+  height: 34px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 0 2px 2px;
+  text-align: left;
+  color: var(--accent-contrast);
+  font-size: clamp(16px, 3.7vw, 22px);
+  line-height: .82;
+  font-weight: 850;
+  letter-spacing: -.015em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: visible;
+}
+html[data-clock-format="24hs"] .header-clock,
+html[data-clock-format="12hs"] .header-clock { font-size: clamp(14px, 3.2vw, 19px); }
+html[data-clock-format="date"] .header-clock { font-size: clamp(12px, 2.7vw, 17px); }
+html[data-clock-format="datetime24"] .header-clock,
+html[data-clock-format="datetime12"] .header-clock { font-size: clamp(10px, 2.2vw, 14px); letter-spacing: -.035em; }
+html[data-clock-format="datetime24s"] .header-clock,
+html[data-clock-format="datetime12s"] .header-clock { font-size: clamp(9px, 1.95vw, 12px); letter-spacing: -.045em; }
+.header-clock.clock-off { visibility: hidden; pointer-events: none; }
+.header-center {
+  min-width: 0;
+  height: 34px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+}
+.turn-control { height: 34px; display: flex; align-items: flex-end; }
+.turn-display {
+  min-width: 47px; height: 34px; padding: 0 1px 2px;
+  display: flex; align-items: flex-end; justify-content: center; gap: 2px;
+  background: transparent; border: 0; color: var(--accent-contrast);
+  font-variant-numeric: tabular-nums; white-space: nowrap; cursor: pointer;
+  text-shadow: 0 1px 3px rgba(0,0,0,.28);
+}
+.turn-display .turn-label {
+  padding-bottom: 2px; font-size: 8px; line-height: .9; font-weight: 900;
+  letter-spacing: .11em; opacity: .76;
+}
+.turn-display .turn-number {
+  font-size: 27px; line-height: .78; font-weight: 950; letter-spacing: -.06em;
+}
+.turn-display:active { opacity:.72; transform:scale(.97); }
+.header-separator {
+  width: 1px; height: 24px; margin: 0 1px 3px; flex: 0 0 auto;
+  background: color-mix(in srgb, var(--accent-contrast) 44%, transparent);
+  box-shadow: 1px 0 0 rgba(0,0,0,.08);
+}
+.timer-wrap {
+  min-width: 0; height: 34px; display: flex; align-items: flex-end; gap: 3px;
+}
+.timer {
+  min-width: 76px; height: 34px; display: flex; align-items: flex-end; justify-content: center;
+  padding: 0 0 2px; text-align: center; font-variant-numeric: tabular-nums;
+  font-size: clamp(28px, 6.4vw, 36px); line-height: .74; font-weight: 900;
+  letter-spacing: -.02em; color: var(--accent-contrast); white-space: nowrap;
+}
+.header-action-btn {
+  width: clamp(44px, 11.8vw, 58px); height: 34px; padding: 0; border-radius: 9px;
+  display: inline-grid; place-items: center;
+  background: color-mix(in srgb, var(--accent-contrast) 18%, transparent);
+  color: var(--accent-contrast); border: 1px solid color-mix(in srgb, var(--accent-contrast) 36%, transparent);
+  cursor: pointer; box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+  touch-action: manipulation;
+}
+.header-action-icon { font-size: 21px; line-height: 1; font-weight: 950; }
+.header-action-label { display:none !important; }
+.timer-wrap .header-action-btn { flex: 0 0 auto; }
+.top-actions { justify-self: end; display: flex; gap: 3px; min-width:0; }
+.brand-wrap, .brand { display:none; }
+.timer-wrap.timer-warning .timer {
+  padding: 5px 9px 4px;
+  border-radius: 12px;
+  background: #ffd33d;
+  color: #151515;
+  box-shadow: 0 0 0 2px rgba(255,255,255,.28), 0 0 18px rgba(255,211,61,.62);
+  animation: timerWarningPulse 1.05s ease-in-out infinite alternate;
+}
+@keyframes timerWarningPulse {
+  from { transform: scale(1); filter: brightness(1); }
+  to { transform: scale(1.055); filter: brightness(1.08); }
+}
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: inline-grid; place-items: center;
+  background: color-mix(in srgb, var(--accent-contrast) 16%, transparent); color: var(--accent-contrast);
+  border: 1px solid color-mix(in srgb, var(--accent-contrast) 28%, transparent);
+  cursor: pointer;
+}
+.top-actions { justify-self: end; display: flex; gap: 3px; min-width:0; }
+.brand-wrap, .brand { display:none; }
+
+.chrome-toggle {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--accent-contrast) 15%, transparent);
+  color: var(--accent-contrast);
+  border: 1px solid color-mix(in srgb, var(--accent-contrast) 25%, transparent);
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+}
+.chrome-layer-toggle {
+  position: fixed;
+  z-index: 980;
+  width: 42px;
+  height: 32px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent) 88%, var(--surface));
+  color: var(--accent-contrast);
+  border: 1px solid color-mix(in srgb, var(--accent-contrast) 28%, transparent);
+  box-shadow: 0 4px 14px rgba(0,0,0,.18);
+  font-size: 19px;
+  font-weight: 950;
+  cursor: pointer;
+  transition: top .2s ease, bottom .2s ease, transform .2s ease, background .2s ease;
+}
+
+.main {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: var(--header-current-h);
+  bottom: var(--footer-current-h);
+  min-height: 0;
+  overflow: hidden;
+  transition: top .2s ease, bottom .2s ease;
+}
+.screen { height: 100%; min-height: 0; overflow: auto; padding: 10px 12px; }
+.screen.life-screen {
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  grid-template-rows: 1fr;
+  gap: 3px;
+  padding: 3px 4px;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--p1) 30%, transparent) 0 50%,
+    color-mix(in srgb, var(--p2) 30%, transparent) 50% 100%);
+}
+
+.player-card {
+  position: relative;
+  min-height: 0;
+  display: block;
+  padding: 2px 3px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 7px solid var(--player-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.player-card.p1 { --player-color: var(--p1); background: color-mix(in srgb, var(--p1) 36%, var(--surface)); }
+.player-card.p2 { --player-color: var(--p2); background: color-mix(in srgb, var(--p2) 36%, var(--surface)); }
+.player-head {
+  position: absolute;
+  z-index: 20;
+  top: 4px;
+  left: 7px;
+  right: 7px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+.player-name {
+  max-width: 80%;
+  font-size: clamp(14px, 3.8vw, 22px);
+  font-weight: 900;
+  letter-spacing: .03em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.player-tag { font-size: 10px; font-weight: 900; letter-spacing: .12em; color: var(--player-color); }
+.dominus-zone {
+  position: absolute;
+  z-index: 35;
+  left: 7px;
+  right: 7px;
+  bottom: 5px;
+  min-height: clamp(28px, 7vw, 36px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 2px 5px;
+  border: 1px dashed color-mix(in srgb, var(--player-color) 44%, var(--border));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 30%, transparent);
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: manipulation;
+  transition: background .14s ease, border-color .14s ease, transform .14s ease;
+}
+.dominus-zone:active {
+  transform: scale(.985);
+  background: color-mix(in srgb, var(--surface) 45%, transparent);
+}
+.dominus-placeholder {
+  font-size: clamp(8px, 2.15vw, 11px);
+  font-weight: 900;
+  letter-spacing: .12em;
+  color: var(--muted);
+  opacity: .58;
+}
+.dominus-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 4px;
+  min-width: 0;
+}
+.dominus-icon,
+.dominus-choice {
+  --attr-color: #777;
+  --attr-text: #fff;
+  width: clamp(25px, 6.2vw, 32px);
+  height: clamp(25px, 6.2vw, 32px);
+  flex: 0 0 auto;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--attr-color) 82%, var(--border));
+  background: var(--attr-color);
+  color: var(--attr-text);
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  font-size: clamp(10px, 2.5vw, 14px);
+  line-height: 1;
+  font-weight: 950;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--attr-color) 32%, transparent);
+}
+.dominus-icon { position: relative; }
+.dominus-icon::after {
+  content: "";
+  position: absolute;
+  width: 125%;
+  height: 2px;
+  border-radius: 2px;
+  background: #ff3b30;
+  transform: rotate(-34deg);
+  box-shadow: 0 0 0 1px rgba(255,255,255,.28);
+}
+.dominus-choice {
+  cursor: pointer;
+  width: clamp(42px, 13vw, 56px);
+  height: clamp(42px, 13vw, 56px);
+  font-size: clamp(16px, 4.5vw, 22px);
+  opacity: .38;
+  filter: grayscale(.55) saturate(.55);
+  transition: transform .12s ease, opacity .12s ease, filter .12s ease, box-shadow .12s ease;
+}
+.dominus-choice:active { transform: scale(.94); }
+.dominus-choice[aria-pressed="true"] {
+  opacity: 1;
+  filter: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--attr-color) 30%, transparent), 0 5px 14px color-mix(in srgb, var(--attr-color) 35%, transparent);
+}
+.dominus-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  justify-items: center;
+  padding: 10px 0 4px;
+}
+.dominus-choice-wrap {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+.dominus-choice-label {
+  max-width: 72px;
+  font-size: 10px;
+  line-height: 1.15;
+  text-align: center;
+  color: var(--muted);
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+.dominus-preset-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.dominus-preset-title {
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  color: var(--muted);
+}
+.dominus-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.dominus-preset-btn {
+  min-height: 54px;
+  padding: 7px 8px;
+  border-radius: 13px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  display: grid;
+  align-content: center;
+  gap: 2px;
+  text-align: left;
+  cursor: pointer;
+  transition: transform .12s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease;
+}
+.dominus-preset-btn:active { transform: scale(.98); }
+.dominus-preset-btn[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+  border-color: color-mix(in srgb, var(--accent) 58%, var(--border));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.dominus-preset-jp {
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.15;
+}
+.dominus-preset-en {
+  font-size: 9px;
+  line-height: 1.1;
+  color: var(--muted);
+  font-weight: 800;
+}
+.dominus-preset-attrs {
+  margin-top: 2px;
+  font-size: 9px;
+  line-height: 1.1;
+  color: var(--muted);
+  font-weight: 800;
+}
+.dominus-icon[data-attr="light"], .dominus-choice[data-attr="light"] { --attr-color: #d8b84f; --attr-text: #171717; }
+.dominus-icon[data-attr="dark"], .dominus-choice[data-attr="dark"] { --attr-color: #6d4a91; }
+.dominus-icon[data-attr="earth"], .dominus-choice[data-attr="earth"] { --attr-color: #9a6638; }
+.dominus-icon[data-attr="water"], .dominus-choice[data-attr="water"] { --attr-color: #377fc4; }
+.dominus-icon[data-attr="fire"], .dominus-choice[data-attr="fire"] { --attr-color: #c94a3d; }
+.dominus-icon[data-attr="wind"], .dominus-choice[data-attr="wind"] { --attr-color: #4f9a73; }
+.lp-button {
+  position: relative;
+  z-index: 10;
+  pointer-events: auto;
+  touch-action: manipulation;
+  width: 100%; height: 100%; min-height: 0;
+  background: transparent; color: var(--text);
+  display: flex; align-items: center; justify-content: center;
+  padding: 13px 0 34px;
+  cursor: pointer;
+  border-radius: 14px;
+}
+.lp-button:active { background: var(--tap); }
+.lp-number {
+  display: block;
+  max-width: 100%;
+  font-size: 200px;
+  line-height: .82;
+  font-weight: 850;
+  letter-spacing: -.05em;
+  font-variant-numeric: tabular-nums;
+  transform-origin: center;
+  will-change: transform, color, filter;
+}
+.player-card.lp-pulse-up { animation: lpCardPulseUp .34s ease-out; }
+.player-card.lp-pulse-down { animation: lpCardPulseDown .34s ease-out; }
+.lp-number.lp-anim-up { animation: lpNumberUp .34s cubic-bezier(.2,.85,.3,1); }
+.lp-number.lp-anim-down { animation: lpNumberDown .34s cubic-bezier(.2,.85,.3,1); }
+@keyframes lpNumberUp {
+  0% { transform: translateY(7%) scale(.90); color: var(--success); filter: brightness(1.18); }
+  52% { transform: translateY(-4%) scale(1.08); color: var(--success); }
+  100% { transform: translateY(0) scale(1); color: var(--text); filter: none; }
+}
+@keyframes lpNumberDown {
+  0% { transform: translateY(-7%) scale(.90); color: var(--danger); filter: brightness(1.15); }
+  52% { transform: translateY(4%) scale(1.08); color: var(--danger); }
+  100% { transform: translateY(0) scale(1); color: var(--text); filter: none; }
+}
+@keyframes lpCardPulseUp {
+  0% { box-shadow: inset 0 0 0 999px color-mix(in srgb, var(--success) 15%, transparent), var(--shadow); }
+  100% { box-shadow: inset 0 0 0 999px transparent, var(--shadow); }
+}
+@keyframes lpCardPulseDown {
+  0% { box-shadow: inset 0 0 0 999px color-mix(in srgb, var(--danger) 15%, transparent), var(--shadow); }
+  100% { box-shadow: inset 0 0 0 999px transparent, var(--shadow); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .player-card.lp-pulse-up, .player-card.lp-pulse-down,
+  .lp-number.lp-anim-up, .lp-number.lp-anim-down {
+    animation-duration: .01ms !important;
+  }
+}
+.change-line { display: none; }
+.change-badge { font-weight: 800; font-variant-numeric: tabular-nums; }
+.change-badge.pos { color: var(--success); }
+.change-badge.neg { color: var(--danger); }
+
+.action-btn {
+  min-height: 38px;
+  padding: 6px 10px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  color: var(--text);
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  cursor: pointer;
+}
+.action-btn.primary { background: var(--accent); color: var(--accent-contrast); }
+.action-btn.danger { color: var(--danger); }
+.action-btn:disabled { opacity: .42; cursor: default; }
+
+.bottom-nav {
+  position: fixed;
+  z-index: 900;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--footer-current-h);
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  padding: 0 0 env(safe-area-inset-bottom);
+  border-top: 1px solid var(--border);
+  background: color-mix(in srgb, var(--accent) 15%, var(--surface));
+  transition: height .2s ease, padding .2s ease, background .2s ease, border .2s ease;
+  overflow: visible;
+}
+.app.footer-collapsed .bottom-nav {
+  height: 0;
+  padding: 0;
+  border-top-color: transparent;
+  background: transparent;
+  pointer-events: none;
+}
+.nav-btn, .footer-toggle-btn {
+  min-width: 0;
+  background: transparent;
+  color: var(--muted);
+  display: grid; place-items: center;
+  align-content: center;
+  gap: 2px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .03em;
+}
+.nav-btn .nav-icon, .footer-toggle-btn .nav-icon { font-size: 20px; line-height: 1; }
+.nav-btn.active { color: var(--accent-contrast); background: var(--accent); }
+.footer-toggle-btn {
+  border-left:1px solid color-mix(in srgb, var(--accent) 24%, var(--border));
+  color:color-mix(in srgb, var(--accent) 74%, var(--text));
+}
+.footer-toggle-btn:active { background:color-mix(in srgb, var(--accent) 13%, transparent); }
+.app.footer-collapsed .footer-toggle-btn {
+  position:fixed;
+  z-index:985;
+  right:0;
+  bottom:env(safe-area-inset-bottom);
+  width:76px;
+  height:54px;
+  pointer-events:auto;
+  background:color-mix(in srgb, var(--accent) 88%, var(--surface));
+  color:var(--accent-contrast);
+  border:1px solid color-mix(in srgb, var(--accent-contrast) 22%, transparent);
+  border-right:0;
+  border-bottom:0;
+  border-radius:14px 0 0 0;
+  box-shadow:0 -4px 14px rgba(0,0,0,.16);
+}
+.app.footer-collapsed .footer-toggle-btn .nav-icon { font-size:22px; }
+
+.section-title { margin: 4px 0 12px; font-size: 19px; font-weight: 850; color: var(--accent); }
+.panel {
+  background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
+  border-top: 4px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px;
+  margin-bottom: 10px;
+}
+.panel h3 { margin: 0 0 10px; font-size: 14px; }
+.empty { color: var(--muted); text-align: center; padding: 28px 12px; font-size: 13px; }
+
+
+.history-table-wrap {
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
+  border-radius: 16px;
+  background: var(--surface);
+}
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-variant-numeric: tabular-nums;
+}
+.history-table th,
+.history-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 10px 8px;
+  text-align: center;
+  vertical-align: middle;
+}
+.history-table tr:last-child td { border-bottom: 0; }
+.history-table th {
+  font-size: 11px;
+  letter-spacing: .08em;
+  font-weight: 900;
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+}
+.history-table th.time-col,
+.history-table td.time-col { width: 76px; }
+.history-table th.p1-col { color: var(--p1); }
+.history-table th.p2-col { color: var(--p2); }
+.history-game-row td {
+  padding: 9px 8px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 13px;
+  font-weight: 950;
+  letter-spacing: .16em;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.history-turn-row td {
+  padding: 7px 8px;
+  background: color-mix(in srgb, var(--accent) 16%, var(--surface));
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: .12em;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.history-time {
+  display:block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+.history-cell {
+  min-height: 48px;
+  border-radius: 10px;
+  padding: 7px 6px;
+  display: grid;
+  gap: 2px;
+  align-content: center;
+}
+.history-cell.p1 { background: color-mix(in srgb, var(--p1) 14%, transparent); }
+.history-cell.p2 { background: color-mix(in srgb, var(--p2) 14%, transparent); }
+.history-lp { font-size: 22px; line-height: 1; font-weight: 950; letter-spacing: -.02em; }
+.history-cell.initial { min-height: 54px; }
+.history-cell.initial .history-lp { font-size: 24px; }
+.history-delta { font-size: 12px; font-weight: 900; }
+.history-delta.pos { color: var(--success); }
+.history-delta.neg { color: var(--danger); }
+.history-empty-cell { color: color-mix(in srgb, var(--muted) 45%, transparent); }
+
+.utility-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.utility-card { min-height: 104px; display: flex; flex-direction: column; gap: 9px; }
+.utility-control-row { display:grid; grid-template-columns:minmax(0,1fr) minmax(72px,.72fr); gap:8px; align-items:center; }
+.utility-control-row .action-btn { min-height:40px; height:40px; padding-inline:10px; }
+.stepper { display: grid; grid-template-columns: 42px 1fr 42px; gap: 6px; align-items: center; }
+.stepper button { height: 40px; border-radius: 11px; background: var(--surface-2); border: 1px solid var(--border); cursor: pointer; font-size: 18px; font-weight: 800; }
+.stepper input { width: 100%; height: 40px; text-align: center; border: 1px solid var(--border); border-radius: 11px; background: var(--bg); font-weight: 800; }
+.result-box { min-height: 126px; border: 1px dashed var(--border); border-radius: 14px; padding: 12px; background: var(--bg); font-size: 13px; line-height: 1.55; word-break: break-word; }
+.utility-visuals { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; min-height: 72px; perspective: 700px; }
+
+.utility-summary { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--border); text-align: center; font-weight: 800; }
+.coin-scene {
+  width: 58px;
+  height: 58px;
+  perspective: 520px;
+  display: grid;
+  place-items: center;
+}
+.coin {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  transform-style: preserve-3d;
+  transform: rotateY(var(--coin-rest, 0deg));
+  will-change: transform;
+}
+.coin.flipping { animation: coinFlip3d 1.05s cubic-bezier(.18,.72,.22,1) forwards; }
+.coin-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border: 3px solid rgba(255,255,255,.52);
+  box-shadow: inset 0 0 0 3px rgba(0,0,0,.12), 0 5px 12px rgba(0,0,0,.22);
+  overflow: hidden;
+}
+.coin-face svg { width: 72%; height: 72%; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.coin-face.front {
+  color: #513600;
+  background: radial-gradient(circle at 32% 28%, #fff2a8 0 8%, #f4c84b 35%, #c98b12 72%, #8e5e00 100%);
+}
+.coin-face.front svg path { fill: currentColor; stroke: currentColor; }
+.coin-face.back {
+  color: #173d69;
+  background: radial-gradient(circle at 32% 28%, #eef8ff 0 8%, #b9d8ee 34%, #6c9dc2 70%, #365d80 100%);
+  transform: rotateY(180deg);
+}
+@keyframes coinFlip3d {
+  0% { transform: rotateY(0deg) rotateX(0deg) translateY(0) scale(1); }
+  30% { transform: rotateY(720deg) rotateX(16deg) translateY(-10px) scale(1.04); }
+  65% { transform: rotateY(1440deg) rotateX(-10deg) translateY(-4px) scale(1.02); }
+  100% { transform: rotateY(var(--coin-end)) rotateX(0deg) translateY(0) scale(1); }
+}
+.die {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #ffffff, #dfe3e8);
+  border: 2px solid rgba(20,24,30,.28);
+  box-shadow: inset -4px -4px 8px rgba(0,0,0,.08), 0 5px 12px rgba(0,0,0,.18);
+  transform-origin: center;
+  will-change: transform;
+}
+html[data-mode="dark"] .die { background: linear-gradient(145deg, #f5f5f5, #bfc5cc); }
+.die.rolling { animation: dieRollVisual .78s cubic-bezier(.22,.7,.25,1); }
+.pip {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #171a1f;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+}
+.die .p1 { left: 25%; top: 25%; } .die .p2 { left: 50%; top: 25%; } .die .p3 { left: 75%; top: 25%; }
+.die .p4 { left: 25%; top: 50%; } .die .p5 { left: 50%; top: 50%; } .die .p6 { left: 75%; top: 50%; }
+.die .p7 { left: 25%; top: 75%; } .die .p8 { left: 50%; top: 75%; } .die .p9 { left: 75%; top: 75%; }
+.die[data-value="1"] .p5,
+.die[data-value="2"] .p1, .die[data-value="2"] .p9,
+.die[data-value="3"] .p1, .die[data-value="3"] .p5, .die[data-value="3"] .p9,
+.die[data-value="4"] .p1, .die[data-value="4"] .p3, .die[data-value="4"] .p7, .die[data-value="4"] .p9,
+.die[data-value="5"] .p1, .die[data-value="5"] .p3, .die[data-value="5"] .p5, .die[data-value="5"] .p7, .die[data-value="5"] .p9,
+.die[data-value="6"] .p1, .die[data-value="6"] .p3, .die[data-value="6"] .p4, .die[data-value="6"] .p6, .die[data-value="6"] .p7, .die[data-value="6"] .p9 { opacity: 1; }
+@keyframes dieRollVisual {
+  0% { transform: rotate(-7deg) scale(.92) translateY(0); }
+  18% { transform: rotate(8deg) scale(1.06) translateY(-7px); }
+  38% { transform: rotate(-6deg) scale(.98) translateY(-3px); }
+  58% { transform: rotate(7deg) scale(1.05) translateY(-6px); }
+  78% { transform: rotate(-4deg) scale(.99) translateY(-1px); }
+  100% { transform: rotate(0deg) scale(1) translateY(0); }
+}
+.result-pop { animation: resultPop .25s ease-out; }
+@keyframes resultPop { from { opacity:.35; transform:scale(.97); } to { opacity:1; transform:scale(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .coin.flipping, .die.rolling, .result-pop, .timer-wrap.timer-warning .timer { animation-duration: .01ms !important; }
+}
+
+.token-toolbar, .counter-toolbar {
+  display:flex;
+  gap:8px;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+}
+.token-list, .counter-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; align-items:start; }
+.token-card, .counter-row {
+  min-width:0;
+  display:grid;
+  gap:7px;
+  padding:8px;
+  border-radius:15px;
+  background:color-mix(in srgb, var(--accent) 8%, var(--surface));
+  border:1px solid color-mix(in srgb, var(--accent) 22%, var(--border));
+}
+.token-name-row, .counter-name-row {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 34px;
+  gap:8px;
+  align-items:center;
+}
+.token-name-input, .counter-name {
+  width:100%;
+  min-width:0;
+  height:40px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--text);
+  padding:0 10px;
+  font-size:14px;
+  font-weight:900;
+}
+.token-delete, .counter-delete {
+  width:34px;
+  height:36px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--surface-2);
+  color:var(--danger);
+  font-size:17px;
+  font-weight:900;
+  cursor:pointer;
+}
+.token-values-row {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.token-value-block {
+  min-width:0;
+  min-height:82px;
+  display:grid;
+  grid-template-rows:auto 1fr;
+  place-items:center;
+  gap:2px;
+  padding:8px;
+  border-radius:13px;
+  border:1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
+  background:color-mix(in srgb, var(--accent) 10%, var(--surface));
+  cursor:pointer;
+}
+.token-value-label {
+  font-size:11px;
+  font-weight:950;
+  color:var(--accent);
+  letter-spacing:.08em;
+}
+.token-value-number {
+  font-size:clamp(30px, 9vw, 50px);
+  line-height:1;
+  font-weight:950;
+  letter-spacing:-.04em;
+  font-variant-numeric:tabular-nums;
+  color:var(--text);
+}
+.counter-empty {
+  padding:16px 10px;
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  border:1px dashed var(--border);
+  border-radius:12px;
+}
+.counter-value-row {
+  display:grid;
+  grid-template-columns:38px minmax(0,1fr) 38px;
+  gap:5px;
+  align-items:center;
+}
+.counter-step {
+  width:38px;
+  height:48px;
+  border-radius:13px;
+  border:1px solid var(--border);
+  background:var(--surface-2);
+  color:var(--text);
+  font-size:24px;
+  font-weight:950;
+  cursor:pointer;
+}
+.counter-value {
+  width:100%;
+  min-width:0;
+  height:54px;
+  border-radius:13px;
+  border:1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
+  background:color-mix(in srgb, var(--accent) 10%, var(--surface));
+  color:var(--text);
+  text-align:center;
+  padding:0 8px;
+  font-size:clamp(27px, 7.2vw, 44px);
+  line-height:1;
+  font-weight:950;
+  font-variant-numeric:tabular-nums;
+}
+@media (max-width: 380px) {
+  .counter-value-row { grid-template-columns:34px minmax(0,1fr) 34px; gap:4px; }
+  .counter-step { width:34px; height:46px; font-size:21px; }
+  .token-card, .counter-row { padding:7px; }
+  .token-name-input, .counter-name { padding-inline:7px; font-size:12px; }
+  .token-value-number { font-size:clamp(26px,8vw,38px); }
+}
+
+.setting-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.setting-row:last-child { border-bottom: 0; }
+.setting-label { font-size: 13px; font-weight: 800; }
+.setting-desc { margin-top: 3px; color: var(--muted); font-size: 10px; }
+select, .text-input {
+  min-height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--bg);
+  padding: 0 10px;
+  outline: none;
+}
+.text-input { width: 145px; }
+.switch { position: relative; width: 52px; height: 30px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; inset: 0; background: var(--surface-2); border: 1px solid var(--border); border-radius: 30px; cursor: pointer; transition: .2s; }
+.slider::before { content: ""; position: absolute; width: 22px; height: 22px; left: 3px; top: 3px; border-radius: 50%; background: var(--muted); transition: .2s; }
+.switch input:checked + .slider { background: color-mix(in srgb, var(--accent) 26%, var(--surface)); }
+.switch input:checked + .slider::before { transform: translateX(22px); background: var(--accent); }
+.setting-number {
+  width: 92px;
+  min-height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--bg);
+  color: var(--text);
+  padding: 0 10px;
+  text-align: right;
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+}
+.utility-section {
+  padding: 0;
+  overflow: hidden;
+}
+.utility-section > summary {
+  list-style: none;
+  cursor: pointer;
+  min-height: 48px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding: 11px 14px;
+  font-size:14px;
+  font-weight:900;
+  color:var(--text);
+  user-select:none;
+}
+.utility-section > summary::-webkit-details-marker { display:none; }
+.utility-section > summary::after {
+  content:'＋';
+  flex:0 0 auto;
+  color:var(--accent);
+  font-size:20px;
+  line-height:1;
+}
+.utility-section[open] > summary::after { content:'−'; }
+.utility-section[open] > summary { border-bottom:1px solid var(--border); }
+.utility-section-body { padding:12px 14px 14px; }
+.utility-section .utility-grid { margin:0; }
+.utility-result-block { margin-top:10px; }
+.utility-result-label { margin:0 0 8px; font-size:12px; font-weight:900; color:var(--muted); }
+.memo-textarea {
+  width: 100%;
+  min-height: 132px;
+  resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg);
+  color: var(--text);
+  padding: 12px 13px;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.55;
+  outline: none;
+}
+.memo-textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+.memo-actions { display:flex; justify-content:flex-end; margin-top:8px; }
+.memo-screen { overflow:hidden; }
+.memo-screen > .panel { height:calc(100% - 42px); min-height:0; display:flex; flex-direction:column; }
+.memo-screen .memo-textarea { flex:1; min-height:0; resize:none; }
+.settings-danger {
+  width: 100%;
+  margin-top: 10px;
+  min-height: 44px;
+  border-radius: 13px;
+  border: 1px solid color-mix(in srgb, var(--danger) 45%, var(--border));
+  background: color-mix(in srgb, var(--danger) 10%, var(--surface));
+  color: var(--danger);
+  font-weight: 900;
+  cursor: pointer;
+}
+.manual-box {
+  margin-top: 10px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+  overflow: hidden;
+}
+.manual-box summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 13px 14px;
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--text);
+}
+.manual-box summary::-webkit-details-marker { display:none; }
+.manual-box summary::after { content:'＋'; float:right; color:var(--accent); }
+.manual-box[open] summary::after { content:'−'; }
+.manual-content {
+  padding: 0 14px 14px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.65;
+}
+.manual-content ul { margin: 10px 0; padding-left: 1.25em; }
+.manual-content a { color: var(--accent); font-weight: 850; }
+.manual-version p { margin: 0; }
+.manual-version-date { margin-left: .5em; color: var(--muted); font-size: .9em; }
+.manual-changelog ul { margin: 6px 0 0; padding-left: 1.2em; }
+.manual-changelog li { margin: 0; line-height: 1.55; color: var(--muted); }
+.manual-changelog li strong { color: var(--text); }
+.settings-section { padding: 0; overflow: hidden; }
+.settings-section > summary {
+  cursor: pointer;
+  list-style: none;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 14px;
+  font-size: 13px;
+  font-weight: 950;
+  letter-spacing: .05em;
+  color: var(--accent);
+  user-select: none;
+}
+.settings-section > summary::-webkit-details-marker { display: none; }
+.settings-section > summary::after { content: '＋'; font-size: 18px; line-height: 1; }
+.settings-section[open] > summary::after { content: '−'; }
+.settings-section[open] > summary { border-bottom: 1px solid var(--border); }
+.settings-section-body { padding: 0 14px 6px; }
+.settings-section-body .setting-row:first-child { padding-top: 12px; }
+.manual-pro {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+}
+.manual-chapter {
+  padding: 12px 13px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--border));
+}
+.manual-chapter h3 {
+  margin: 0 0 7px;
+  font-size: 14px;
+  color: var(--accent);
+}
+.manual-chapter p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--text);
+}
+.manual-note {
+  padding: 10px 12px;
+  border-left: 4px solid var(--accent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.creator-line { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border); }
+
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 1000;
+  display: flex; align-items: flex-end; justify-content: center;
+  background: rgba(0,0,0,.52);
+  padding: max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom));
+}
+.modal {
+  width: min(100%, 560px);
+  max-height: min(92dvh, 760px);
+  overflow: auto;
+  border-radius: 24px 24px 18px 18px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 60px rgba(0,0,0,.3);
+  padding: 14px;
+}
+.modal.small { max-width: 430px; align-self: center; border-radius: 20px; }
+.modal-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
+.modal-title { font-weight: 900; font-size: 17px; }
+.close-btn { width: 38px; height: 38px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--border); cursor: pointer; font-size: 20px; }
+
+.calc-status { display: grid; grid-template-columns: 1fr; gap: 8px; align-items: end; margin-bottom: 9px; }
+.calc-player { font-size: 11px; color: var(--muted); font-weight: 800; }
+.calc-current { font-size: 20px; font-weight: 900; font-variant-numeric: tabular-nums; }
+.mode-toggle { min-height: 38px; padding: 0 10px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); font-size: 11px; font-weight: 900; cursor: pointer; }
+.calc-display { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 10px 12px; margin-bottom: 10px; }
+.calc-expression { min-height: 34px; text-align: right; font-size: 25px; font-weight: 850; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.calc-entered { color: var(--text); }
+.calc-auto-zero { color: color-mix(in srgb, var(--text) 28%, transparent); font-weight: 800; }
+.calc-preview { min-height: 20px; text-align: right; color: var(--muted); font-size: 12px; margin-top: 3px; }
+.calc-preview:empty { display: none; }
+.calc-result-preview { min-height: 18px; text-align: right; color: var(--accent); font-size: 11px; font-weight: 800; margin-top: 2px; }
+.calc-quick { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-bottom:7px; }
+.calc-quick .calc-key { background:var(--accent); color:var(--accent-contrast); font-size:16px; }
+.calc-quick .calc-key.set-mode { background:color-mix(in srgb, var(--accent) 16%, var(--surface)); color:var(--accent); }
+.calc-quick .calc-key.set-mode.active { background:var(--accent); color:var(--accent-contrast); }
+.calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
+.calc-key { min-height: 54px; border-radius: 13px; background: var(--surface-2); border: 1px solid var(--border); font-size: 20px; font-weight: 850; cursor: pointer; }
+.calc-key.op { background: color-mix(in srgb, var(--accent) 14%, var(--surface)); color: var(--accent); }
+.calc-key.clear { color: var(--danger); }
+.calc-key.enter { grid-column: span 4; background: var(--accent); color: var(--accent-contrast); font-size: 16px; }
+.calc-key.raw100 { font-size: 13px; }
+
+.confirm-text { font-size: 13px; line-height: 1.7; color: var(--muted); }
+.check-row { display: flex; align-items: center; gap: 9px; padding: 12px; margin: 12px 0; background: var(--bg); border: 1px solid var(--border); border-radius: 13px; font-size: 13px; font-weight: 800; }
+.check-row input { width: 20px; height: 20px; }
+.modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 12px); z-index: 1200;
+  transform: translate(-50%, 20px); opacity: 0;
+  pointer-events: none;
+  background: var(--text); color: var(--bg);
+  padding: 9px 13px; border-radius: 999px;
+  font-size: 12px; font-weight: 800;
+  transition: .18s ease;
+  max-width: calc(100vw - 28px);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.toast.show { transform: translate(-50%, 0); opacity: .94; }
+
+
+@media (max-width: 520px) {
+  .topbar { grid-template-columns: minmax(62px, .8fr) auto minmax(102px, .8fr); gap:3px; padding-left:4px; padding-right:4px; }
+  .brand { display:none; }
+  .header-clock { min-width:0; }
+  .timer { min-width:68px; font-size:30px; }
+  .header-center { gap:2px; }
+  .turn-display { min-width:43px; height:32px; padding:0 1px 2px; gap:1px; }
+  .turn-display .turn-label { font-size:7px; }
+  .turn-display .turn-number { font-size:24px; }
+  .timer-wrap { height:32px; gap:2px; }
+  .timer { min-width:66px; font-size:22px; }
+  .topbar .header-action-btn { width:clamp(44px,11.5vw,50px); height:32px; }
+  .top-actions { gap:2px; }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  :root { --timer-h: 52px; --nav-h: 54px; }
+  .topbar { padding: calc(4px + env(safe-area-inset-top)) 12px 4px; }
+  .icon-btn { width: 36px; height: 36px; }
+  .timer { font-size: 24px; }
+  .player-card { padding: 2px 3px; }
+  .utility-grid { grid-template-columns: 1fr 1fr; }
+  .modal { max-height: 94dvh; }
+  .calc-key { min-height: 43px; }
+}
+
+@media (max-width: 380px), (max-height: 650px) {
+  :root { --timer-h: 48px; --nav-h: 62px; }
+  .screen.life-screen { gap: 4px; padding: 4px 5px; }
+  .player-card { padding: 2px 3px; border-radius: 15px; }
+  .change-line { min-height: 18px; font-size: 10px; }
+  .action-btn { min-height: 38px; }
+  .topbar { padding: calc(2px + env(safe-area-inset-top)) 4px 2px; }
+  .header-clock { min-width:0; }
+  .timer { min-width:62px; font-size:27px; }
+  .header-center { height:32px; gap:1px; }
+  .turn-control, .turn-display { height:32px; }
+  .turn-display { min-width:45px; padding:0 1px 3px; gap:1px; }
+  .turn-display .turn-label { font-size:7px; }
+  .turn-display .turn-number { font-size:22px; }
+  .timer-wrap { height:32px; gap:2px; }
+  .timer { min-width:64px; font-size:21px; }
+  .topbar .header-action-btn { width:44px; height:30px; }
+  .top-actions { gap:2px; }
+  .calc-key { min-height: 48px; }
+}
+
+@media (max-width: 350px) {
+  .topbar { grid-template-columns:minmax(34px,.55fr) auto minmax(126px,.75fr); gap:2px; }
+  .topbar .header-action-btn { width:42px; }
+  .turn-display { min-width:42px; }
+  .timer { min-width:58px; }
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="topbar">
+    <div class="header-clock" id="localClock" aria-label="Current time">00:00</div>
+    <div class="header-center">
+      <div class="turn-control" aria-label="Turn counter">
+        <button type="button" class="turn-display" id="turnDisplay" aria-label="Advance turn" title="NEXT TURN"><span class="turn-label">TURN</span><span class="turn-number">1</span></button>
+      </div>
+      <span class="header-separator" aria-hidden="true"></span>
+      <div class="timer-wrap" id="timerWrap" aria-label="Duel timer">
+        <div class="timer" id="timerDisplay">0:00</div>
+        <button class="header-action-btn" id="timerToggle" aria-label="Start timer" title="TIMER"><span class="header-action-icon">▶</span></button>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="header-action-btn" id="swapPlayers" aria-label="Swap P1 and P2" title="SWAP"><span class="header-action-icon">⇄</span></button>
+      <button class="header-action-btn" id="quickUndo" aria-label="Undo last LP change" title="UNDO"><span class="header-action-icon">↶</span></button>
+      <button class="header-action-btn" id="openReset" aria-label="Reset duel" title="RESET"><span class="header-action-icon">↻</span></button>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="screen life-screen" data-screen="life">
+      <article class="player-card p1">
+        <div class="player-head">
+          <div class="player-name" id="p1NameDisplay">PLAYER 1</div>
+          <div class="player-tag">P1</div>
+        </div>
+        <button type="button" class="lp-button" id="p1LPButton" data-player="p1" aria-label="PLAYER 1 のライフポイントを計算">
+          <span class="lp-number" id="p1LP">8000</span>
+        </button>
+        <button type="button" class="dominus-zone" data-dominus-player="p1" aria-label="P1 Dominus restrictions">
+          <span class="dominus-placeholder">DOMINUS</span>
+          <span class="dominus-icons" data-dominus-icons="p1"></span>
+        </button>
+        <div class="change-line">
+          <span id="p1LastLabel">タップして計算</span>
+          <span class="change-badge" id="p1LastDelta">—</span>
+        </div>
+      </article>
+
+      <article class="player-card p2">
+        <div class="player-head">
+          <div class="player-name" id="p2NameDisplay">PLAYER 2</div>
+          <div class="player-tag">P2</div>
+        </div>
+        <button type="button" class="lp-button" id="p2LPButton" data-player="p2" aria-label="PLAYER 2 のライフポイントを計算">
+          <span class="lp-number" id="p2LP">8000</span>
+        </button>
+        <button type="button" class="dominus-zone" data-dominus-player="p2" aria-label="P2 Dominus restrictions">
+          <span class="dominus-placeholder">DOMINUS</span>
+          <span class="dominus-icons" data-dominus-icons="p2"></span>
+        </button>
+        <div class="change-line">
+          <span id="p2LastLabel">タップして計算</span>
+          <span class="change-badge" id="p2LastDelta">—</span>
+        </div>
+      </article>
+
+    </section>
+
+    <section class="screen hidden" data-screen="history">
+      <div class="section-title" data-i18n="history">履歴</div>
+      <div id="historyContainer"></div>
+    </section>
+
+    <section class="screen hidden" data-screen="utility">
+      <div class="section-title" data-i18n="utility">ユーティリティ</div>
+
+      <details class="panel utility-section">
+        <summary data-i18n="randomTools">コイン・ダイス</summary>
+        <div class="utility-section-body">
+          <div class="utility-grid">
+            <div class="utility-card">
+              <h3 data-i18n="coinToss">コイントス</h3>
+              <div class="utility-control-row">
+                <div class="stepper">
+                  <button data-step="coin" data-delta="-1">−</button>
+                  <input id="coinCount" type="number" min="1" max="20" value="1" inputmode="numeric" />
+                  <button data-step="coin" data-delta="1">＋</button>
+                </div>
+                <button class="action-btn primary" id="runCoin" data-i18n="execute">実行</button>
+              </div>
+            </div>
+            <div class="utility-card">
+              <h3 data-i18n="diceRoll">ダイスロール</h3>
+              <div class="utility-control-row">
+                <div class="stepper">
+                  <button data-step="dice" data-delta="-1">−</button>
+                  <input id="diceCount" type="number" min="1" max="20" value="1" inputmode="numeric" />
+                  <button data-step="dice" data-delta="1">＋</button>
+                </div>
+                <button class="action-btn primary" id="runDice" data-i18n="execute">実行</button>
+              </div>
+            </div>
+          </div>
+          <div class="utility-result-block">
+            <div class="utility-result-label" data-i18n="result">結果</div>
+            <div class="result-box" id="utilityResult">コインまたはダイスを実行してください。</div>
+          </div>
+        </div>
+      </details>
+
+      <details class="panel utility-section">
+        <summary data-i18n="tokenMemo">トークンメモ</summary>
+        <div class="utility-section-body">
+          <div class="token-toolbar" style="justify-content:flex-end">
+            <button class="action-btn primary" id="addToken" data-i18n="addToken">＋ トークンを追加</button>
+          </div>
+          <div class="token-list" id="tokenList" style="margin-top:10px"></div>
+        </div>
+      </details>
+
+      <details class="panel utility-section">
+        <summary data-i18n="cardCounters">カードカウンター</summary>
+        <div class="utility-section-body">
+          <div class="counter-toolbar" style="justify-content:flex-end">
+            <button class="action-btn primary" id="addCounterCard" data-i18n="addCard">＋ カードを追加</button>
+          </div>
+          <div class="counter-list" id="counterList" style="margin-top:10px"></div>
+        </div>
+      </details>
+
+    </section>
+
+    <section class="screen memo-screen hidden" data-screen="memo">
+      <div class="section-title" data-i18n="duelMemo">メモ</div>
+      <div class="panel">
+        <textarea class="memo-textarea" id="duelMemo" maxlength="2000" data-i18n-placeholder="memoPlaceholder" placeholder="対戦中の確認事項などを自由に入力"></textarea>
+        <div class="memo-actions">
+          <button class="action-btn" id="clearMemo" data-i18n="clearMemo">メモを消去</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen hidden" data-screen="settings">
+      <div class="section-title" data-i18n="settings">設定</div>
+
+      <details class="panel settings-section">
+        <summary data-i18n="settingsPlayers">プレイヤー</summary>
+        <div class="settings-section-body">
+          <div class="setting-row">
+            <div>
+              <div class="setting-label" data-i18n="player1Name">PLAYER 1 名</div>
+              <div class="setting-desc" data-i18n="savedBrowser">ブラウザに保存します</div>
+            </div>
+            <input class="text-input" id="p1NameInput" maxlength="18" value="PLAYER 1" />
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label" data-i18n="player2Name">PLAYER 2 名</div>
+              <div class="setting-desc" data-i18n="savedBrowser">ブラウザに保存します</div>
+            </div>
+            <input class="text-input" id="p2NameInput" maxlength="18" value="PLAYER 2" />
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label" data-i18n="playerNameDisplay">プレイヤー名表示</div>
+              <div class="setting-desc" data-i18n="playerNameDisplayDesc">基本画面のプレイヤー名を表示</div>
+            </div>
+            <label class="switch"><input type="checkbox" id="playerNamesVisibleSetting" checked><span class="slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label" data-i18n="dominusDisplay">ドミナス制約表示</div>
+              <div class="setting-desc" data-i18n="dominusDisplayDesc">LIFE画面の属性制約表示を使用</div>
+            </div>
+            <label class="switch"><input type="checkbox" id="dominusVisibleSetting" checked><span class="slider"></span></label>
+          </div>
+        </div>
+      </details>
+
+      <details class="panel settings-section">
+        <summary data-i18n="settingsDisplay">表示・操作</summary>
+        <div class="settings-section-body">
+          <div class="setting-row">
+            <div>
+              <div class="setting-label" data-i18n="appearance">表示モード</div>
+              <div class="setting-desc" data-i18n="appearanceDesc">OS設定または明暗を選択</div>
+            </div>
+            <select id="modeSelect">
+              <option value="system" data-i18n="system">システム</option>
+              <option value="light" data-i18n="light">ライト</option>
+              <option value="dark" data-i18n="dark">ダーク</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label" data-i18n="designTheme">デザインテーマ</div>
+              <div class="setting-desc" data-i18n="themeDesc">配色テーマを選択</div>
+            </div>
+            <select id="themeSelect">
+              <option value="standard">STANDARD</option>
+              <option value="red">RED</option>
+              <option value="blue">BLUE</option>
+              <option value="green">GREEN</option>
+              <option value="purple">PURPLE</option>
+              <option value="amber">AMBER</option>
+              <option value="teal">TEAL</option>
+              <option value="versus">VERSUS</option>
+              <option value="monochrome">MONOCHROME</option>
+              <option value="high-contrast">HIGH CONTRAST</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label" data-i18n="fontFamily">フォント</div>
+              <div class="setting-desc" data-i18n="fontFamilyDesc">表示フォントを選択</div>
+            </div>
+            <select id="fontFamilySelect">
+              <option value="system">SYSTEM</option>
+              <option value="orbitron">ORBITRON</option>
+              <option value="rajdhani">RAJDHANI</option>
+              <option value="sans">NOTO SANS</option>
+              <option value="serif">NOTO SERIF</option>
+              <option value="mono">ROBOTO MONO</option>
+              <option value="rounded">M PLUS ROUNDED</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label" data-i18n="dynamicBackgroundPattern">背景アニメーション</div>
+              <div class="setting-desc" data-i18n="dynamicBackgroundPatternDesc">OFFまたは動き方を選択</div>
+            </div>
+            <select id="dynamicBackgroundPatternSelect">
+              <option value="off">OFF</option>
+              <option value="drift">DRIFT</option>
+              <option value="aurora">AURORA</option>
+              <option value="waves">WAVES</option>
+              <option value="pulse">PULSE</option>
+              <option value="nebula">NEBULA</option>
+              <option value="beams">BEAMS</option>
+              <option value="orbit">ORBIT</option>
+              <option value="duel">DUEL</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label" data-i18n="language">言語</div>
+              <div class="setting-desc" data-i18n="languageDesc">表示言語を選択</div>
+            </div>
+            <select id="languageSelect">
+              <option value="ja">日本語</option>
+              <option value="en">English</option>
+              <option value="ko">한국어</option>
+            </select>
+          </div>
+        </div>
+      </details>
+
+      <details class="panel settings-section">
+        <summary data-i18n="settingsTimerScreen">タイマー・画面</summary>
+        <div class="settings-section-body">
+          <div class="setting-row">
+            <div>
+              <div class="setting-label" data-i18n="clockDisplay">時計表示</div>
+              <div class="setting-desc" data-i18n="clockDisplayDesc">ヘッダー左端に現在時刻を表示</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="clockEnabledSetting" checked />
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label" data-i18n="clockFormat">時計形式</div>
+              <div class="setting-desc" data-i18n="clockFormatDesc">24時間表記または12時間表記</div>
+            </div>
+            <select id="clockFormatSelect">
+              <option value="24h">HH:MM</option>
+              <option value="24hs">HH:MM:SS</option>
+              <option value="12h">h:MM AM/PM</option>
+              <option value="12hs">h:MM:SS AM/PM</option>
+              <option value="date">yyyy/mm/dd</option>
+              <option value="datetime24">yyyy/mm/dd HH:MM</option>
+              <option value="datetime24s">yyyy/mm/dd HH:MM:SS</option>
+              <option value="datetime12">yyyy/mm/dd h:MM AM/PM</option>
+              <option value="datetime12s">yyyy/mm/dd h:MM:SS AM/PM</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label" data-i18n="wakeLock">画面スリープ防止</div>
+              <div class="setting-desc" data-i18n="wakeLockDesc">対応ブラウザで対戦中の画面スリープを防止</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="wakeLockSetting" checked />
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label" data-i18n="timerTarget">タイマー目標時間 A</div>
+              <div class="setting-desc" data-i18n="timerTargetDesc">この時間を基準に強調表示します</div>
+            </div>
+            <input class="setting-number" id="timerTargetInput" type="number" min="1" max="999" step="1" inputmode="numeric" value="40" aria-label="Timer target minutes">
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label" data-i18n="timerWarningLead">強調開始 B</div>
+              <div class="setting-desc" data-i18n="timerWarningLeadDesc">目標時間Aの何分前から強調するか</div>
+            </div>
+            <input class="setting-number" id="timerWarningLeadInput" type="number" min="0" max="999" step="1" inputmode="numeric" value="5" aria-label="Timer warning lead minutes">
+          </div>
+        </div>
+      </details>
+
+      <details class="panel settings-section">
+        <summary data-i18n="settingsData">設定データ</summary>
+        <div class="settings-section-body" style="padding-top:12px;padding-bottom:12px">
+          <button class="settings-danger" id="clearAllSettings" data-i18n="clearAllSettings">全ての設定を削除</button>
+        </div>
+      </details>
+
+      <details class="panel settings-section manual-section">
+        <summary data-i18n="manualTitle">操作マニュアル</summary>
+        <div class="manual-pro">
+          <div class="manual-chapter"><h3 data-i18n="manualLifeShortTitle">LP</h3><p data-i18n="manualLife">LP数字をタップすると電卓を開きます。1〜2桁入力は末尾00を補助し、加減算・×2・÷2・指定LPに対応します。</p></div>
+          <div class="manual-chapter"><h3 data-i18n="manualTimerShortTitle">タイマー</h3><p data-i18n="manualTimer">ヘッダー中央のタイマーは0:00からカウントアップします。設定AのB分前以降は強調表示されます。</p></div>
+          <div class="manual-chapter"><h3 data-i18n="manualControlsShortTitle">操作</h3><p data-i18n="manualHeader">ヘッダーからP1/P2入れ替え、UNDO、対戦リセットを操作できます。ヘッダーとフッターは開閉できます。</p></div>
+          <div class="manual-chapter"><h3 data-i18n="manualUtilityTitle">UTILITY</h3><p data-i18n="manualUtility">コイントス、ダイス、トークン、カードカウンター、メモを利用できます。</p></div>
+          <div class="manual-chapter"><h3 data-i18n="manualStorageShortTitle">保存</h3><p data-i18n="manualStorageShort">永続保存されるのはプレイヤー名と設定のみです。LPや履歴、UTILITYの対戦情報は再読み込みで初期化されます。</p></div>
+          <div class="manual-chapter manual-version">
+            <h3 data-i18n="manualVersionTitle">VERSION</h3>
+            <p><strong>v1.0.0</strong> <span class="manual-version-date" data-i18n="manualVersionDate">2026/08/21</span></p>
+          </div>
+          <div class="manual-chapter manual-changelog">
+            <h3 data-i18n="manualChangelogTitle">更新履歴</h3>
+            <ul>
+              <li><strong>v1.0.0</strong> <span data-i18n="manualChangelogV100">リリース</span></li>
+            </ul>
+          </div>
+          <div class="manual-note" data-i18n="manualNoteShort">大会・イベントでは主催者の端末利用ルールを優先してください。</div>
+          <div class="creator-line">
+            <div data-i18n="creator">制作者：GYONIC</div>
+            <div>X：<a href="https://x.com/GYONIC" target="_blank" rel="noopener noreferrer">@GYONIC</a></div>
+          </div>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Main menu">
+    <button class="nav-btn active" data-nav="life"><span class="nav-icon">♥</span><span>LIFE</span></button>
+    <button class="nav-btn" data-nav="history"><span class="nav-icon">≡</span><span>HISTORY</span></button>
+    <button class="nav-btn" data-nav="utility"><span class="nav-icon">⚄</span><span>UTILITY</span></button>
+    <button class="nav-btn" data-nav="memo"><span class="nav-icon">✎</span><span>MEMO</span></button>
+    <button class="nav-btn" data-nav="settings"><span class="nav-icon">⚙</span><span>SETTINGS</span></button>
+    <button type="button" class="footer-toggle-btn" id="footerToggle" aria-label="Collapse footer" title="FOOTER"><span class="nav-icon">⌄</span><span class="footer-toggle-label">HIDE</span></button>
+  </nav>
+</div>
+
+<div id="modalRoot"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  const STORAGE_KEY = 'ocg-life-counter-v1';
+  const MAX_HISTORY = 20;
+  const MAX_UTILITY_COUNT = 20;
+
+  const defaults = {
+    lp: { p1: 8000, p2: 8000 },
+    names: { p1: 'PLAYER 1', p2: 'PLAYER 2' },
+    history: [],
+    game: 1,
+    gameStarts: [{ game: 1 }],
+    turn: 1,
+    timer: { elapsedMs: 0, running: false, startedAt: null },
+    settings: { mode: 'system', theme: 'standard', fontFamily: 'system', language: 'ja', playerNamesVisible: true, dominusVisible: true, dynamicBackgroundPattern: 'drift', clockEnabled: true, clockFormat: '24h', wakeLock: true, timerTargetMin: 40, timerWarningLeadMin: 5 },
+    tokenMemos: [{ id: 'token-initial', name: '原始生命態トークン', atk: '', def: '' }],
+    cardCounters: [{ id: 'counter-initial', name: '', count: 0 }],
+    dominusRestrictions: {
+      p1: { light: false, dark: false, earth: false, water: false, fire: false, wind: false },
+      p2: { light: false, dark: false, earth: false, water: false, fire: false, wind: false }
+    },
+    dominusManualRestrictions: {
+      p1: { light: false, dark: false, earth: false, water: false, fire: false, wind: false },
+      p2: { light: false, dark: false, earth: false, water: false, fire: false, wind: false }
+    },
+    dominusPresets: {
+      p1: { purge: false, impulse: false, spiral: false, spark: false },
+      p2: { purge: false, impulse: false, spiral: false, spark: false }
+    },
+    lastChange: { p1: null, p2: null }
+  };
+
+  const clone = obj => JSON.parse(JSON.stringify(obj));
+
+  const Store = {
+    state: clone(defaults),
+    load() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        this.state.names = { ...defaults.names, ...(saved.names || {}) };
+        this.state.settings = { ...defaults.settings, ...(saved.settings || {}) };
+        if (saved.settings && (saved.settings.dynamicBackground === false || saved.settings.backgroundAnimation === false)) {
+          this.state.settings.dynamicBackgroundPattern = 'off';
+        }
+        delete this.state.settings.dynamicBackground;
+        delete this.state.settings.backgroundAnimation;
+        // 対戦情報は保持せず、旧バージョンで保存された値も読み戻さない。
+        this.save();
+      } catch (_) {
+        this.state = clone(defaults);
+      }
+    },
+    save() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          names: this.state.names,
+          settings: this.state.settings
+        }));
+      } catch (_) {}
+    }
+  };
+
+  const $ = sel => document.querySelector(sel);
+  const $$ = sel => [...document.querySelectorAll(sel)];
+  const clampInt = (value, min, max, fallback = min) => {
+    const n = Number.parseInt(value, 10);
+    if (!Number.isFinite(n)) return fallback;
+    return Math.max(min, Math.min(max, n));
+  };
+  const signed = n => n > 0 ? `+${n}` : `${n}`;
+  const formatLP = n => String(Math.trunc(n));
+  const formatTime = ms => {
+    const totalSec = Math.max(0, Math.floor(ms / 1000));
+    const h = Math.floor(totalSec / 3600);
+    const m = Math.floor((totalSec % 3600) / 60);
+    const s = totalSec % 60;
+    return h > 0 ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}` : `${m}:${String(s).padStart(2,'0')}`;
+  };
+  const formatClock = ts => new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const escapeHTML = value => String(value).replace(/[&<>"']/g, ch => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  })[ch]);
+
+  const I18N = {
+    ja: {
+      life:'ライフ', history:'履歴', utility:'ユーティリティ', settings:'設定', time:'時間', turnLabel:'ターン', nextTurn:'ターンを進める', turnAdvanced:n=>`ターン ${n}`, 
+      coinToss:'コイントス', diceRoll:'ダイスロール', randomTools:'コイン・ダイス', execute:'実行', toss:'トス', roll:'ロール', result:'結果',
+      utilityPrompt:'コインまたはダイスを実行してください。', tossing:'トス中…', rolling:'ロール中…', heads:'表', tails:'裏', total:'合計',
+      tokenMemo:'トークンメモ', addToken:'＋ トークンを追加', tokenDefault:'トークン', tokenName:'トークン名', deleteToken:'このトークンを削除',
+      cardCounters:'カードカウンター', addCard:'＋ カードを追加', cardName:'カード名', deleteCard:'このカードを削除', counterCount:'カウンター数', counterMinus:'カウンターを1減らす', counterPlus:'カウンターを1増やす', counterEmpty:'「＋ カードを追加」からカウンターを記録するカードを追加できます。', duelMemo:'メモ', memoPlaceholder:'対戦中の確認事項などを自由に入力', clearMemo:'メモを消去', memoCleared:'メモを消去しました',
+      player1Name:'PLAYER 1 名', player2Name:'PLAYER 2 名', savedBrowser:'ブラウザに保存します', appearance:'表示モード', appearanceDesc:'OS設定または明暗を選択', designTheme:'デザインテーマ', themeDesc:'配色テーマを選択', fontFamily:'フォント', fontFamilyDesc:'LP・ヘッダーを含む表示フォントを選択', playerNameDisplay:'プレイヤー名表示', playerNameDisplayDesc:'基本画面のプレイヤー名を表示', dominusDisplay:'ドミナス制約表示', dominusDisplayDesc:'LIFE画面の属性制約表示を使用', dynamicBackground:'背景効果', dynamicBackgroundDesc:'テーマ色に連動した背景効果', backgroundAnimation:'背景アニメーション', backgroundAnimationDesc:'背景効果を残したまま動きだけ停止', dynamicBackgroundPattern:'背景アニメーション', dynamicBackgroundPatternDesc:'OFFまたはループアニメーションを選択', clockDisplay:'時計表示', clockDisplayDesc:'ヘッダー左端に現在時刻を表示', clockFormat:'時計形式', clockFormatDesc:'時刻・秒・日付を含む表示形式を選択', language:'言語', languageDesc:'表示言語を選択', system:'システム', light:'ライト', dark:'ダーク',
+      timer:'対戦タイマー', timerStart:'タイマー開始', timerPause:'タイマー一時停止', timerResume:'タイマー再開', collapseHeader:'ヘッダーを閉じる', expandHeader:'ヘッダーを開く', collapseFooter:'フッターを閉じる', expandFooter:'フッターを開く', undo:'1操作元に戻す', resetMatch:'対戦をリセット', swapPlayers:'P1とP2を入れ替え', playersSwapped:'P1とP2を入れ替えました', wakeLock:'画面スリープ防止', wakeLockDesc:'対応ブラウザで対戦中の画面スリープを防止', wakeUnsupported:'このブラウザは画面スリープ防止に対応していません',
+      historyAria:'LP変更履歴', calculator:'LIFE CALCULATOR', lpCalculator:'LP電卓', close:'閉じる', currentLP:'現在LP', currentTimes2:'現在LP ×2', currentHalf:'現在LP ÷2', setLP:'指定LP', applyLP:'LPへ反映', resultAfter:'反映後', enterNumber:'数値を入力してください', noChange:'LPは変更されませんでした', noUndo:'元に戻せる操作がありません', undoDone:(p,lp)=>`${p} を ${lp} LP に戻しました`,
+      confirm:'確定', dominusTitle:'ドミナス属性制約', dominusHint:'モンスター効果を発動できない属性をまとめて選択してください。基本画面には発動不可の属性だけを表示します。', dominusClear:'全て発動可', maxRows:n=>`最大${n}件までです`, keepOneToken:'トークンは1件以上残してください', tokenStatInput:(stat)=>`トークン${stat}入力`,
+      timerTarget:'タイマー目標時間 A', timerTargetDesc:'この時間を基準に強調表示します（分）', timerWarningLead:'強調開始 B', timerWarningLeadDesc:'目標時間Aの何分前から強調するか（分）',
+      settingsPlayers:'プレイヤー', settingsDisplay:'表示・操作', settingsTimerScreen:'タイマー・画面', settingsData:'設定データ',
+      manualOverviewTitle:'1. 基本画面', manualOverviewBody:'画面中央の左右にPLAYER 1 / PLAYER 2を常時表示します。LP数字が最優先で大きく表示され、プレイヤー名は各LP領域上部に表示されます。ヘッダーは常時固定表示、フッターは必要に応じて折りたためます。',
+      manualLifeTitle:'2. LPの変更', manualLifeBody:'LP数字をタップして電卓を開きます。＋／－では1〜2桁入力時に末尾00を自動補助し、3桁以上は入力値をそのまま使います。×2は即時2倍、÷2は減算される値だけを2で割って端数切り捨てするため、25 LPなら12減って13 LPになります。指定LPも同じ0補助入力に対応し、LPは0未満にはなりません。',
+      manualAnimationTitle:'3. LP表示とUNDO', manualAnimationBody:'LP変更時は旧値から新値まで数値が連続して変化し、増加は上方向・減少は下方向の色付きアニメーションで示します。ヘッダーのUNDOは直前のLP変更1件だけを取り消します。',
+      manualTimerTitle:'4. 対戦タイマー', manualTimerBody:'ヘッダー中央のタイマーをタップして0:00から開始・一時停止・再開します。設定Aを目標時間、設定Bを目標の何分前から警告するかとして保存し、A−B以降はタイマーを強調表示します。タイマー単独リセット機能はありません。',
+      manualHeaderTitle:'5. ヘッダー操作', manualHeaderBody:'P1/P2入れ替えはプレイヤー名・現在LP・履歴上の左右関係をまとめて交換します。RESETは双方を8000 LPへ戻します。タイマーをリセットしない場合は履歴を保持し、8000への変更も履歴に追加します。タイマーもリセットした場合のみ履歴を初期化します。',
+      manualHistoryTitle:'6. HISTORY', manualHistoryBody:'HISTORYは左にPLAYER 1、中央に操作時点の対戦タイマー、右にPLAYER 2を表示します。先頭行は初期LP 8000で、その後は変更があった側の変更後LPと増減値だけを時系列順に表示します。履歴画面は閲覧専用です。',
+      manualRandomTitle:'7. コイン・ダイス', manualRandomBody:'UTILITYのコイン・ダイス欄で1〜20回を一括実行できます。コインは表裏の異なる面を3D回転で表示し、ダイスは実行中に目が高速で切り替わって最終結果で停止します。複数ダイスでは各結果と合計を表示します。',
+      manualTokenTitle:'8. トークン', manualTokenBody:'複数のトークンを追加でき、名称を自由に編集できます。ATK/DEFは数値をタップして電卓を開き、＋／－／×2／÷2／指定値を使用できます。対戦リセットでは名称を残し、ATK/DEFだけを初期化します。',
+      manualCounterTitle:'9. カードカウンター', manualCounterBody:'カードごとに名称とカウンター数を記録できます。＋／－または数値入力で変更し、不要な行は個別に削除できます。対戦リセットでは名称を残して数値を0へ戻します。',
+      manualStorageTitle:'10. 保存される情報', manualStorageBody:'ブラウザへ永続保存するのはプレイヤー名と各種設定だけです。現在LP、タイマー、履歴、トークン、カードカウンターなどの対戦データはページ再読み込み後には保持されません。「全ての設定を削除」は保存済み設定だけを初期値へ戻し、現在進行中の対戦データには影響しません。',
+      manualWakeTitle:'11. 画面スリープ防止', manualWakeBody:'ON時はScreen Wake Lock APIに対応するブラウザで画面点灯を維持します。ブラウザやOSが非対応の場合は利用できず、タブを離れた後に戻った場合は可能な範囲で再取得します。',
+      manualNote:'大会・イベントのルールや端末利用可否は主催者の案内を優先してください。端末の省電力設定やブラウザ仕様により、一部機能の動作が異なる場合があります。',
+      manualTitle:'操作マニュアル', manualLifeShortTitle:'LP', manualTimerShortTitle:'タイマー', manualControlsShortTitle:'基本操作', manualStorageShortTitle:'保存', manualUtilityTitle:'UTILITY', manualStorageShort:'保存されるのはプレイヤー名と設定のみ。LP・ターン・タイマー・履歴・UTILITY・MEMOは再読み込みで初期化されます。', manualNoteShort:'大会・イベントでは主催者の端末利用ルールを優先してください。', manualVersionTitle:'VERSION', manualVersionDate:'2026/08/21', manualChangelogTitle:'更新履歴', manualChangelogV100:'リリース', manualLife:'LPをタップして計算します。1〜2桁は末尾00を補助し、＋／－／×2／÷2／指定LPに対応。LP下部のDOMINUS欄をタップすると6属性（光・闇・地・水・炎・風）の発動不可状態を一括編集でき、基本画面には発動不可属性だけを丸型アイコンで表示します。表示自体は設定からOFFにできます。', manualTimer:'TURNをタップしてターン進行。対戦タイマーは右側の再生／一時停止アイコンで操作し、設定AのB分前以降は強調表示されます。左の時計は表示形式とON/OFFを変更できます。', manualHeader:'ヘッダーは常時表示。右側の各アイコンからP1/P2入れ替え、UNDO、RESETを操作できます。フッターはHIDE／SHOWで開閉できます。背景アニメーションは設定のプルダウンからOFFまたはパターンを選択します。', manualHistory:'HISTORYはGAME→TURNの順に区切って表示します。タイマーもリセットすると次のGAMEへ進み、TURN 1と8000/8000を新しい初期値として記録します。', manualUtility:'UTILITYではコイン／ダイス、複数トークン、カードカウンターを利用できます。MEMOは独立タブです。', manualWake:'画面スリープ防止は対応ブラウザでのみ動作します。', creator:'制作者：GYONIC', clearAllSettings:'全ての設定を削除', clearSettingsTitle:'設定を初期化', clearSettingsBody:'プレイヤーネームを含む、ブラウザに保存されている全ての設定を初期値へ戻します。現在のLP・タイマー・履歴・トークン・カウンターの対戦情報は変更しません。', clearSettingsDone:'保存済み設定を初期化しました',
+      resetTitle:'RESET LIFE', resetBody:'PLAYER 1 / PLAYER 2 のLPを8000へ戻し、ターンをTURN 1へ戻します。タイマーもリセットする場合はGAMEを1つ進め、履歴に新しいTURN 1と8000 / 8000を追加します。トークン／カウンターは名称を残して数値のみ初期化します。', resetTimerToo:'タイマーもリセットする', cancel:'キャンセル', reset:'リセット', resetBoth:'LPとタイマーをリセットしました', resetLP:'LPをリセットしました'
+    },
+    en: {
+      life:'LIFE', history:'HISTORY', utility:'UTILITY', settings:'SETTINGS', time:'TIME', turnLabel:'TURN', nextTurn:'Advance turn', turnAdvanced:n=>`TURN ${n}`, 
+      coinToss:'COIN TOSS', diceRoll:'DICE ROLL', randomTools:'COIN / DICE', execute:'RUN', toss:'TOSS', roll:'ROLL', result:'RESULT',
+      utilityPrompt:'Run a coin toss or dice roll.', tossing:'TOSSING…', rolling:'ROLLING…', heads:'Heads', tails:'Tails', total:'Total',
+      tokenMemo:'TOKEN MEMO', addToken:'+ ADD TOKEN', tokenDefault:'Token', tokenName:'Token name', deleteToken:'Delete this token',
+      cardCounters:'CARD COUNTERS', addCard:'+ ADD CARD', cardName:'Card name', deleteCard:'Delete this card', counterCount:'Counter count', counterMinus:'Decrease counter by 1', counterPlus:'Increase counter by 1', counterEmpty:'Add a card to record its counters.', duelMemo:'MEMO', memoPlaceholder:'Write any duel notes here', clearMemo:'CLEAR MEMO', memoCleared:'Memo cleared',
+      player1Name:'PLAYER 1 NAME', player2Name:'PLAYER 2 NAME', savedBrowser:'Saved in this browser', appearance:'APPEARANCE', appearanceDesc:'Use system, light, or dark mode', designTheme:'DESIGN THEME', themeDesc:'Choose a color theme', fontFamily:'FONT', fontFamilyDesc:'Choose the font used for LP and the header', playerNameDisplay:'PLAYER NAMES', playerNameDisplayDesc:'Show player names on the LIFE screen', dominusDisplay:'DOMINUS DISPLAY', dominusDisplayDesc:'Show attribute restrictions on the LIFE screen', dynamicBackground:'BACKGROUND EFFECT', dynamicBackgroundDesc:'Show a theme-colored background effect', backgroundAnimation:'BACKGROUND ANIMATION', backgroundAnimationDesc:'Keep the background effect but stop its motion', dynamicBackgroundPattern:'BACKGROUND MOTION', dynamicBackgroundPatternDesc:'Choose OFF or a looping animation pattern', clockDisplay:'CLOCK', clockDisplayDesc:'Show the current time at the left of the header', clockFormat:'CLOCK FORMAT', clockFormatDesc:'Choose time, seconds, date, and 12/24-hour formats', language:'LANGUAGE', languageDesc:'Choose display language', system:'SYSTEM', light:'LIGHT', dark:'DARK',
+      timer:'Duel timer', timerStart:'Start timer', timerPause:'Pause timer', timerResume:'Resume timer', collapseHeader:'Collapse header', expandHeader:'Expand header', collapseFooter:'Collapse footer', expandFooter:'Expand footer', undo:'Undo last LP change', resetMatch:'Reset duel', swapPlayers:'Swap P1 and P2', playersSwapped:'P1 and P2 swapped', wakeLock:'PREVENT SLEEP', wakeLockDesc:'Keep the screen awake during a duel on supported browsers', wakeUnsupported:'Screen wake lock is not supported by this browser',
+      historyAria:'LP change history', calculator:'LIFE CALCULATOR', lpCalculator:'LP calculator', close:'Close', currentLP:'CURRENT LP', currentTimes2:'CURRENT LP ×2', currentHalf:'CURRENT LP ÷2', setLP:'SET LP', applyLP:'APPLY TO LP', resultAfter:'After', enterNumber:'Enter a number', noChange:'LP did not change', noUndo:'Nothing to undo', undoDone:(p,lp)=>`${p} restored to ${lp} LP`,
+      confirm:'CONFIRM', dominusTitle:'DOMINUS RESTRICTIONS', dominusHint:'Select every attribute whose monster effects cannot be activated. Only blocked attributes are shown on the LIFE screen.', dominusClear:'ALLOW ALL', maxRows:n=>`Maximum ${n} entries`, keepOneToken:'At least one token must remain', tokenStatInput:(stat)=>`Token ${stat} input`,
+      timerTarget:'TIMER TARGET A', timerTargetDesc:'Minutes used as the timer target', timerWarningLead:'WARNING LEAD B', timerWarningLeadDesc:'Highlight this many minutes before target A',
+      settingsPlayers:'PLAYERS', settingsDisplay:'DISPLAY / CONTROLS', settingsTimerScreen:'TIMER / SCREEN', settingsData:'SAVED SETTINGS',
+      manualOverviewTitle:'1. Main screen', manualOverviewBody:'PLAYER 1 and PLAYER 2 are always shown side by side in the center. LP is given the largest possible display area, with each player name above it. The header stays fixed and always visible; the footer can be collapsed when more space is needed.',
+      manualLifeTitle:'2. Changing LP', manualLifeBody:'Tap an LP number to open the calculator. For + or −, one- and two-digit entries automatically append 00; entries of three or more digits are used as typed. ×2 applies immediately. ÷2 subtracts half rounded down, so 25 LP loses 12 and becomes 13. SET LP uses the same 00 assistance, and LP never displays below 0.',
+      manualAnimationTitle:'3. LP animation and Undo', manualAnimationBody:'When LP changes, the displayed number counts from the old value to the new value. Increases and decreases also use directional, color-coded motion. The header Undo control reverts only the latest LP change.',
+      manualTimerTitle:'4. Duel timer', manualTimerBody:'Tap the timer in the header to start from 0:00, pause, or resume. A is the target time and B is how many minutes before A the warning begins. From A−B onward the timer is emphasized. There is no timer-only reset.',
+      manualHeaderTitle:'5. Header controls', manualHeaderBody:'Swap P1/P2 exchanges player names, current LP, and the left/right ownership of history. RESET returns both players to 8000 LP. If the timer is kept, history is kept and the return to 8000 is added to history. History is cleared only when the timer is reset too.',
+      manualHistoryTitle:'6. History', manualHistoryBody:'HISTORY shows PLAYER 1 on the left, the duel timer at the moment of each change in the center, and PLAYER 2 on the right. The first row is the initial 8000 LP. Later rows show only the new LP and delta for the side that changed. HISTORY is view-only.',
+      manualRandomTitle:'7. Coin and dice', manualRandomBody:'The UTILITY coin/dice section can run 1 to 20 results at once. Coins show distinct front and back faces in a 3D flip. Dice rapidly change their pips while rolling, then stop on the final values. Multiple dice also show the total.',
+      manualTokenTitle:'8. Tokens', manualTokenBody:'Add multiple tokens and freely edit their names. Tap ATK or DEF to use +, −, ×2, ÷2, or SET value. Duel reset keeps token names while clearing their ATK/DEF values.',
+      manualCounterTitle:'9. Card counters', manualCounterBody:'Record a card name and its counter value for multiple cards. Change the value with +/− or direct numeric input, and delete rows individually. Duel reset keeps card names and returns counter values to 0.',
+      manualStorageTitle:'10. What is saved', manualStorageBody:'Only player names and settings are stored persistently in the browser. Duel data such as current LP, timer, history, tokens, and card counters is not retained after a page reload. DELETE ALL SETTINGS resets saved preferences only and does not alter the duel currently in progress.',
+      manualWakeTitle:'11. Prevent sleep', manualWakeBody:'When enabled, the app requests Screen Wake Lock on supported browsers to keep the display awake. It cannot work when the browser or OS does not support the API. After returning to the tab, the app attempts to reacquire the lock when possible.',
+      manualNote:'Always follow the organizer’s rules on device use at tournaments or events. Power-saving settings and browser behavior can affect some features.',
+      manualTitle:'USER MANUAL', manualLifeShortTitle:'LP', manualTimerShortTitle:'Timer', manualControlsShortTitle:'Controls', manualStorageShortTitle:'Storage', manualUtilityTitle:'UTILITY', manualStorageShort:'Only player names and settings are saved. LP, turn, timer, history, UTILITY, and MEMO reset when the page reloads.', manualNoteShort:'Follow the organizer’s rules on device use at tournaments and events.', manualVersionTitle:'VERSION', manualVersionDate:'2026/08/21', manualChangelogTitle:'CHANGELOG', manualChangelogV100:'Release', manualLife:'Tap an LP value to calculate. One- or two-digit input appends 00. +, −, ×2, ÷2, and SET LP are supported. Tap the DOMINUS area below LP to edit blocked attributes together. Six attributes are supported (LIGHT, DARK, EARTH, WATER, FIRE, and WIND), and only blocked attributes appear as round icons on the LIFE screen. The display can be disabled in Settings.', manualTimer:'Tap TURN to advance the turn. Use the play/pause icon to control the duel timer; it is highlighted from B minutes before target A. The left clock supports multiple formats and can be hidden.', manualHeader:'The header is always shown. Use its icons to swap P1/P2, undo, or reset. Use HIDE / SHOW for the footer. Choose OFF or a looping background animation from the Settings dropdown.', manualHistory:'HISTORY is grouped by GAME and TURN. Resetting the timer advances to the next GAME and records TURN 1 with 8000 / 8000 as the new initial state.', manualUtility:'UTILITY provides coin/dice, multiple token tools, and card counters. MEMO has its own tab.', manualWake:'Prevent Sleep works only in browsers that support Screen Wake Lock.', creator:'Creator: GYONIC', clearAllSettings:'DELETE ALL SETTINGS', clearSettingsTitle:'RESET SETTINGS', clearSettingsBody:'Reset every saved preference, including player names, to its default. Current LP, timer, history, token, and counter duel data are not changed.', clearSettingsDone:'Saved settings were reset',
+      resetTitle:'RESET LIFE', resetBody:'Return both players to 8000 LP and reset the turn counter to TURN 1. History is kept unless the timer is also reset. Token and counter names are kept while their values are cleared.', resetTimerToo:'Reset timer too', cancel:'CANCEL', reset:'RESET', resetBoth:'LP and timer reset', resetLP:'LP reset'
+    },
+    ko: {
+      life:'라이프', history:'기록', utility:'유틸리티', settings:'설정', time:'시간', turnLabel:'턴', nextTurn:'턴 진행', turnAdvanced:n=>`턴 ${n}`, 
+      coinToss:'코인 토스', diceRoll:'주사위 굴리기', randomTools:'코인 / 주사위', execute:'실행', toss:'토스', roll:'굴리기', result:'결과',
+      utilityPrompt:'코인 또는 주사위를 실행하세요.', tossing:'토스 중…', rolling:'굴리는 중…', heads:'앞면', tails:'뒷면', total:'합계',
+      tokenMemo:'토큰 메모', addToken:'+ 토큰 추가', tokenDefault:'토큰', tokenName:'토큰 이름', deleteToken:'이 토큰 삭제',
+      cardCounters:'카드 카운터', addCard:'+ 카드 추가', cardName:'카드 이름', deleteCard:'이 카드 삭제', counterCount:'카운터 수', counterMinus:'카운터 1 감소', counterPlus:'카운터 1 증가', counterEmpty:'카운터를 기록할 카드를 추가하세요.', duelMemo:'메모', memoPlaceholder:'듀얼 중 확인할 내용을 자유롭게 입력', clearMemo:'메모 지우기', memoCleared:'메모를 지웠습니다',
+      player1Name:'PLAYER 1 이름', player2Name:'PLAYER 2 이름', savedBrowser:'브라우저에 저장됩니다', appearance:'화면 모드', appearanceDesc:'시스템·라이트·다크 선택', designTheme:'디자인 테마', themeDesc:'색상 테마 선택', fontFamily:'글꼴', fontFamilyDesc:'LP와 헤더에 사용할 표시 글꼴 선택', playerNameDisplay:'플레이어 이름 표시', playerNameDisplayDesc:'LIFE 화면에 플레이어 이름 표시', dominusDisplay:'도미나스 제약 표시', dominusDisplayDesc:'LIFE 화면의 속성 제약 표시 사용', dynamicBackground:'배경 효과', dynamicBackgroundDesc:'테마 색상에 맞춘 배경 효과 표시', backgroundAnimation:'배경 애니메이션', backgroundAnimationDesc:'배경 효과는 유지하고 움직임만 정지', dynamicBackgroundPattern:'배경 애니메이션', dynamicBackgroundPatternDesc:'OFF 또는 반복 애니메이션 패턴 선택', clockDisplay:'시계 표시', clockDisplayDesc:'헤더 왼쪽에 현재 시간을 표시', clockFormat:'시계 형식', clockFormatDesc:'시간·초·날짜 및 12/24시간 형식 선택', language:'언어', languageDesc:'표시 언어 선택', system:'시스템', light:'라이트', dark:'다크',
+      timer:'듀얼 타이머', timerStart:'타이머 시작', timerPause:'타이머 일시정지', timerResume:'타이머 재개', collapseHeader:'헤더 접기', expandHeader:'헤더 열기', collapseFooter:'푸터 접기', expandFooter:'푸터 열기', undo:'마지막 LP 변경 취소', resetMatch:'듀얼 리셋', swapPlayers:'P1과 P2 바꾸기', playersSwapped:'P1과 P2를 바꿨습니다', wakeLock:'화면 절전 방지', wakeLockDesc:'지원 브라우저에서 듀얼 중 화면이 꺼지지 않도록 유지', wakeUnsupported:'이 브라우저는 화면 절전 방지를 지원하지 않습니다',
+      historyAria:'LP 변경 기록', calculator:'LIFE CALCULATOR', lpCalculator:'LP 계산기', close:'닫기', currentLP:'현재 LP', currentTimes2:'현재 LP ×2', currentHalf:'현재 LP ÷2', setLP:'LP 지정', applyLP:'LP에 적용', resultAfter:'적용 후', enterNumber:'숫자를 입력하세요', noChange:'LP가 변경되지 않았습니다', noUndo:'되돌릴 변경이 없습니다', undoDone:(p,lp)=>`${p}를 ${lp} LP로 되돌렸습니다`,
+      confirm:'확정', dominusTitle:'도미나스 속성 제약', dominusHint:'몬스터 효과를 발동할 수 없는 속성을 한 번에 선택하세요. LIFE 화면에는 발동 불가 속성만 표시됩니다.', dominusClear:'모두 허용', maxRows:n=>`최대 ${n}개까지 가능합니다`, keepOneToken:'토큰은 1개 이상 남겨야 합니다', tokenStatInput:(stat)=>`토큰 ${stat} 입력`,
+      timerTarget:'타이머 목표 시간 A', timerTargetDesc:'강조 표시 기준 시간(분)', timerWarningLead:'강조 시작 B', timerWarningLeadDesc:'목표 시간 A의 몇 분 전부터 강조할지 설정',
+      settingsPlayers:'플레이어', settingsDisplay:'표시 / 조작', settingsTimerScreen:'타이머 / 화면', settingsData:'저장 설정',
+      manualOverviewTitle:'1. 기본 화면', manualOverviewBody:'화면 중앙에는 PLAYER 1과 PLAYER 2가 항상 좌우로 표시됩니다. LP 숫자를 가장 크게 보여 주고 플레이어 이름은 각 LP 영역 상단에 표시합니다. 헤더는 항상 고정 표시되고 푸터는 필요하면 접을 수 있습니다.',
+      manualLifeTitle:'2. LP 변경', manualLifeBody:'LP 숫자를 탭하면 계산기가 열립니다. +/−에서 1~2자리 입력은 뒤에 00을 자동 보조하고 3자리 이상은 입력값 그대로 사용합니다. ×2는 즉시 2배, ÷2는 감소할 값만 절반으로 나눈 뒤 소수점을 버리므로 25 LP는 12가 감소해 13이 됩니다. LP 지정도 같은 00 보조를 사용하며 LP는 0 아래로 표시되지 않습니다.',
+      manualAnimationTitle:'3. LP 애니메이션과 UNDO', manualAnimationBody:'LP가 바뀌면 이전 값에서 새 값까지 숫자가 연속으로 변화합니다. 증가와 감소는 방향과 색으로도 구분됩니다. 헤더의 UNDO는 가장 최근 LP 변경 1건만 되돌립니다.',
+      manualTimerTitle:'4. 듀얼 타이머', manualTimerBody:'헤더 중앙 타이머를 탭해 0:00부터 시작, 일시정지, 재개합니다. A는 목표 시간, B는 A 몇 분 전부터 경고할지를 의미하며 A−B 이후 타이머가 강조됩니다. 타이머만 따로 리셋하는 기능은 없습니다.',
+      manualHeaderTitle:'5. 헤더 조작', manualHeaderBody:'P1/P2 교체는 플레이어 이름, 현재 LP, 기록의 좌우 관계를 함께 교환합니다. RESET은 양쪽 LP를 8000으로 되돌립니다. 타이머를 유지하면 기록도 유지되고 8000으로 돌아간 변경이 기록에 추가됩니다. 타이머도 리셋할 때만 기록을 초기화합니다.',
+      manualHistoryTitle:'6. HISTORY', manualHistoryBody:'HISTORY는 왼쪽에 PLAYER 1, 중앙에 변경 시점의 듀얼 타이머, 오른쪽에 PLAYER 2를 표시합니다. 첫 행은 초기 LP 8000이며 이후에는 변경된 쪽의 변경 후 LP와 증감값만 시간순으로 표시합니다. 기록 화면은 조회 전용입니다.',
+      manualRandomTitle:'7. 코인과 주사위', manualRandomBody:'UTILITY의 코인/주사위에서 1~20회를 한 번에 실행할 수 있습니다. 코인은 서로 다른 앞뒷면을 3D 회전으로 보여 주고, 주사위는 굴리는 동안 눈이 빠르게 바뀐 뒤 최종 결과에서 멈춥니다. 여러 주사위는 합계도 표시합니다.',
+      manualTokenTitle:'8. 토큰', manualTokenBody:'여러 토큰을 추가하고 이름을 자유롭게 편집할 수 있습니다. ATK/DEF를 탭하면 +, −, ×2, ÷2, 지정값 계산을 사용할 수 있습니다. 듀얼 리셋 시 토큰 이름은 남기고 ATK/DEF 값만 초기화합니다.',
+      manualCounterTitle:'9. 카드 카운터', manualCounterBody:'여러 카드의 이름과 카운터 수를 기록할 수 있습니다. +/− 또는 숫자 직접 입력으로 값을 바꾸고 필요 없는 행은 개별 삭제할 수 있습니다. 듀얼 리셋 시 이름은 남기고 카운터는 0으로 돌아갑니다.',
+      manualStorageTitle:'10. 저장되는 정보', manualStorageBody:'브라우저에 계속 저장되는 것은 플레이어 이름과 각종 설정뿐입니다. 현재 LP, 타이머, 기록, 토큰, 카드 카운터 등의 듀얼 데이터는 페이지를 새로고침하면 유지되지 않습니다. 모든 설정 삭제는 저장된 설정만 초기화하며 현재 진행 중인 듀얼 데이터에는 영향을 주지 않습니다.',
+      manualWakeTitle:'11. 화면 절전 방지', manualWakeBody:'ON이면 지원 브라우저에서 Screen Wake Lock을 요청해 화면을 켜 둡니다. 브라우저나 OS가 지원하지 않으면 사용할 수 없습니다. 다른 탭에서 돌아오면 가능한 경우 다시 잠금을 요청합니다.',
+      manualNote:'대회나 이벤트에서의 단말기 사용 가능 여부는 반드시 주최 측 규정을 우선해 주세요. 절전 설정이나 브라우저 사양에 따라 일부 기능의 동작이 달라질 수 있습니다.',
+      manualTitle:'사용 설명서', manualLifeShortTitle:'LP', manualTimerShortTitle:'타이머', manualControlsShortTitle:'기본 조작', manualStorageShortTitle:'저장', manualUtilityTitle:'UTILITY', manualStorageShort:'저장되는 것은 플레이어 이름과 설정뿐입니다. LP, 턴, 타이머, 기록, UTILITY, MEMO는 새로고침하면 초기화됩니다.', manualNoteShort:'대회·이벤트에서는 주최 측의 단말기 사용 규정을 우선해 주세요.', manualVersionTitle:'VERSION', manualVersionDate:'2026/08/21', manualChangelogTitle:'업데이트 내역', manualChangelogV100:'릴리스', manualLife:'LP를 탭해 계산합니다. 1~2자리 입력은 뒤에 00을 보조하며 +, −, ×2, ÷2, LP 지정이 가능합니다. LP는 0 아래로 내려가지 않습니다. LP 아래 DOMINUS 영역을 탭하면 빛·어둠·땅·물·불·바람 6속성의 발동 불가 상태를 한 번에 편집할 수 있으며, LIFE 화면에는 발동 불가 속성만 원형 아이콘으로 표시됩니다. 표시 기능은 설정에서 끌 수 있습니다.', manualTimer:'TURN을 탭해 턴을 진행합니다. 듀얼 타이머는 재생/일시정지 아이콘으로 조작하고 목표 A의 B분 전부터 강조됩니다. 왼쪽 시계는 형식과 표시 여부를 변경할 수 있습니다.', manualHeader:'헤더는 항상 표시되며 아이콘으로 P1/P2 교체, UNDO, RESET을 조작합니다. 푸터는 HIDE / SHOW로 접고 펼칩니다. 배경 애니메이션은 설정의 드롭다운에서 OFF 또는 반복 패턴을 선택합니다.', manualHistory:'HISTORY는 GAME→TURN 순서로 구분됩니다. 타이머까지 리셋하면 다음 GAME으로 진행하고 TURN 1과 8000 / 8000을 새 초기값으로 기록합니다.', manualUtility:'UTILITY에서 코인/주사위, 여러 토큰, 카드 카운터를 사용할 수 있으며 MEMO는 독립 탭입니다.', manualWake:'화면 절전 방지는 Screen Wake Lock을 지원하는 브라우저에서만 작동합니다.', creator:'제작자: GYONIC', clearAllSettings:'모든 설정 삭제', clearSettingsTitle:'설정 초기화', clearSettingsBody:'플레이어 이름을 포함한 저장된 모든 설정을 초기값으로 되돌립니다. 현재 LP, 타이머, 기록, 토큰, 카운터의 듀얼 정보는 변경하지 않습니다.', clearSettingsDone:'저장된 설정을 초기화했습니다',
+      resetTitle:'RESET LIFE', resetBody:'양쪽 LP를 8000으로 되돌리고 TURN 1로 초기화합니다. 타이머도 리셋하면 다음 GAME으로 진행하고 HISTORY에 새 TURN 1과 8000 / 8000을 추가합니다. 토큰/카운터는 이름을 남기고 수치만 초기화합니다.', resetTimerToo:'타이머도 리셋', cancel:'취소', reset:'리셋', resetBoth:'LP와 타이머를 리셋했습니다', resetLP:'LP를 리셋했습니다'
+    }
+  };
+  const t = (key, ...args) => {
+    const lang = Store.state.settings.language || 'ja';
+    const value = I18N[lang]?.[key] ?? I18N.ja[key] ?? key;
+    return typeof value === 'function' ? value(...args) : value;
+  };
+  const Language = {
+    apply() {
+      const lang = Store.state.settings.language || 'ja';
+      document.documentElement.lang = lang;
+      $$('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+      $$('[data-i18n-placeholder]').forEach(el => { el.setAttribute('placeholder', t(el.dataset.i18nPlaceholder)); });
+      const clock = $('#localClock');
+      if (clock) clock.setAttribute('aria-label', 'Current time');
+      const timerWrap = $('#timerWrap');
+      if (timerWrap) timerWrap.setAttribute('aria-label', 'Duel timer');
+      const undo = $('#quickUndo');
+      if (undo) undo.setAttribute('aria-label', 'Undo last LP change');
+      const reset = $('#openReset');
+      if (reset) reset.setAttribute('aria-label', 'Reset duel');
+      const swap = $('#swapPlayers');
+      if (swap) swap.setAttribute('aria-label', 'Swap P1 and P2');
+      const turnDisplay = $('#turnDisplay');
+      if (turnDisplay) turnDisplay.setAttribute('aria-label', 'Advance turn');
+      if (typeof UI !== 'undefined') UI.renderTurn();
+      const targetInput = $('#timerTargetInput');
+      if (targetInput) targetInput.setAttribute('aria-label', t('timerTarget'));
+      const leadInput = $('#timerWarningLeadInput');
+      if (leadInput) leadInput.setAttribute('aria-label', t('timerWarningLead'));
+      Timer.render();
+      History.render();
+      if (typeof UI !== 'undefined') UI.updateChrome();
+      TokenTool.render();
+      CounterTool.render();
+      Utility.renderLast();
+      UI.renderNames();
+      requestAnimationFrame(() => UI.fitAllLP());
+    }
+  };
+
+  let toastTimer = null;
+  function toast(message) {
+    const el = $('#toast');
+    el.textContent = message;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 1500);
+  }
+
+  const Theme = {
+    media: window.matchMedia('(prefers-color-scheme: dark)'),
+    apply() {
+      const { mode, theme, fontFamily, playerNamesVisible, dynamicBackgroundPattern, clockFormat } = Store.state.settings;
+      const resolved = mode === 'system' ? (this.media.matches ? 'dark' : 'light') : mode;
+      document.documentElement.dataset.mode = resolved;
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.dataset.font = fontFamily || 'system';
+      document.documentElement.dataset.playerNames = playerNamesVisible === false ? 'off' : 'on';
+      const bgPattern = dynamicBackgroundPattern || 'drift';
+      document.documentElement.dataset.dynamicBg = bgPattern === 'off' ? 'off' : 'on';
+      document.documentElement.dataset.bgPattern = bgPattern;
+      document.documentElement.dataset.clockFormat = clockFormat || '24h';
+      document.documentElement.style.colorScheme = resolved;
+    },
+    init() {
+      this.apply();
+      const handler = () => Store.state.settings.mode === 'system' && this.apply();
+      if (this.media.addEventListener) this.media.addEventListener('change', handler);
+      else this.media.addListener(handler);
+    }
+  };
+
+  const LP = {
+    set(player, next, meta = {}) {
+      next = Math.max(0, Math.trunc(next));
+      const before = Store.state.lp[player];
+      if (next === before) return false;
+      const delta = next - before;
+      Store.state.lp[player] = next;
+      const entry = {
+        id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        player,
+        before,
+        after: next,
+        delta,
+        expression: meta.expression || null,
+        timerMs: Timer.currentMs(),
+        game: Math.max(1, Math.trunc(Store.state.game || 1)),
+        turn: Store.state.turn
+      };
+      Store.state.history.unshift(entry);
+      Store.state.history = Store.state.history.slice(0, MAX_HISTORY);
+      Store.state.lastChange[player] = entry;
+      Store.save();
+      UI.renderLP();
+      UI.animateLPChange(player, before, next);
+      History.render();
+      UI.syncUndoButtons();
+      return true;
+    },
+    undo() {
+      const currentGame = Math.max(1, Math.trunc(Store.state.game || 1));
+      const index = Store.state.history.findIndex(h => Math.max(1, Math.trunc(h.game || 1)) === currentGame);
+      if (index < 0) {
+        toast(t('noUndo'));
+        return;
+      }
+      const [entry] = Store.state.history.splice(index, 1);
+      Store.state.lp[entry.player] = entry.before;
+      Store.state.lastChange[entry.player] = Store.state.history.find(h =>
+        h.player === entry.player && Math.max(1, Math.trunc(h.game || 1)) === currentGame
+      ) || null;
+      Store.save();
+      UI.renderLP();
+      UI.animateLPChange(entry.player, entry.after, entry.before);
+      History.render();
+      UI.syncUndoButtons();
+      toast(t('undoDone', entry.player.toUpperCase(), entry.before));
+    },
+    reset(resetTimer) {
+      const resetFrom = { p1: Store.state.lp.p1, p2: Store.state.lp.p2 };
+      const resetAt = Timer.currentMs();
+      const resetTurn = Math.max(1, Math.trunc(Store.state.turn || 1));
+      const resetGame = Math.max(1, Math.trunc(Store.state.game || 1));
+
+      Store.state.lp.p1 = 8000;
+      Store.state.lp.p2 = 8000;
+
+      // トークン／カウンターは名称を残し、対戦中の実数だけ初期化する。
+      Store.state.tokenMemos = Store.state.tokenMemos.map(token => ({ ...token, atk: '', def: '' }));
+      Store.state.cardCounters = Store.state.cardCounters.map(item => ({ ...item, count: 0 }));
+      Store.state.dominusRestrictions = clone(defaults.dominusRestrictions);
+      Store.state.dominusManualRestrictions = clone(defaults.dominusManualRestrictions);
+      Store.state.dominusPresets = clone(defaults.dominusPresets);
+
+      if (resetTimer) {
+        // タイマーをリセットする場合は新しいゲームとして履歴を継続する。
+        Store.state.game = resetGame + 1;
+        Store.state.gameStarts.push({ game: Store.state.game });
+        Store.state.lastChange = { p1: null, p2: null };
+        Timer.reset();
+      } else {
+        ['p1','p2'].forEach(player => {
+          const before = resetFrom[player];
+          if (before === 8000) return;
+          const entry = {
+            id: `${Date.now()}-${player}-${Math.random().toString(16).slice(2)}`,
+            player,
+            before,
+            after: 8000,
+            delta: 8000 - before,
+            expression: 'RESET',
+            timerMs: resetAt,
+            game: resetGame,
+            turn: resetTurn
+          };
+          Store.state.history.unshift(entry);
+          Store.state.lastChange[player] = entry;
+        });
+        Store.state.history = Store.state.history.slice(0, MAX_HISTORY);
+      }
+
+      // RESET時は常にターンをTURN 1へ戻す。
+      Store.state.turn = 1;
+      Store.save();
+
+      UI.renderTurn();
+      UI.renderLP();
+      if (resetFrom.p1 !== 8000) UI.animateLPChange('p1', resetFrom.p1, 8000);
+      if (resetFrom.p2 !== 8000) UI.animateLPChange('p2', resetFrom.p2, 8000);
+      History.render();
+      TokenTool.render();
+      CounterTool.render();
+      UI.renderDominusRestrictions();
+      UI.syncUndoButtons();
+    }
+  };
+
+  const Clock = {
+    timer: null,
+    render() {
+      const el = $('#localClock');
+      if (!el) return;
+      const enabled = Store.state.settings.clockEnabled !== false;
+      el.classList.toggle('clock-off', !enabled);
+      el.setAttribute('aria-hidden', enabled ? 'false' : 'true');
+      if (!enabled) return;
+
+      const now = new Date();
+      const format = Store.state.settings.clockFormat || '24h';
+      document.documentElement.dataset.clockFormat = format;
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+      const min = String(now.getMinutes()).padStart(2, '0');
+      const sec = String(now.getSeconds()).padStart(2, '0');
+      const h24 = String(now.getHours()).padStart(2, '0');
+      let h12n = now.getHours();
+      const suffix = h12n >= 12 ? 'PM' : 'AM';
+      h12n = h12n % 12 || 12;
+      const h12 = String(h12n);
+      const date = `${yyyy}/${mm}/${dd}`;
+      const values = {
+        '24h': `${h24}:${min}`,
+        '24hs': `${h24}:${min}:${sec}`,
+        '12h': `${h12}:${min} ${suffix}`,
+        '12hs': `${h12}:${min}:${sec} ${suffix}`,
+        'date': date,
+        'datetime24': `${date} ${h24}:${min}`,
+        'datetime24s': `${date} ${h24}:${min}:${sec}`,
+        'datetime12': `${date} ${h12}:${min} ${suffix}`,
+        'datetime12s': `${date} ${h12}:${min}:${sec} ${suffix}`
+      };
+      el.textContent = values[format] || values['24h'];
+    },
+    init() {
+      this.render();
+      clearInterval(this.timer);
+      this.timer = setInterval(() => this.render(), 1000);
+    }
+  };
+
+  const Timer = {
+    raf: null,
+    currentMs() {
+      const t = Store.state.timer;
+      return t.running && t.startedAt ? t.elapsedMs + (Date.now() - t.startedAt) : t.elapsedMs;
+    },
+    render() {
+      const current = this.currentMs();
+      $('#timerDisplay').textContent = formatTime(current);
+      const btn = $('#timerToggle');
+      const running = Store.state.timer.running;
+      const resumed = !running && Store.state.timer.elapsedMs > 0;
+      const icon = btn?.querySelector('.header-action-icon');
+      const label = btn?.querySelector('.header-action-label');
+      if (icon) icon.textContent = running ? 'Ⅱ' : '▶';
+      if (label) label.textContent = running ? 'PAUSE' : (resumed ? 'RESUME' : 'START');
+      btn?.setAttribute('aria-label', running ? 'Pause timer' : (resumed ? 'Resume timer' : 'Start timer'));
+      const targetMin = Math.max(1, Number(Store.state.settings.timerTargetMin) || defaults.settings.timerTargetMin);
+      const leadMin = Math.max(0, Math.min(targetMin, Number(Store.state.settings.timerWarningLeadMin) || 0));
+      const warningStartMs = Math.max(0, (targetMin - leadMin) * 60 * 1000);
+      $('#timerWrap')?.classList.toggle('timer-warning', current >= warningStartMs);
+    },
+    loop() {
+      this.render();
+      if (Store.state.timer.running) this.raf = requestAnimationFrame(() => this.loop());
+    },
+    toggle() {
+      const t = Store.state.timer;
+      if (t.running) {
+        t.elapsedMs = this.currentMs();
+        t.running = false;
+        t.startedAt = null;
+        cancelAnimationFrame(this.raf);
+        Store.save();
+        this.render();
+      } else {
+        t.running = true;
+        t.startedAt = Date.now();
+        Store.save();
+        this.loop();
+      }
+    },
+    reset() {
+      cancelAnimationFrame(this.raf);
+      Store.state.timer = { elapsedMs: 0, running: false, startedAt: null };
+      Store.save();
+      this.render();
+    },
+    restore() {
+      const t = Store.state.timer;
+      if (t.running) {
+        if (!t.startedAt) t.startedAt = Date.now();
+        this.loop();
+      } else this.render();
+    },
+    checkpoint() {
+      if (!Store.state.timer.running) return;
+      Store.state.timer.elapsedMs = this.currentMs();
+      Store.state.timer.startedAt = Date.now();
+      Store.save();
+    }
+  };
+
+  const WakeLock = {
+    sentinel: null,
+    supported() {
+      return 'wakeLock' in navigator && typeof navigator.wakeLock?.request === 'function';
+    },
+    async request() {
+      if (!Store.state.settings.wakeLock || document.visibilityState !== 'visible') return;
+      if (!this.supported() || this.sentinel) return;
+      try {
+        this.sentinel = await navigator.wakeLock.request('screen');
+        this.sentinel.addEventListener('release', () => {
+          this.sentinel = null;
+        }, { once: true });
+      } catch (_) {
+        this.sentinel = null;
+      }
+    },
+    async release() {
+      if (!this.sentinel) return;
+      const current = this.sentinel;
+      this.sentinel = null;
+      try { await current.release(); } catch (_) {}
+    },
+    apply(showUnsupportedToast = false) {
+      if (Store.state.settings.wakeLock) {
+        if (!this.supported()) {
+          if (showUnsupportedToast) toast(t('wakeUnsupported'));
+          return;
+        }
+        this.request();
+      } else {
+        this.release();
+      }
+    },
+    init() {
+      this.apply(false);
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible' && Store.state.settings.wakeLock) this.request();
+      });
+      // Some browsers are more reliable when the first request follows a user gesture.
+      document.addEventListener('pointerdown', () => {
+        if (Store.state.settings.wakeLock) this.request();
+      }, { once: true, passive: true });
+    }
+  };
+
+  const History = {
+    render() {
+      const root = $('#historyContainer');
+      const entries = [...Store.state.history].reverse();
+      const rows = [];
+
+      const gameNumbers = [...new Set([
+        ...(Store.state.gameStarts || []).map(item => Math.max(1, Math.trunc(item.game || 1))),
+        ...entries.map(item => Math.max(1, Math.trunc(item.game || 1))),
+        Math.max(1, Math.trunc(Store.state.game || 1))
+      ])].sort((a, b) => a - b);
+
+      const pushGameRow = game => {
+        rows.push(`<tr class="history-game-row"><td colspan="3">GAME ${game}</td></tr>`);
+      };
+      const pushTurnRow = turn => {
+        rows.push(`<tr class="history-turn-row"><td colspan="3">TURN ${turn}</td></tr>`);
+      };
+      const pushInitialRow = () => {
+        rows.push(`
+          <tr>
+            <td><div class="history-cell p1 initial"><div class="history-lp">8000</div></div></td>
+            <td class="time-col"><span class="history-time">0:00</span></td>
+            <td><div class="history-cell p2 initial"><div class="history-lp">8000</div></div></td>
+          </tr>`);
+      };
+
+      gameNumbers.forEach(game => {
+        pushGameRow(game);
+        pushTurnRow(1);
+        pushInitialRow();
+
+        let shownTurn = 1;
+        entries.filter(h => Math.max(1, Math.trunc(h.game || 1)) === game).forEach(h => {
+          const turn = Math.max(1, Math.trunc(h.turn || 1));
+          if (shownTurn !== turn) {
+            pushTurnRow(turn);
+            shownTurn = turn;
+          }
+          const cell = `
+            <div class="history-cell ${h.player}">
+              <div class="history-lp">${h.after}</div>
+              <div class="history-delta ${h.delta >= 0 ? 'pos' : 'neg'}">${signed(h.delta)}</div>
+            </div>`;
+          rows.push(`
+            <tr>
+              <td>${h.player === 'p1' ? cell : '<span class="history-empty-cell">—</span>'}</td>
+              <td class="time-col"><span class="history-time">${formatTime(h.timerMs || 0)}</span></td>
+              <td>${h.player === 'p2' ? cell : '<span class="history-empty-cell">—</span>'}</td>
+            </tr>`);
+        });
+      });
+
+      root.innerHTML = `
+        <div class="history-table-wrap">
+          <table class="history-table" aria-label="${escapeHTML(t('historyAria'))}">
+            <thead>
+              <tr>
+                <th class="p1-col">${escapeHTML(Store.state.names.p1)}</th>
+                <th class="time-col">TIME</th>
+                <th class="p2-col">${escapeHTML(Store.state.names.p2)}</th>
+              </tr>
+            </thead>
+            <tbody>${rows.join('')}</tbody>
+          </table>
+        </div>`;
+    },
+    clearConfirmed() {
+      Store.state.history = [];
+      Store.state.game = 1;
+      Store.state.gameStarts = [{ game: 1 }];
+      Store.state.lastChange = { p1: null, p2: null };
+      this.render();
+      UI.renderLP();
+      UI.syncUndoButtons();
+      toast(t('history') + ' cleared');
+    }
+  };
+
+  const Calculator = {
+    player: null,
+    operator: '-',
+    input: '',
+    root: null,
+    open(player) {
+      this.player = player;
+      this.operator = '-';
+      this.input = '';
+      Modal.show(this.template(), () => {
+        this.root = $('#calculatorModal');
+        this.bind();
+        this.render();
+      });
+    },
+    template() {
+      const name = Store.state.names[this.player];
+      return `
+      <div class="modal" id="calculatorModal" role="dialog" aria-modal="true" aria-label="${escapeHTML(t('lpCalculator'))}">
+        <div class="modal-head">
+          <div class="modal-title">${escapeHTML(t('calculator'))}</div>
+          <button class="close-btn" data-modal-close aria-label="${escapeHTML(t('close'))}">×</button>
+        </div>
+        <div class="calc-status">
+          <div>
+            <div class="calc-player">${escapeHTML(name)} ・ ${escapeHTML(t('currentLP'))}</div>
+            <div class="calc-current">${Store.state.lp[this.player]}</div>
+          </div>
+        </div>
+        <div class="calc-display">
+          <div class="calc-expression" id="calcExpression"></div>
+          <div class="calc-preview" id="calcPreview"></div>
+          <div class="calc-result-preview" id="calcResultPreview"></div>
+        </div>
+        <div class="calc-quick">
+          <button class="calc-key" data-scale="2">${escapeHTML(t('currentTimes2'))}</button>
+          <button class="calc-key" data-scale="0.5">${escapeHTML(t('currentHalf'))}</button>
+          <button class="calc-key set-mode" data-set-mode>${escapeHTML(t('setLP'))}</button>
+        </div>
+        <div class="calc-grid">
+          <button class="calc-key clear" data-key="C">C</button>
+          <button class="calc-key" data-key="DEL">⌫</button>
+          <button class="calc-key op" data-op="+">＋</button>
+          <button class="calc-key op" data-op="-">－</button>
+
+          <button class="calc-key" data-num="7">7</button>
+          <button class="calc-key" data-num="8">8</button>
+          <button class="calc-key" data-num="9">9</button>
+          <button class="calc-key raw100" data-num="00">00</button>
+
+          <button class="calc-key" data-num="4">4</button>
+          <button class="calc-key" data-num="5">5</button>
+          <button class="calc-key" data-num="6">6</button>
+          <button class="calc-key" data-num="0">0</button>
+
+          <button class="calc-key" data-num="1">1</button>
+          <button class="calc-key" data-num="2">2</button>
+          <button class="calc-key" data-num="3">3</button>
+          <button class="calc-key" data-num="000">000</button>
+
+          <button class="calc-key enter" data-enter>${escapeHTML(t('applyLP'))}</button>
+        </div>
+      </div>`;
+    },
+    bind() {
+      this.root.querySelectorAll('[data-num]').forEach(btn => btn.addEventListener('click', () => {
+        const value = btn.dataset.num;
+        if (this.input.length >= 8) return;
+        if (!this.input && /^0+$/.test(value)) this.input = '0';
+        else if (this.input === '0') this.input = value.replace(/^0+/, '') || '0';
+        else this.input += value;
+        this.render();
+      }));
+      this.root.querySelectorAll('[data-op]').forEach(btn => btn.addEventListener('click', () => {
+        this.operator = btn.dataset.op;
+        this.render();
+      }));
+      this.root.querySelectorAll('[data-scale]').forEach(btn => btn.addEventListener('click', () => {
+        const factor = Number(btn.dataset.scale);
+        const current = Store.state.lp[this.player];
+        const next = factor === 0.5 ? current - Math.floor(current / 2) : current * 2;
+        const expression = factor === 0.5 ? `${current} ÷ 2` : `${current} × 2`;
+        const changed = LP.set(this.player, next, { expression });
+        if (changed) Modal.close();
+      }));
+      this.root.querySelector('[data-set-mode]').addEventListener('click', () => {
+        this.operator = '=';
+        this.render();
+      });
+      this.root.querySelector('[data-key="C"]').addEventListener('click', () => { this.input = ''; this.render(); });
+      this.root.querySelector('[data-key="DEL"]').addEventListener('click', () => { this.input = this.input.slice(0, -1); this.render(); });
+      this.root.querySelector('[data-enter]').addEventListener('click', () => this.commit());
+    },
+    operand() {
+      if (!this.input) return null;
+      const raw = Number(this.input);
+      if (!Number.isFinite(raw)) return null;
+      return this.input.length <= 2 ? raw * 100 : raw;
+    },
+    result() {
+      const operand = this.operand();
+      if (operand === null) return null;
+      const current = Store.state.lp[this.player];
+      switch (this.operator) {
+        case '+': return Math.max(0, current + operand);
+        case '-': return Math.max(0, current - operand);
+        case '=': return Math.max(0, operand);
+        default: return null;
+      }
+    },
+    render() {
+      const operand = this.operand();
+      const expression = $('#calcExpression');
+      const opLabel = this.operator === '=' ? 'LP =' : this.operator;
+      if (!this.input) {
+        expression.textContent = `${opLabel} —`;
+      } else if (this.input.length <= 2) {
+        expression.innerHTML = `<span class="calc-entered">${escapeHTML(opLabel)} ${escapeHTML(this.input)}</span><span class="calc-auto-zero">00</span>`;
+      } else {
+        expression.innerHTML = `<span class="calc-entered">${escapeHTML(opLabel)} ${escapeHTML(this.input)}</span>`;
+      }
+      const setButton = this.root?.querySelector('[data-set-mode]');
+      if (setButton) setButton.classList.toggle('active', this.operator === '=');
+      $('#calcPreview').textContent = '';
+      const result = this.result();
+      $('#calcResultPreview').textContent = result === null ? '' : `${t('resultAfter')}：${result} LP`;
+    },
+    commit() {
+      const operand = this.operand();
+      const result = this.result();
+      if (operand === null) return toast(t('enterNumber'));
+      const current = Store.state.lp[this.player];
+      const expression = this.operator === '=' ? `${current} → ${operand}` : `${current} ${this.operator} ${operand}`;
+      const changed = LP.set(this.player, result, { expression });
+      if (changed) Modal.close();
+      else toast(t('noChange'));
+    }
+  };
+
+  const TokenCalculator = {
+    tokenId: null,
+    stat: null,
+    operator: '=',
+    input: '',
+    open(tokenId, stat) {
+      const token = Store.state.tokenMemos.find(item => item.id === tokenId);
+      if (!token) return;
+      this.tokenId = tokenId;
+      this.stat = stat;
+      this.operator = '=';
+      this.input = '';
+      const label = stat === 'atk' ? 'ATK' : 'DEF';
+      const current = this.currentValue();
+      Modal.show(`
+        <div class="modal small" id="tokenCalculator" role="dialog" aria-modal="true" aria-label="${escapeHTML(t('tokenStatInput', label))}">
+          <div class="modal-head">
+            <div class="modal-title">TOKEN ${label}</div>
+            <button class="close-btn" data-modal-close aria-label="${escapeHTML(t('close'))}">×</button>
+          </div>
+          <div class="calc-status">
+            <div>
+              <div class="calc-player">${escapeHTML(token.name)} ・ ${label}</div>
+              <div class="calc-current">${current}</div>
+            </div>
+          </div>
+          <div class="calc-display">
+            <div class="calc-expression" id="tokenCalcDisplay"></div>
+            <div class="calc-result-preview" id="tokenCalcResult"></div>
+          </div>
+          <div class="calc-quick">
+            <button class="calc-key" data-token-scale="2">×2</button>
+            <button class="calc-key" data-token-scale="0.5">÷2</button>
+            <button class="calc-key set-mode active" data-token-set>SET</button>
+          </div>
+          <div class="calc-grid">
+            <button class="calc-key clear" data-token-key="C">C</button>
+            <button class="calc-key" data-token-key="DEL">⌫</button>
+            <button class="calc-key op" data-token-op="+">＋</button>
+            <button class="calc-key op" data-token-op="-">－</button>
+
+            <button class="calc-key" data-token-num="7">7</button>
+            <button class="calc-key" data-token-num="8">8</button>
+            <button class="calc-key" data-token-num="9">9</button>
+            <button class="calc-key raw100" data-token-num="00">00</button>
+
+            <button class="calc-key" data-token-num="4">4</button>
+            <button class="calc-key" data-token-num="5">5</button>
+            <button class="calc-key" data-token-num="6">6</button>
+            <button class="calc-key" data-token-num="0">0</button>
+
+            <button class="calc-key" data-token-num="1">1</button>
+            <button class="calc-key" data-token-num="2">2</button>
+            <button class="calc-key" data-token-num="3">3</button>
+            <button class="calc-key" data-token-num="000">000</button>
+
+            <button class="calc-key enter" data-token-enter>${escapeHTML(t('confirm'))}</button>
+          </div>
+        </div>`, () => this.bind());
+    },
+    currentValue() {
+      const token = Store.state.tokenMemos.find(item => item.id === this.tokenId);
+      const n = Number(token?.[this.stat]);
+      return Number.isFinite(n) && n >= 0 ? Math.trunc(n) : 0;
+    },
+    operand() {
+      if (!this.input) return null;
+      const raw = Number(this.input);
+      if (!Number.isFinite(raw)) return null;
+      return this.input.length <= 2 ? raw * 100 : raw;
+    },
+    result() {
+      const operand = this.operand();
+      if (operand === null) return null;
+      const current = this.currentValue();
+      switch (this.operator) {
+        case '+': return Math.max(0, current + operand);
+        case '-': return Math.max(0, current - operand);
+        case '=': return Math.max(0, operand);
+        default: return null;
+      }
+    },
+    applyValue(value) {
+      const token = Store.state.tokenMemos.find(item => item.id === this.tokenId);
+      if (!token) return Modal.close();
+      token[this.stat] = String(Math.max(0, Math.trunc(value)));
+      TokenTool.render();
+      Modal.close();
+    },
+    bind() {
+      const root = $('#tokenCalculator');
+      root.querySelectorAll('[data-token-num]').forEach(btn => btn.addEventListener('click', () => {
+        const v = btn.dataset.tokenNum;
+        if (this.input.length >= 8) return;
+        if (!this.input && /^0+$/.test(v)) this.input = '0';
+        else if (this.input === '0') this.input = v.replace(/^0+/, '') || '0';
+        else this.input += v;
+        this.render();
+      }));
+      root.querySelectorAll('[data-token-op]').forEach(btn => btn.addEventListener('click', () => {
+        this.operator = btn.dataset.tokenOp;
+        this.render();
+      }));
+      root.querySelectorAll('[data-token-scale]').forEach(btn => btn.addEventListener('click', () => {
+        const current = this.currentValue();
+        const factor = Number(btn.dataset.tokenScale);
+        const next = factor === 0.5 ? Math.floor(current / 2) : current * 2;
+        this.applyValue(next);
+      }));
+      root.querySelector('[data-token-set]').addEventListener('click', () => {
+        this.operator = '=';
+        this.render();
+      });
+      root.querySelector('[data-token-key="C"]').addEventListener('click', () => { this.input = ''; this.render(); });
+      root.querySelector('[data-token-key="DEL"]').addEventListener('click', () => { this.input = this.input.slice(0,-1); this.render(); });
+      root.querySelector('[data-token-enter]').addEventListener('click', () => {
+        const result = this.result();
+        if (result === null) return toast(t('enterNumber'));
+        this.applyValue(result);
+      });
+      this.render();
+    },
+    render() {
+      const display = $('#tokenCalcDisplay');
+      if (!display) return;
+      const opLabel = this.operator === '=' ? 'SET ' : `${this.operator} `;
+      if (!this.input) {
+        display.textContent = `${opLabel}—`;
+      } else if (this.input.length <= 2) {
+        display.innerHTML = `<span class="calc-entered">${escapeHTML(opLabel)}${escapeHTML(this.input)}</span><span class="calc-auto-zero">00</span>`;
+      } else {
+        display.innerHTML = `<span class="calc-entered">${escapeHTML(opLabel)}${escapeHTML(this.input)}</span>`;
+      }
+      const result = this.result();
+      const resultEl = $('#tokenCalcResult');
+      if (resultEl) resultEl.textContent = result === null ? '' : `${t('resultAfter')}：${result}`;
+      const rootSet = $('#tokenCalculator')?.querySelector('[data-token-set]');
+      if (rootSet) rootSet.classList.toggle('active', this.operator === '=');
+    }
+  };
+
+  const Utility = {
+    last: null,
+    timer: null,
+    diceTicker: null,
+    coinMarkup(value, rolling = false, index = 0) {
+      const frontIcon = `<svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="11"/><path d="M16 7.5l2.2 5.1 5.5.5-4.2 3.7 1.3 5.4-4.8-2.8-4.8 2.8 1.3-5.4-4.2-3.7 5.5-.5z"/></svg>`;
+      const backIcon = `<svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="11"/><circle cx="16" cy="16" r="6"/><path d="M16 5v5M16 22v5M5 16h5M22 16h5M8.2 8.2l3.5 3.5M20.3 20.3l3.5 3.5M23.8 8.2l-3.5 3.5M11.7 20.3l-3.5 3.5"/></svg>`;
+      const tails = value === 'tails';
+      const fullSpins = 5 + (index % 3);
+      const endDeg = fullSpins * 360 + (tails ? 180 : 0);
+      const style = rolling ? `--coin-end:${endDeg}deg;--coin-rest:0deg` : `--coin-rest:${tails ? 180 : 0}deg`;
+      return `<div class="coin-scene" aria-label="${escapeHTML(t(value))}"><div class="coin ${rolling ? 'flipping' : ''}" style="${style}"><div class="coin-face front">${frontIcon}</div><div class="coin-face back">${backIcon}</div></div></div>`;
+    },
+    dieMarkup(value, rolling = false) {
+      return `<div class="die ${rolling ? 'rolling' : ''}" data-value="${value}" aria-label="${value}">${Array.from({length:9}, (_,i) => `<span class="pip p${i+1}"></span>`).join('')}</div>`;
+    },
+    renderLast() {
+      const root = $('#utilityResult');
+      if (!root) return;
+      if (!this.last) {
+        root.textContent = t('utilityPrompt');
+        return;
+      }
+      if (this.last.type === 'coin') {
+        const { results } = this.last;
+        const heads = results.filter(v => v === 'heads').length;
+        const tails = results.length - heads;
+        root.innerHTML = `<div class="utility-visuals">${results.map((v, i) => this.coinMarkup(v, false, i)).join('')}</div><div class="utility-summary">${escapeHTML(t('heads'))}：${heads}　${escapeHTML(t('tails'))}：${tails}</div>`;
+      } else {
+        const { results } = this.last;
+        const total = results.reduce((a,b) => a+b, 0);
+        root.innerHTML = `<div class="utility-visuals">${results.map(v => this.dieMarkup(v)).join('')}</div><div class="utility-summary">${escapeHTML(t('total'))}：${total}</div>`;
+      }
+    },
+    coin() {
+      clearTimeout(this.timer);
+      clearInterval(this.diceTicker);
+      this.diceTicker = null;
+      const input = $('#coinCount');
+      const count = clampInt(input.value, 1, MAX_UTILITY_COUNT, 1);
+      input.value = count;
+      const results = Array.from({length: count}, () => Math.random() < .5 ? 'heads' : 'tails');
+      const root = $('#utilityResult');
+      root.innerHTML = `<div class="utility-visuals">${results.map((v, i) => this.coinMarkup(v, true, i)).join('')}</div><div class="utility-summary">${escapeHTML(t('tossing'))}</div>`;
+      this.timer = setTimeout(() => {
+        this.last = { type:'coin', results };
+        this.renderLast();
+        root.classList.remove('result-pop'); void root.offsetWidth; root.classList.add('result-pop');
+      }, 1080);
+    },
+    dice() {
+      clearTimeout(this.timer);
+      clearInterval(this.diceTicker);
+      const input = $('#diceCount');
+      const count = clampInt(input.value, 1, MAX_UTILITY_COUNT, 1);
+      input.value = count;
+      const results = Array.from({length: count}, () => Math.floor(Math.random() * 6) + 1);
+      const root = $('#utilityResult');
+      const rollingValues = results.map(() => Math.floor(Math.random() * 6) + 1);
+      root.innerHTML = `<div class="utility-visuals">${rollingValues.map(v => this.dieMarkup(v, true)).join('')}</div><div class="utility-summary">${escapeHTML(t('rolling'))}</div>`;
+      const diceEls = [...root.querySelectorAll('.die')];
+      this.diceTicker = setInterval(() => {
+        diceEls.forEach(die => {
+          let next = Math.floor(Math.random() * 6) + 1;
+          if (Number(die.dataset.value) === next) next = (next % 6) + 1;
+          die.dataset.value = String(next);
+          die.setAttribute('aria-label', String(next));
+        });
+      }, 85);
+      this.timer = setTimeout(() => {
+        clearInterval(this.diceTicker);
+        this.diceTicker = null;
+        this.last = { type:'dice', results };
+        this.renderLast();
+        root.classList.remove('result-pop'); void root.offsetWidth; root.classList.add('result-pop');
+      }, 820);
+    }
+  };
+
+  const TokenTool = {
+    maxRows: 8,
+    add() {
+      if (Store.state.tokenMemos.length >= this.maxRows) {
+        toast(t('maxRows', this.maxRows));
+        return;
+      }
+      Store.state.tokenMemos.push({
+        id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        name: t('tokenDefault'),
+        atk: '',
+        def: ''
+      });
+      this.render();
+      const cards = $$('#tokenList .token-card');
+      cards.at(-1)?.querySelector('.token-name-input')?.focus();
+    },
+    remove(id) {
+      if (Store.state.tokenMemos.length <= 1) {
+        toast(t('keepOneToken'));
+        return;
+      }
+      Store.state.tokenMemos = Store.state.tokenMemos.filter(item => item.id !== id);
+      this.render();
+    },
+    setName(id, value) {
+      const token = Store.state.tokenMemos.find(item => item.id === id);
+      if (token) token.name = value;
+    },
+    normalizeName(id, input) {
+      const token = Store.state.tokenMemos.find(item => item.id === id);
+      if (!token) return;
+      const fallback = id === 'token-initial' ? '原始生命態トークン' : t('tokenDefault');
+      token.name = input.value.trim() || fallback;
+      input.value = token.name;
+    },
+    render() {
+      const root = $('#tokenList');
+      if (!root) return;
+      root.innerHTML = Store.state.tokenMemos.map(token => `
+        <div class="token-card" data-token-id="${token.id}">
+          <div class="token-name-row">
+            <input class="token-name-input" maxlength="30" value="${escapeHTML(token.name)}" placeholder="${escapeHTML(t('tokenName'))}" aria-label="${escapeHTML(t('tokenName'))}">
+            <button class="token-delete" data-token-delete aria-label="${escapeHTML(t('deleteToken'))}">×</button>
+          </div>
+          <div class="token-values-row">
+            <button class="token-value-block" data-token-stat="atk" aria-label="${escapeHTML(token.name)} ATK">
+              <span class="token-value-label">ATK</span>
+              <span class="token-value-number">${token.atk === '' ? '—' : token.atk}</span>
+            </button>
+            <button class="token-value-block" data-token-stat="def" aria-label="${escapeHTML(token.name)} DEF">
+              <span class="token-value-label">DEF</span>
+              <span class="token-value-number">${token.def === '' ? '—' : token.def}</span>
+            </button>
+          </div>
+        </div>`).join('');
+
+      root.querySelectorAll('.token-card').forEach(card => {
+        const id = card.dataset.tokenId;
+        const nameInput = card.querySelector('.token-name-input');
+        nameInput.addEventListener('input', e => this.setName(id, e.target.value));
+        nameInput.addEventListener('blur', e => this.normalizeName(id, e.target));
+        card.querySelectorAll('[data-token-stat]').forEach(btn => btn.addEventListener('click', () => TokenCalculator.open(id, btn.dataset.tokenStat)));
+        card.querySelector('[data-token-delete]').addEventListener('click', () => this.remove(id));
+      });
+    },
+    bind() {
+      $('#addToken').addEventListener('click', () => this.add());
+    }
+  };
+
+  const CounterTool = {
+    maxRows: 12,
+    add() {
+      if (Store.state.cardCounters.length >= this.maxRows) {
+        toast(t('maxRows', this.maxRows));
+        return;
+      }
+      Store.state.cardCounters.push({
+        id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        name: '',
+        count: 0
+      });
+      this.render();
+      const rows = $$('#counterList .counter-row');
+      rows.at(-1)?.querySelector('.counter-name')?.focus();
+    },
+    remove(id) {
+      Store.state.cardCounters = Store.state.cardCounters.filter(item => item.id !== id);
+      this.render();
+    },
+    change(id, delta) {
+      const item = Store.state.cardCounters.find(item => item.id === id);
+      if (!item) return;
+      item.count = Math.max(0, Math.min(999, item.count + delta));
+      this.render();
+    },
+    setCount(id, value) {
+      const item = Store.state.cardCounters.find(item => item.id === id);
+      if (!item) return;
+      item.count = clampInt(value, 0, 999, 0);
+      this.render();
+    },
+    setName(id, value) {
+      const item = Store.state.cardCounters.find(item => item.id === id);
+      if (item) item.name = value;
+    },
+    render() {
+      const root = $('#counterList');
+      if (!root) return;
+      const items = Store.state.cardCounters;
+      if (!items.length) {
+        root.innerHTML = `<div class="counter-empty">${escapeHTML(t('counterEmpty'))}</div>`;
+        return;
+      }
+      root.innerHTML = items.map(item => `
+        <div class="counter-row" data-counter-id="${item.id}">
+          <div class="counter-name-row">
+            <input class="counter-name" maxlength="30" value="${escapeHTML(item.name)}" placeholder="${escapeHTML(t('cardName'))}" aria-label="${escapeHTML(t('cardName'))}">
+            <button class="counter-delete" data-counter-delete aria-label="${escapeHTML(t('deleteCard'))}">×</button>
+          </div>
+          <div class="counter-value-row">
+            <button class="counter-step" data-counter-delta="-1" aria-label="${escapeHTML(t('counterMinus'))}">−</button>
+            <input class="counter-value" type="number" min="0" max="999" value="${item.count}" inputmode="numeric" aria-label="${escapeHTML(t('counterCount'))}">
+            <button class="counter-step" data-counter-delta="1" aria-label="${escapeHTML(t('counterPlus'))}">＋</button>
+          </div>
+        </div>`).join('');
+      root.querySelectorAll('.counter-row').forEach(row => {
+        const id = row.dataset.counterId;
+        row.querySelector('.counter-name').addEventListener('input', e => this.setName(id, e.target.value));
+        row.querySelectorAll('[data-counter-delta]').forEach(btn => btn.addEventListener('click', () => this.change(id, Number(btn.dataset.counterDelta))));
+        row.querySelector('.counter-value').addEventListener('change', e => this.setCount(id, e.target.value));
+        row.querySelector('[data-counter-delete]').addEventListener('click', () => this.remove(id));
+      });
+    },
+    bind() {
+      $('#addCounterCard').addEventListener('click', () => this.add());
+    }
+  };
+
+  const Modal = {
+    show(html, afterOpen) {
+      $('#modalRoot').innerHTML = `<div class="modal-backdrop" id="modalBackdrop">${html}</div>`;
+      const backdrop = $('#modalBackdrop');
+      backdrop.addEventListener('click', e => {
+        if (e.target === backdrop || e.target.closest('[data-modal-close]')) this.close();
+      });
+      afterOpen?.();
+    },
+    close() { $('#modalRoot').innerHTML = ''; }
+  };
+
+  const Dialogs = {
+    reset() {
+      Modal.show(`
+        <div class="modal small" role="dialog" aria-modal="true" aria-label="${escapeHTML(t('resetMatch'))}">
+          <div class="modal-head"><div class="modal-title">${escapeHTML(t('resetTitle'))}</div><button class="close-btn" data-modal-close aria-label="${escapeHTML(t('close'))}">×</button></div>
+          <div class="confirm-text">${escapeHTML(t('resetBody'))}</div>
+          <label class="check-row"><input type="checkbox" id="resetTimerCheck">${escapeHTML(t('resetTimerToo'))}</label>
+          <div class="modal-actions">
+            <button class="action-btn" data-modal-close>${escapeHTML(t('cancel'))}</button>
+            <button class="action-btn danger" id="confirmReset">${escapeHTML(t('reset'))}</button>
+          </div>
+        </div>`, () => {
+          $('#confirmReset').addEventListener('click', () => {
+            const withTimer = $('#resetTimerCheck').checked;
+            LP.reset(withTimer);
+            Modal.close();
+            toast(withTimer ? t('resetBoth') : t('resetLP'));
+          });
+        });
+    },
+    clearAllSettings() {
+      Modal.show(`
+        <div class="modal small" role="dialog" aria-modal="true" aria-label="${escapeHTML(t('clearSettingsTitle'))}">
+          <div class="modal-head"><div class="modal-title">${escapeHTML(t('clearSettingsTitle'))}</div><button class="close-btn" data-modal-close aria-label="${escapeHTML(t('close'))}">×</button></div>
+          <div class="confirm-text">${escapeHTML(t('clearSettingsBody'))}</div>
+          <div class="modal-actions">
+            <button class="action-btn" data-modal-close>${escapeHTML(t('cancel'))}</button>
+            <button class="action-btn danger" id="confirmClearSettings">${escapeHTML(t('reset'))}</button>
+          </div>
+        </div>`, () => {
+          $('#confirmClearSettings').addEventListener('click', () => {
+            Store.state.names = clone(defaults.names);
+            Store.state.settings = clone(defaults.settings);
+            try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+            Theme.apply();
+            WakeLock.apply(Store.state.settings.wakeLock);
+            Modal.close();
+            Language.apply();
+            Settings.render();
+            UI.renderNames();
+            UI.renderDominusRestrictions();
+            History.render();
+            Timer.render();
+            Clock.render();
+            toast(t('clearSettingsDone'));
+          });
+        });
+    }
+  };
+
+  const Settings = {
+    render() {
+      $('#p1NameInput').value = Store.state.names.p1;
+      $('#p2NameInput').value = Store.state.names.p2;
+      $('#modeSelect').value = Store.state.settings.mode;
+      $('#themeSelect').value = Store.state.settings.theme;
+      $('#fontFamilySelect').value = Store.state.settings.fontFamily || 'system';
+      $('#languageSelect').value = Store.state.settings.language || 'ja';
+      $('#playerNamesVisibleSetting').checked = Store.state.settings.playerNamesVisible !== false;
+      $('#dominusVisibleSetting').checked = Store.state.settings.dominusVisible !== false;
+      $('#dynamicBackgroundPatternSelect').value = Store.state.settings.dynamicBackgroundPattern || 'drift';
+      $('#clockEnabledSetting').checked = Store.state.settings.clockEnabled !== false;
+      $('#clockFormatSelect').value = Store.state.settings.clockFormat || '24h';
+      $('#wakeLockSetting').checked = Store.state.settings.wakeLock !== false;
+      $('#timerTargetInput').value = Math.max(1, Number(Store.state.settings.timerTargetMin) || defaults.settings.timerTargetMin);
+      $('#timerWarningLeadInput').value = Math.max(0, Number(Store.state.settings.timerWarningLeadMin) || 0);
+    },
+    bind() {
+      const saveName = player => {
+        const input = $(`#${player}NameInput`);
+        const value = input.value.trim() || (player === 'p1' ? 'PLAYER 1' : 'PLAYER 2');
+        input.value = value;
+        Store.state.names[player] = value;
+        Store.save();
+        UI.renderNames();
+        History.render();
+      };
+      $('#p1NameInput').addEventListener('change', () => saveName('p1'));
+      $('#p2NameInput').addEventListener('change', () => saveName('p2'));
+      $('#modeSelect').addEventListener('change', e => {
+        Store.state.settings.mode = e.target.value;
+        Store.save(); Theme.apply();
+      });
+      $('#themeSelect').addEventListener('change', e => {
+        Store.state.settings.theme = e.target.value;
+        Store.save(); Theme.apply();
+      });
+      $('#fontFamilySelect').addEventListener('change', e => {
+        Store.state.settings.fontFamily = e.target.value;
+        Store.save();
+        Theme.apply();
+        requestAnimationFrame(() => UI.fitAllLP());
+        if (document.fonts?.ready) {
+          document.fonts.ready.then(() => requestAnimationFrame(() => UI.fitAllLP()));
+        }
+      });
+      $('#playerNamesVisibleSetting').addEventListener('change', e => {
+        Store.state.settings.playerNamesVisible = e.target.checked;
+        Store.save();
+        Theme.apply();
+        requestAnimationFrame(() => UI.fitAllLP());
+      });
+      $('#dominusVisibleSetting').addEventListener('change', e => {
+        Store.state.settings.dominusVisible = e.target.checked;
+        Store.save();
+        UI.renderDominusRestrictions();
+        requestAnimationFrame(() => UI.fitAllLP());
+      });
+      $('#dynamicBackgroundPatternSelect').addEventListener('change', e => {
+        Store.state.settings.dynamicBackgroundPattern = e.target.value;
+        Store.save();
+        Theme.apply();
+      });
+      $('#clockEnabledSetting').addEventListener('change', e => {
+        Store.state.settings.clockEnabled = e.target.checked;
+        Store.save();
+        Clock.render();
+      });
+      $('#clockFormatSelect').addEventListener('change', e => {
+        Store.state.settings.clockFormat = e.target.value;
+        Store.save();
+        Theme.apply();
+        Clock.render();
+      });
+      $('#wakeLockSetting').addEventListener('change', e => {
+        Store.state.settings.wakeLock = e.target.checked;
+        Store.save();
+        WakeLock.apply(e.target.checked);
+      });
+      $('#languageSelect').addEventListener('change', e => {
+        Store.state.settings.language = e.target.value;
+        Store.save();
+        Language.apply();
+      });
+      const saveTimerWarning = () => {
+        const targetInput = $('#timerTargetInput');
+        const leadInput = $('#timerWarningLeadInput');
+        const target = clampInt(targetInput.value, 1, 999, defaults.settings.timerTargetMin);
+        const lead = clampInt(leadInput.value, 0, target, defaults.settings.timerWarningLeadMin);
+        targetInput.value = target;
+        leadInput.max = target;
+        leadInput.value = lead;
+        Store.state.settings.timerTargetMin = target;
+        Store.state.settings.timerWarningLeadMin = lead;
+        Store.save();
+        Timer.render();
+      };
+      $('#timerTargetInput').addEventListener('change', saveTimerWarning);
+      $('#timerWarningLeadInput').addEventListener('change', saveTimerWarning);
+      $('#clearAllSettings').addEventListener('click', () => Dialogs.clearAllSettings());
+    }
+  };
+
+  const UI = {
+    footerCollapsed: false,
+    updateChrome() {
+      const app = $('#app');
+      if (!app) return;
+      app.classList.toggle('footer-collapsed', this.footerCollapsed);
+      const footerBtn = $('#footerToggle');
+      if (footerBtn) {
+        const icon = footerBtn.querySelector('.nav-icon');
+        const label = footerBtn.querySelector('.footer-toggle-label');
+        if (icon) icon.textContent = this.footerCollapsed ? '⌃' : '⌄';
+        if (label) label.textContent = this.footerCollapsed ? 'SHOW' : 'HIDE';
+        footerBtn.setAttribute('aria-label', this.footerCollapsed ? 'Expand footer' : 'Collapse footer');
+        footerBtn.title = this.footerCollapsed ? 'Expand footer' : 'Collapse footer';
+      }
+      requestAnimationFrame(() => this.fitAllLP());
+    },
+    toggleFooter() {
+      this.footerCollapsed = !this.footerCollapsed;
+      this.updateChrome();
+    },
+    renderTurn() {
+      const el = $('#turnDisplay');
+      if (!el) return;
+      const number = el.querySelector('.turn-number');
+      if (number) number.textContent = String(Store.state.turn);
+      else el.innerHTML = `<span class="turn-label">TURN</span><span class="turn-number">${Store.state.turn}</span>`;
+    },
+    nextTurn() {
+      Store.state.turn = Math.max(1, Math.trunc(Store.state.turn || 1) + 1);
+      this.renderTurn();
+      toast(t('turnAdvanced', Store.state.turn));
+    },
+    renderNames() {
+      $('#p1NameDisplay').textContent = Store.state.names.p1;
+      $('#p2NameDisplay').textContent = Store.state.names.p2;
+    },
+    renderLP() {
+      ['p1','p2'].forEach(player => {
+        $(`#${player}LP`).textContent = formatLP(Store.state.lp[player]);
+        const last = Store.state.lastChange[player];
+        const label = $(`#${player}LastLabel`);
+        const delta = $(`#${player}LastDelta`);
+        if (!last) {
+          label.textContent = 'タップして計算';
+          delta.textContent = '—';
+          delta.className = 'change-badge';
+        } else {
+          label.textContent = `${last.before} → ${last.after}`;
+          delta.textContent = signed(last.delta);
+          delta.className = `change-badge ${last.delta >= 0 ? 'pos' : 'neg'}`;
+        }
+      });
+      requestAnimationFrame(() => this.fitAllLP());
+    },
+    lpCountAnimations: { p1: null, p2: null },
+    animateLPChange(player, from, to) {
+      from = Math.trunc(Number(from));
+      to = Math.trunc(Number(to));
+      if (!Number.isFinite(from) || !Number.isFinite(to) || from === to) return;
+
+      const text = $(`#${player}LP`);
+      const card = text?.closest('.player-card');
+      if (!text || !card) return;
+
+      if (this.lpCountAnimations[player]) {
+        cancelAnimationFrame(this.lpCountAnimations[player]);
+        this.lpCountAnimations[player] = null;
+      }
+
+      const delta = to - from;
+      const up = delta > 0;
+      const textClass = up ? 'lp-anim-up' : 'lp-anim-down';
+      const cardClass = up ? 'lp-pulse-up' : 'lp-pulse-down';
+
+      text.classList.remove('lp-anim-up', 'lp-anim-down');
+      card.classList.remove('lp-pulse-up', 'lp-pulse-down');
+      text.textContent = formatLP(from);
+      this.fitLP(player);
+      void text.offsetWidth;
+      text.classList.add(textClass);
+      card.classList.add(cardClass);
+
+      const cleanup = () => {
+        text.classList.remove(textClass);
+        card.classList.remove(cardClass);
+      };
+      text.addEventListener('animationend', cleanup, { once: true });
+
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reducedMotion) {
+        text.textContent = formatLP(to);
+        this.fitLP(player);
+        setTimeout(cleanup, 0);
+        return;
+      }
+
+      const duration = 380;
+      const startedAt = performance.now();
+      const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+      let lastRendered = from;
+
+      const step = now => {
+        const progress = Math.min(1, (now - startedAt) / duration);
+        const eased = easeOutCubic(progress);
+        const raw = from + delta * eased;
+        const current = delta > 0 ? Math.floor(raw) : Math.ceil(raw);
+
+        if (current !== lastRendered) {
+          text.textContent = formatLP(current);
+          lastRendered = current;
+        }
+
+        if (progress < 1) {
+          this.lpCountAnimations[player] = requestAnimationFrame(step);
+        } else {
+          text.textContent = formatLP(to);
+          this.lpCountAnimations[player] = null;
+          this.fitLP(player);
+        }
+      };
+
+      this.lpCountAnimations[player] = requestAnimationFrame(step);
+    },
+    lpBaseFontSizes: { p1: null, p2: null },
+    measureLPFontSize(player, value) {
+      const button = $(`#${player}LPButton`);
+      const text = $(`#${player}LP`);
+      if (!button || !text || button.offsetWidth === 0 || button.offsetHeight === 0) return null;
+
+      const originalText = text.textContent;
+      const originalSize = text.style.fontSize;
+      text.textContent = String(value);
+
+      const maxWidth = Math.max(40, button.clientWidth - 4);
+      const maxHeight = Math.max(40, button.clientHeight - 42);
+      let low = 28, high = 280, best = low;
+
+      while (low <= high) {
+        const mid = Math.floor((low + high) / 2);
+        text.style.fontSize = `${mid}px`;
+        if (text.scrollWidth <= maxWidth && text.scrollHeight <= maxHeight) {
+          best = mid;
+          low = mid + 1;
+        } else {
+          high = mid - 1;
+        }
+      }
+
+      text.textContent = originalText;
+      text.style.fontSize = originalSize;
+      return best;
+    },
+    fitLP(player) {
+      const text = $(`#${player}LP`);
+      if (!text) return;
+
+      // 8000表示時のサイズを基準上限にする。3桁以下になっても文字は拡大しない。
+      const baseSize = this.measureLPFontSize(player, 8000);
+      const currentSize = this.measureLPFontSize(player, text.textContent || Store.state.lp[player]);
+      if (baseSize === null || currentSize === null) return;
+
+      this.lpBaseFontSizes[player] = baseSize;
+      text.style.fontSize = `${Math.min(baseSize, currentSize)}px`;
+    },
+    fitAllLP() {
+      this.fitLP('p1');
+      this.fitLP('p2');
+    },
+    swapPlayers() {
+      [Store.state.names.p1, Store.state.names.p2] = [Store.state.names.p2, Store.state.names.p1];
+      [Store.state.lp.p1, Store.state.lp.p2] = [Store.state.lp.p2, Store.state.lp.p1];
+      [Store.state.dominusRestrictions.p1, Store.state.dominusRestrictions.p2] = [Store.state.dominusRestrictions.p2, Store.state.dominusRestrictions.p1];
+      [Store.state.dominusManualRestrictions.p1, Store.state.dominusManualRestrictions.p2] = [Store.state.dominusManualRestrictions.p2, Store.state.dominusManualRestrictions.p1];
+      [Store.state.dominusPresets.p1, Store.state.dominusPresets.p2] = [Store.state.dominusPresets.p2, Store.state.dominusPresets.p1];
+
+      Store.state.history = Store.state.history.map(entry => ({
+        ...entry,
+        player: entry.player === 'p1' ? 'p2' : 'p1'
+      }));
+      Store.state.lastChange = {
+        p1: Store.state.history.find(h => h.player === 'p1') || null,
+        p2: Store.state.history.find(h => h.player === 'p2') || null
+      };
+
+      Store.save();
+      this.renderNames();
+      this.renderTurn();
+      this.renderLP();
+      this.renderDominusRestrictions();
+      History.render();
+      Settings.render();
+      toast(t('playersSwapped'));
+    },
+    renderDominusRestrictions() {
+      const meta = {
+        light:  { short: '光', label: 'LIGHT' },
+        dark:   { short: '闇', label: 'DARK' },
+        earth:  { short: '地', label: 'EARTH' },
+        water:  { short: '水', label: 'WATER' },
+        fire:   { short: '炎', label: 'FIRE' },
+        wind:   { short: '風', label: 'WIND' }
+      };
+      const enabled = Store.state.settings.dominusVisible !== false;
+      ['p1','p2'].forEach(player => {
+        const state = { ...defaults.dominusRestrictions[player], ...(Store.state.dominusManualRestrictions?.[player] || Store.state.dominusRestrictions?.[player] || {}) };
+        const presetMap = {
+          purge: ['dark','water','fire'],
+          impulse: ['light','earth','wind'],
+          spiral: ['light','dark'],
+          spark: ['earth','water','fire','wind']
+        };
+        Object.entries(presetMap).forEach(([key, attrs]) => {
+          if (!Store.state.dominusPresets?.[player]?.[key]) return;
+          attrs.forEach(attr => state[attr] = true);
+        });
+        Store.state.dominusRestrictions[player] = { ...state };
+        const zone = document.querySelector(`[data-dominus-player="${player}"]`);
+        const root = document.querySelector(`[data-dominus-icons="${player}"]`);
+        if (!zone || !root) return;
+        zone.classList.toggle('hidden', !enabled);
+        if (!enabled) {
+          root.innerHTML = '';
+          return;
+        }
+        const blocked = Object.keys(meta).filter(attr => !!state[attr]);
+        root.innerHTML = blocked.map(attr => `
+          <span class="dominus-icon" data-attr="${attr}" title="${meta[attr].label}: BLOCKED" aria-label="${meta[attr].label} monster effects blocked">${meta[attr].short}</span>
+        `).join('');
+        const placeholder = zone.querySelector('.dominus-placeholder');
+        if (placeholder) placeholder.hidden = blocked.length > 0;
+        zone.setAttribute('aria-label', `${player.toUpperCase()} Dominus restrictions. ${blocked.length ? blocked.map(attr => meta[attr].label).join(', ') + ' blocked' : 'No blocked attributes'}. Tap to edit.`);
+      });
+    },
+    openDominusSelector(player) {
+      if (Store.state.settings.dominusVisible === false) return;
+      const meta = {
+        light:  { short: '光', label: 'LIGHT' },
+        dark:   { short: '闇', label: 'DARK' },
+        earth:  { short: '地', label: 'EARTH' },
+        water:  { short: '水', label: 'WATER' },
+        fire:   { short: '炎', label: 'FIRE' },
+        wind:   { short: '風', label: 'WIND' }
+      };
+      const presets = {
+        purge: {
+          jp: '聖王の粉砕', en: 'Dominus Purge', attrs: ['dark','water','fire']
+        },
+        impulse: {
+          jp: '霊王の波動', en: 'Dominus Impulse', attrs: ['light','earth','wind']
+        },
+        spiral: {
+          jp: '命王の螺旋', en: 'Dominus Spiral', attrs: ['light','dark']
+        },
+        spark: {
+          jp: '霆王の閃光', en: 'Dominus Spark', attrs: ['earth','water','fire','wind']
+        }
+      };
+
+      // 既存状態は手動属性として引き継ぎ、カードプリセットは独立して管理する。
+      if (!Store.state.dominusManualRestrictions) {
+        Store.state.dominusManualRestrictions = clone(defaults.dominusManualRestrictions);
+      }
+      if (!Store.state.dominusPresets) {
+        Store.state.dominusPresets = clone(defaults.dominusPresets);
+      }
+      const manualDraft = {
+        ...defaults.dominusManualRestrictions[player],
+        ...(Store.state.dominusManualRestrictions[player] || Store.state.dominusRestrictions[player] || {})
+      };
+      const presetDraft = {
+        ...defaults.dominusPresets[player],
+        ...(Store.state.dominusPresets[player] || {})
+      };
+      const playerName = Store.state.names[player] || player.toUpperCase();
+
+      const computeEffective = () => {
+        const effective = { ...defaults.dominusRestrictions[player] };
+        Object.keys(effective).forEach(attr => {
+          effective[attr] = !!manualDraft[attr];
+        });
+        Object.entries(presets).forEach(([key, preset]) => {
+          if (!presetDraft[key]) return;
+          preset.attrs.forEach(attr => effective[attr] = true);
+        });
+        return effective;
+      };
+
+      const renderChoice = attr => {
+        const item = meta[attr];
+        const effective = computeEffective();
+        return `
+          <div class="dominus-choice-wrap">
+            <button type="button" class="dominus-choice" data-dominus-choice="${attr}" data-attr="${attr}" aria-pressed="${effective[attr] ? 'true' : 'false'}" aria-label="${item.label}">${item.short}</button>
+            <div class="dominus-choice-label">${item.label}</div>
+          </div>`;
+      };
+
+      const renderPreset = (key, preset) => `
+        <button type="button" class="dominus-preset-btn" data-dominus-preset="${key}" aria-pressed="${presetDraft[key] ? 'true' : 'false'}">
+          <span class="dominus-preset-jp">《${preset.jp}》</span>
+          <span class="dominus-preset-en">${preset.en}</span>
+          <span class="dominus-preset-attrs">${preset.attrs.map(attr => meta[attr].short).join('・')}</span>
+        </button>`;
+
+      Modal.show(`
+        <div class="modal small" role="dialog" aria-modal="true" aria-label="${escapeHTML(t('dominusTitle'))}">
+          <div class="modal-head">
+            <div>
+              <div class="modal-title">${escapeHTML(t('dominusTitle'))}</div>
+              <div class="calc-player">${escapeHTML(playerName)}</div>
+            </div>
+            <button class="close-btn" data-modal-close aria-label="${escapeHTML(t('close'))}">×</button>
+          </div>
+          <div class="confirm-text">${escapeHTML(t('dominusHint'))}</div>
+          <div class="dominus-choice-grid">${Object.keys(meta).map(renderChoice).join('')}</div>
+          <div class="dominus-preset-section">
+            <div class="dominus-preset-title">CARD PRESETS</div>
+            <div class="dominus-preset-grid">${Object.entries(presets).map(([key,preset]) => renderPreset(key,preset)).join('')}</div>
+          </div>
+          <div class="modal-actions">
+            <button class="action-btn" id="clearDominus">${escapeHTML(t('dominusClear'))}</button>
+            <button class="action-btn primary" id="applyDominus">${escapeHTML(t('confirm'))}</button>
+          </div>
+        </div>`, () => {
+          const syncAll = () => {
+            const effective = computeEffective();
+            document.querySelectorAll('[data-dominus-choice]').forEach(btn => {
+              const attr = btn.dataset.dominusChoice;
+              btn.setAttribute('aria-pressed', effective[attr] ? 'true' : 'false');
+            });
+            document.querySelectorAll('[data-dominus-preset]').forEach(btn => {
+              const key = btn.dataset.dominusPreset;
+              btn.setAttribute('aria-pressed', presetDraft[key] ? 'true' : 'false');
+            });
+          };
+
+          document.querySelectorAll('[data-dominus-choice]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const attr = btn.dataset.dominusChoice;
+              const effective = computeEffective();
+              if (effective[attr]) {
+                // 個別で許可へ戻す場合、その属性を含む有効プリセットも解除する。
+                manualDraft[attr] = false;
+                Object.entries(presets).forEach(([key, preset]) => {
+                  if (presetDraft[key] && preset.attrs.includes(attr)) presetDraft[key] = false;
+                });
+              } else {
+                manualDraft[attr] = true;
+              }
+              syncAll();
+            });
+          });
+
+          document.querySelectorAll('[data-dominus-preset]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const key = btn.dataset.dominusPreset;
+              presetDraft[key] = !presetDraft[key];
+              syncAll();
+            });
+          });
+
+          $('#clearDominus').addEventListener('click', () => {
+            Object.keys(meta).forEach(attr => manualDraft[attr] = false);
+            Object.keys(presets).forEach(key => presetDraft[key] = false);
+            syncAll();
+          });
+
+          $('#applyDominus').addEventListener('click', () => {
+            Store.state.dominusManualRestrictions[player] = { ...manualDraft };
+            Store.state.dominusPresets[player] = { ...presetDraft };
+            Store.state.dominusRestrictions[player] = computeEffective();
+            this.renderDominusRestrictions();
+            Modal.close();
+          });
+        });
+    },
+    syncUndoButtons() {
+      const currentGame = Math.max(1, Math.trunc(Store.state.game || 1));
+      const disabled = !Store.state.history.some(h => Math.max(1, Math.trunc(h.game || 1)) === currentGame);
+      ['#quickUndo'].forEach(sel => { const el = $(sel); if (el) el.disabled = disabled; });
+    },
+    nav(screen) {
+      $$('.screen').forEach(el => el.classList.toggle('hidden', el.dataset.screen !== screen));
+      $$('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.nav === screen));
+      if (screen === 'history') History.render();
+      if (screen === 'settings') {
+        Settings.render();
+        $$('.settings-section').forEach(section => { section.open = false; });
+      }
+      if (screen === 'utility') {
+        $$('.utility-section').forEach(section => { section.open = false; });
+      }
+      if (screen === 'life') requestAnimationFrame(() => this.fitAllLP());
+    },
+    bind() {
+      const bindLPButton = (selector, player) => {
+        const button = $(selector);
+        if (!button) return;
+        const openCalculator = event => {
+          event.preventDefault();
+          event.stopPropagation();
+          Calculator.open(player);
+        };
+        button.addEventListener('click', openCalculator);
+      };
+      bindLPButton('#p1LPButton', 'p1');
+      bindLPButton('#p2LPButton', 'p2');
+      $('#timerToggle').addEventListener('click', () => Timer.toggle());
+      $('#turnDisplay').addEventListener('click', () => this.nextTurn());
+      $('#footerToggle').addEventListener('click', () => this.toggleFooter());
+      $$('.dominus-zone').forEach(zone => {
+        zone.addEventListener('click', event => {
+          event.preventDefault();
+          event.stopPropagation();
+          this.openDominusSelector(zone.dataset.dominusPlayer);
+        });
+      });
+
+      $('#swapPlayers').addEventListener('click', () => this.swapPlayers());
+      $('#quickUndo').addEventListener('click', () => LP.undo());
+      $('#openReset').addEventListener('click', () => Dialogs.reset());
+      $$('.nav-btn[data-nav]').forEach(btn => btn.addEventListener('click', () => this.nav(btn.dataset.nav)));
+
+      $$('[data-step]').forEach(btn => btn.addEventListener('click', () => {
+        const id = btn.dataset.step === 'coin' ? '#coinCount' : '#diceCount';
+        const input = $(id);
+        input.value = clampInt(Number(input.value) + Number(btn.dataset.delta), 1, MAX_UTILITY_COUNT, 1);
+      }));
+      $('#coinCount').addEventListener('change', e => e.target.value = clampInt(e.target.value, 1, MAX_UTILITY_COUNT, 1));
+      $('#diceCount').addEventListener('change', e => e.target.value = clampInt(e.target.value, 1, MAX_UTILITY_COUNT, 1));
+      $('#runCoin').addEventListener('click', () => Utility.coin());
+      $('#runDice').addEventListener('click', () => Utility.dice());
+      $('#clearMemo').addEventListener('click', () => { const memo = $('#duelMemo'); if (memo) memo.value = ''; toast(t('memoCleared')); });
+
+      window.addEventListener('pagehide', () => Timer.checkpoint());
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') Timer.checkpoint();
+        else Timer.render();
+      });
+    },
+    init() {
+      this.renderNames();
+      this.renderTurn();
+      this.renderLP();
+      this.renderDominusRestrictions();
+      this.syncUndoButtons();
+      History.render();
+      Settings.render();
+      TokenTool.render();
+      TokenTool.bind();
+      CounterTool.render();
+      CounterTool.bind();
+      this.bind();
+      this.updateChrome();
+      window.addEventListener('resize', () => this.fitAllLP());
+      requestAnimationFrame(() => this.fitAllLP());
+    }
+  };
+
+  Store.load();
+  Clock.init();
+  WakeLock.init();
+  Theme.init();
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(() => requestAnimationFrame(() => UI.fitAllLP()));
+  }
+  UI.init();
+  Settings.bind();
+  Timer.restore();
+  Language.apply();
+})();
+</script>
+</body>
+</html>
