@@ -504,7 +504,7 @@ html[data-clock-format="datetime12s"] .header-clock { font-size: clamp(9px, 1.95
 }
 .turn-display:active { opacity:.72; transform:scale(.97); }
 .header-separator {
-  width: 1px; height: 24px; margin: 0 1px 3px; flex: 0 0 auto;
+  width: 1px; height: 24px; margin: 0 7px 3px; flex: 0 0 auto;
   background: color-mix(in srgb, var(--accent-contrast) 44%, transparent);
   box-shadow: 1px 0 0 rgba(0,0,0,.08);
 }
@@ -1087,21 +1087,44 @@ html[data-turn-order="off"] .player-head { right: 7px; }
 .stepper { display: grid; grid-template-columns: 42px 1fr 42px; gap: 6px; align-items: center; }
 .stepper button { height: 40px; border-radius: 11px; background: var(--surface-2); border: 1px solid var(--border); cursor: pointer; font-size: 18px; font-weight: 800; }
 .stepper input { width: 100%; height: 40px; text-align: center; border: 1px solid var(--border); border-radius: 11px; background: var(--bg); font-weight: 800; }
-.result-box { min-height: 126px; border: 1px dashed var(--border); border-radius: 14px; padding: 12px; background: var(--bg); font-size: 13px; line-height: 1.55; word-break: break-word; }
-.utility-visuals { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; min-height: 72px; perspective: 700px; }
-
-.utility-summary { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--border); text-align: center; font-weight: 800; }
+.result-box { min-height: 192px; border: 1px dashed var(--border); border-radius: 14px; padding: 12px 10px; background: var(--bg); font-size: 13px; line-height: 1.55; word-break: break-word; overflow: hidden; }
+.utility-visuals {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  justify-content: safe center;
+  justify-items: center;
+  gap: 12px;
+  min-height: 82px;
+  max-width: 100%;
+  padding: 4px 2px 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  perspective: 850px;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+.utility-visuals.one-row {
+  grid-template-columns: repeat(var(--result-count, 1), max-content);
+  grid-template-rows: max-content;
+}
+.utility-visuals.two-rows {
+  grid-template-columns: repeat(var(--result-cols, 1), max-content);
+  grid-template-rows: repeat(2, max-content);
+  grid-auto-flow: row;
+}
+.utility-summary { margin-top: 8px; padding-top: 9px; border-top: 1px solid var(--border); text-align: center; font-weight: 800; }
 .coin-scene {
-  width: 58px;
-  height: 58px;
+  width: 72px;
+  height: 72px;
   perspective: 520px;
   display: grid;
   place-items: center;
 }
 .coin {
   position: relative;
-  width: 54px;
-  height: 54px;
+  width: 68px;
+  height: 68px;
   transform-style: preserve-3d;
   transform: rotateY(var(--coin-rest, 0deg));
   will-change: transform;
@@ -1138,9 +1161,9 @@ html[data-turn-order="off"] .player-head { right: 7px; }
 }
 .die {
   position: relative;
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
+  width: 70px;
+  height: 70px;
+  border-radius: 15px;
   background: linear-gradient(145deg, #ffffff, #dfe3e8);
   border: 2px solid rgba(20,24,30,.28);
   box-shadow: inset -4px -4px 8px rgba(0,0,0,.08), 0 5px 12px rgba(0,0,0,.18);
@@ -1151,8 +1174,8 @@ html[data-mode="dark"] .die { background: linear-gradient(145deg, #f5f5f5, #bfc5
 .die.rolling { animation: dieRollVisual .78s cubic-bezier(.22,.7,.25,1); }
 .pip {
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: #171a1f;
   opacity: 0;
@@ -1252,10 +1275,16 @@ html[data-mode="dark"] .die { background: linear-gradient(145deg, #f5f5f5, #bfc5
   letter-spacing:.08em;
 }
 .token-value-number {
-  font-size:clamp(30px, 9vw, 50px);
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  overflow:hidden;
+  white-space:nowrap;
+  text-align:center;
+  font-size:clamp(28px, 7vw, 44px);
   line-height:1;
   font-weight:950;
-  letter-spacing:-.04em;
+  letter-spacing:-.055em;
   font-variant-numeric:tabular-nums;
   color:var(--text);
 }
@@ -1304,7 +1333,7 @@ html[data-mode="dark"] .die { background: linear-gradient(145deg, #f5f5f5, #bfc5
   .counter-step { width:34px; height:46px; font-size:21px; }
   .token-card, .counter-row { padding:7px; }
   .token-name-input, .counter-name { padding-inline:7px; font-size:12px; }
-  .token-value-number { font-size:clamp(26px,8vw,38px); }
+  .token-value-number { font-size:clamp(24px,7vw,36px); }
 }
 
 .setting-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
@@ -1657,6 +1686,18 @@ select, .text-input {
 @media (orientation: landscape) and (max-height: 600px) {
   .topbar .timer { font-size: 38px !important; }
 }
+
+/* Header control spacing: keep icon buttons easy to distinguish and tap without changing header height. */
+.topbar .header-action-btn {
+  margin-inline: 2px;
+}
+.topbar .timer-wrap { gap: 6px; }
+.topbar .top-actions { gap: 5px; }
+@media (max-width: 520px) {
+  .topbar .header-action-btn { margin-inline: 1px; }
+  .topbar .timer-wrap { gap: 4px; }
+  .topbar .top-actions { gap: 3px; }
+}
 </style>
 </head>
 <body>
@@ -1664,13 +1705,13 @@ select, .text-input {
   <header class="topbar">
     <div class="header-clock" id="localClock" aria-label="Current time">00:00</div>
     <div class="header-center">
-      <div class="turn-control" aria-label="Turn counter">
-        <button type="button" class="turn-display" id="turnDisplay" aria-label="Advance turn" title="NEXT TURN"><span class="turn-label">TURN</span><span class="turn-number">1</span></button>
+      <div class="timer-wrap" id="timerWrap" aria-label="Duel timer">
+        <button class="header-action-btn" id="timerToggle" aria-label="Start timer" title="TIMER"><span class="header-action-icon">▶</span></button>
+        <div class="timer" id="timerDisplay">0:00</div>
       </div>
       <span class="header-separator" aria-hidden="true"></span>
-      <div class="timer-wrap" id="timerWrap" aria-label="Duel timer">
-        <div class="timer" id="timerDisplay">0:00</div>
-        <button class="header-action-btn" id="timerToggle" aria-label="Start timer" title="TIMER"><span class="header-action-icon">▶</span></button>
+      <div class="turn-control" aria-label="Turn counter">
+        <button type="button" class="turn-display" id="turnDisplay" aria-label="Advance turn" title="NEXT TURN"><span class="turn-label">TURN</span><span class="turn-number">1</span></button>
       </div>
     </div>
     <div class="top-actions">
@@ -2000,6 +2041,13 @@ select, .text-input {
           <div class="manual-chapter"><h3 data-i18n="manualStorageShortTitle">保存</h3><p data-i18n="manualStorageShort">永続保存されるのはプレイヤー名と設定のみです。LPや履歴、UTILITYの対戦情報は再読み込みで初期化されます。</p></div>
           <div class="manual-chapter manual-version manual-changelog">
             <h3 data-i18n="manualVersionTitle">VERSION / 更新履歴</h3>
+            <p><strong>v1.0.2</strong> <span class="manual-version-date" data-i18n="manualVersionDateV102">2026/08/21</span></p>
+            <ul>
+              <li data-i18n="manualChangelogV102A">GAME履歴とRESET時のゲーム進行・初期化処理を改善</li>
+              <li data-i18n="manualChangelogV102B">UTILITY・SETTINGSのハッチ開閉状態をリロードまで保持するよう変更</li>
+              <li data-i18n="manualChangelogV102C">コイン・ダイス結果表示とトークン数値表示を調整</li>
+              <li data-i18n="manualChangelogV102D">ヘッダー内のタイマー・TURN・操作ボタン配置を調整</li>
+            </ul>
             <p><strong>v1.0.1</strong> <span class="manual-version-date" data-i18n="manualVersionDateV101">2026/08/21</span></p>
             <ul>
               <li data-i18n="manualChangelogV101A">iPhone等のノッチ／Dynamic Islandを考慮した余白と画面回転時のLP再描画を追加</li>
@@ -2046,7 +2094,7 @@ select, .text-input {
     names: { p1: 'PLAYER 1', p2: 'PLAYER 2' },
     history: [],
     game: 1,
-    gameStarts: [{ game: 1, turnOrder: { p1: 'first', p2: 'second' } }],
+    gameStarts: [{ game: 1, timerMs: 0, turnOrder: { p1: 'first', p2: 'second' } }],
     turn: 1,
     turnOrder: { p1: 'first', p2: 'second' },
     timer: { elapsedMs: 0, running: false, startedAt: null },
@@ -2150,8 +2198,8 @@ select, .text-input {
       manualStorageTitle:'10. 保存される情報', manualStorageBody:'ブラウザへ永続保存するのはプレイヤー名と各種設定だけです。現在LP、タイマー、履歴、トークン、カードカウンターなどの対戦データはページ再読み込み後には保持されません。「全ての設定を削除」は保存済み設定だけを初期値へ戻し、現在進行中の対戦データには影響しません。',
       manualWakeTitle:'11. 画面スリープ防止', manualWakeBody:'ON時はScreen Wake Lock APIに対応するブラウザで画面点灯を維持します。ブラウザやOSが非対応の場合は利用できず、タブを離れた後に戻った場合は可能な範囲で再取得します。',
       manualNote:'大会・イベントのルールや端末利用可否は主催者の案内を優先してください。端末の省電力設定やブラウザ仕様により、一部機能の動作が異なる場合があります。',
-      manualTitle:'操作マニュアル', manualLifeShortTitle:'LP', manualTimerShortTitle:'タイマー', manualControlsShortTitle:'基本操作', manualStorageShortTitle:'保存', manualUtilityTitle:'UTILITY', manualStorageShort:'保存されるのはプレイヤー名と設定のみ。LP・ターン・タイマー・履歴・UTILITY・MEMOは再読み込みで初期化されます。', manualNoteShort:'大会・イベントでは主催者の端末利用ルールを優先してください。', manualVersionTitle:'VERSION / 更新履歴', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'更新履歴', manualChangelogV101A:'iPhone等のノッチ／Dynamic Islandを考慮した余白と画面回転時のLP再描画を追加', manualChangelogV101D:'FIRST / SECOND表示をLIFE・HISTORYへ追加', manualChangelogV100:'リリース', manualLife:'先攻・後攻表示がONの時はFIRST / SECONDをタップして入れ替えられます。LPをタップして計算します。1〜2桁は末尾00を補助し、＋／－／×2／÷2／指定LPに対応。LP下部のDOMINUS欄をタップすると6属性（光・闇・地・水・炎・風）の発動不可状態を一括編集でき、基本画面には発動不可属性だけを丸型アイコンで表示します。表示自体は設定からOFFにできます。', manualTimer:'TURNをタップしてターン進行。対戦タイマーは右側の再生／一時停止アイコンで操作し、設定AのB分前以降は強調表示されます。左の時計は表示形式とON/OFFを変更できます。', manualHeader:'ヘッダーは常時表示。右側の各アイコンからP1/P2入れ替え、UNDO、RESETを操作できます。フッターはHIDE／SHOWで開閉できます。背景アニメーションは設定のプルダウンからOFFまたはパターンを選択します。', manualHistory:'HISTORYはGAME→TURNの順に区切り、先攻・後攻表示がONの場合は各GAMEの初期行にFIRST / SECONDと8000/8000を表示します。タイマーもリセットすると次のGAMEへ進み、TURN 1と新しい初期状態を記録します。', manualUtility:'UTILITYではコイン／ダイス、複数トークン、カードカウンターを利用できます。MEMOは独立タブです。', manualWake:'画面スリープ防止と画面向き固定は対応ブラウザでのみ動作します。iPhone Safariなどでは向き固定を利用できない場合があります。', creator:'制作者：GYONIC', clearAllSettings:'全ての設定を削除', clearSettingsTitle:'設定を初期化', clearSettingsBody:'プレイヤーネームを含む、ブラウザに保存されている全ての設定を初期値へ戻します。現在のLP・タイマー・履歴・トークン・カウンターの対戦情報は変更しません。', clearSettingsDone:'保存済み設定を初期化しました',
-      resetTitle:'RESET LIFE', resetBody:'PLAYER 1 / PLAYER 2 のLPを8000へ戻し、ターンをTURN 1へ戻します。タイマーもリセットする場合はGAMEを1つ進め、履歴に新しいTURN 1と8000 / 8000を追加します。トークン／カウンターは名称を残して数値のみ初期化します。', resetTimerToo:'タイマーもリセットする', cancel:'キャンセル', reset:'リセット', resetBoth:'LPとタイマーをリセットしました', resetLP:'LPをリセットしました'
+      manualTitle:'操作マニュアル', manualLifeShortTitle:'LP', manualTimerShortTitle:'タイマー', manualControlsShortTitle:'基本操作', manualStorageShortTitle:'保存', manualUtilityTitle:'UTILITY', manualStorageShort:'保存されるのはプレイヤー名と設定のみ。LP・ターン・タイマー・履歴・UTILITY・MEMOは再読み込みで初期化されます。', manualNoteShort:'大会・イベントでは主催者の端末利用ルールを優先してください。', manualVersionTitle:'VERSION / 更新履歴', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'GAME履歴とRESET時のゲーム進行・初期化処理を改善', manualChangelogV102B:'UTILITY・SETTINGSのハッチ開閉状態をリロードまで保持するよう変更', manualChangelogV102C:'コイン・ダイス結果表示とトークン数値表示を調整', manualChangelogV102D:'ヘッダー内のタイマー・TURN・操作ボタン配置を調整', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'更新履歴', manualChangelogV101A:'iPhone等のノッチ／Dynamic Islandを考慮した余白と画面回転時のLP再描画を追加', manualChangelogV101D:'FIRST / SECOND表示をLIFE・HISTORYへ追加', manualChangelogV100:'リリース', manualLife:'先攻・後攻表示がONの時はFIRST / SECONDをタップして入れ替えられます。LPをタップして計算します。1〜2桁は末尾00を補助し、＋／－／×2／÷2／指定LPに対応。LP下部のDOMINUS欄をタップすると6属性（光・闇・地・水・炎・風）の発動不可状態を一括編集でき、基本画面には発動不可属性だけを丸型アイコンで表示します。表示自体は設定からOFFにできます。', manualTimer:'TURNをタップしてターン進行。対戦タイマーは右側の再生／一時停止アイコンで操作し、設定AのB分前以降は強調表示されます。左の時計は表示形式とON/OFFを変更できます。', manualHeader:'ヘッダーは常時表示。右側の各アイコンからP1/P2入れ替え、UNDO、RESETを操作できます。フッターはHIDE／SHOWで開閉できます。背景アニメーションは設定のプルダウンからOFFまたはパターンを選択します。', manualHistory:'HISTORYはGAME→TURNの順に区切り、先攻・後攻表示がONの場合は各GAMEの初期行にFIRST / SECONDと8000/8000を表示します。タイマーを維持してRESETすると次のGAMEへ進み、開始時刻・TURN 1・初期LPを記録します。タイマーもリセットするとGAME 1へ戻り、履歴も新しいマッチとして初期化されます。', manualUtility:'UTILITYではコイン／ダイス、複数トークン、カードカウンターを利用できます。MEMOは独立タブです。', manualWake:'画面スリープ防止と画面向き固定は対応ブラウザでのみ動作します。iPhone Safariなどでは向き固定を利用できない場合があります。', creator:'制作者：GYONIC', clearAllSettings:'全ての設定を削除', clearSettingsTitle:'設定を初期化', clearSettingsBody:'プレイヤーネームを含む、ブラウザに保存されている全ての設定を初期値へ戻します。現在のLP・タイマー・履歴・トークン・カウンターの対戦情報は変更しません。', clearSettingsDone:'保存済み設定を初期化しました',
+      resetTitle:'RESET LIFE', resetBody:'PLAYER 1 / PLAYER 2 のLPを8000へ戻し、TURN 1へ戻します。タイマーを維持する場合は次のGAMEへ進み、履歴を継続します。タイマーもリセットする場合はGAME 1へ戻り、履歴を新しいマッチとして初期化します。トークン／カウンターは名称を残して数値のみ初期化します。', resetTimerToo:'タイマーもリセットする', cancel:'キャンセル', reset:'リセット', resetBoth:'LPとタイマーをリセットしました', resetLP:'LPをリセットしました'
     },
     en: {
       life:'LIFE', history:'HISTORY', utility:'UTILITY', settings:'SETTINGS', time:'TIME', turnLabel:'TURN', nextTurn:'Advance turn', turnAdvanced:n=>`TURN ${n}`, 
@@ -2177,8 +2225,8 @@ select, .text-input {
       manualStorageTitle:'10. What is saved', manualStorageBody:'Only player names and settings are stored persistently in the browser. Duel data such as current LP, timer, history, tokens, and card counters is not retained after a page reload. DELETE ALL SETTINGS resets saved preferences only and does not alter the duel currently in progress.',
       manualWakeTitle:'11. Prevent sleep', manualWakeBody:'When enabled, the app requests Screen Wake Lock on supported browsers to keep the display awake. It cannot work when the browser or OS does not support the API. After returning to the tab, the app attempts to reacquire the lock when possible.',
       manualNote:'Always follow the organizer’s rules on device use at tournaments or events. Power-saving settings and browser behavior can affect some features.',
-      manualTitle:'USER MANUAL', manualLifeShortTitle:'LP', manualTimerShortTitle:'Timer', manualControlsShortTitle:'Controls', manualStorageShortTitle:'Storage', manualUtilityTitle:'UTILITY', manualStorageShort:'Only player names and settings are saved. LP, turn, timer, history, UTILITY, and MEMO reset when the page reloads.', manualNoteShort:'Follow the organizer’s rules on device use at tournaments and events.', manualVersionTitle:'VERSION / CHANGELOG', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'CHANGELOG', manualChangelogV101A:'Added safer spacing for iPhone notches / Dynamic Island and LP redraw on orientation changes', manualChangelogV101D:'Added FIRST / SECOND indicators to LIFE and HISTORY', manualChangelogV100:'Release', manualLife:'When FIRST / SECOND display is enabled, tap it to swap who goes first. Tap an LP value to calculate. One- or two-digit input appends 00. +, −, ×2, ÷2, and SET LP are supported. Tap the DOMINUS area below LP to edit blocked attributes together. Six attributes are supported (LIGHT, DARK, EARTH, WATER, FIRE, and WIND), and only blocked attributes appear as round icons on the LIFE screen. The display can be disabled in Settings.', manualTimer:'Tap TURN to advance the turn. Use the play/pause icon to control the duel timer; it is highlighted from B minutes before target A. The left clock supports multiple formats and can be hidden.', manualHeader:'The header is always shown. Use its icons to swap P1/P2, undo, or reset. Use HIDE / SHOW for the footer. Choose OFF or a looping background animation from the Settings dropdown.', manualHistory:'HISTORY is grouped by GAME and TURN. When FIRST / SECOND display is enabled, each GAME starts with FIRST / SECOND and 8000 / 8000. Resetting the timer advances to the next GAME and records TURN 1 with the new initial state.', manualUtility:'UTILITY provides coin/dice, multiple token tools, and card counters. MEMO has its own tab.', manualWake:'Prevent Sleep and orientation lock work only in supported browsers. Orientation lock may be unavailable in iPhone Safari.', creator:'Creator: GYONIC', clearAllSettings:'DELETE ALL SETTINGS', clearSettingsTitle:'RESET SETTINGS', clearSettingsBody:'Reset every saved preference, including player names, to its default. Current LP, timer, history, token, and counter duel data are not changed.', clearSettingsDone:'Saved settings were reset',
-      resetTitle:'RESET LIFE', resetBody:'Return both players to 8000 LP and reset the turn counter to TURN 1. History is kept unless the timer is also reset. Token and counter names are kept while their values are cleared.', resetTimerToo:'Reset timer too', cancel:'CANCEL', reset:'RESET', resetBoth:'LP and timer reset', resetLP:'LP reset'
+      manualTitle:'USER MANUAL', manualLifeShortTitle:'LP', manualTimerShortTitle:'Timer', manualControlsShortTitle:'Controls', manualStorageShortTitle:'Storage', manualUtilityTitle:'UTILITY', manualStorageShort:'Only player names and settings are saved. LP, turn, timer, history, UTILITY, and MEMO reset when the page reloads.', manualNoteShort:'Follow the organizer’s rules on device use at tournaments and events.', manualVersionTitle:'VERSION / CHANGELOG', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'Improved GAME history and game progression / initialization behavior on RESET', manualChangelogV102B:'UTILITY and SETTINGS hatch states now persist until page reload', manualChangelogV102C:'Refined coin / dice result layout and token value sizing', manualChangelogV102D:'Adjusted timer, TURN, and header control layout', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'CHANGELOG', manualChangelogV101A:'Added safer spacing for iPhone notches / Dynamic Island and LP redraw on orientation changes', manualChangelogV101D:'Added FIRST / SECOND indicators to LIFE and HISTORY', manualChangelogV100:'Release', manualLife:'When FIRST / SECOND display is enabled, tap it to swap who goes first. Tap an LP value to calculate. One- or two-digit input appends 00. +, −, ×2, ÷2, and SET LP are supported. Tap the DOMINUS area below LP to edit blocked attributes together. Six attributes are supported (LIGHT, DARK, EARTH, WATER, FIRE, and WIND), and only blocked attributes appear as round icons on the LIFE screen. The display can be disabled in Settings.', manualTimer:'Tap TURN to advance the turn. Use the play/pause icon to control the duel timer; it is highlighted from B minutes before target A. The left clock supports multiple formats and can be hidden.', manualHeader:'The header is always shown. Use its icons to swap P1/P2, undo, or reset. Use HIDE / SHOW for the footer. Choose OFF or a looping background animation from the Settings dropdown.', manualHistory:'HISTORY is grouped by GAME and TURN. When FIRST / SECOND display is enabled, each GAME starts with FIRST / SECOND and 8000 / 8000. Reset while keeping the timer running to advance to the next GAME and record its start time, TURN 1, and initial LP. Resetting the timer returns to GAME 1 and starts a fresh match history.', manualUtility:'UTILITY provides coin/dice, multiple token tools, and card counters. MEMO has its own tab.', manualWake:'Prevent Sleep and orientation lock work only in supported browsers. Orientation lock may be unavailable in iPhone Safari.', creator:'Creator: GYONIC', clearAllSettings:'DELETE ALL SETTINGS', clearSettingsTitle:'RESET SETTINGS', clearSettingsBody:'Reset every saved preference, including player names, to its default. Current LP, timer, history, token, and counter duel data are not changed.', clearSettingsDone:'Saved settings were reset',
+      resetTitle:'RESET LIFE', resetBody:'Return both players to 8000 LP and TURN 1. If the timer is kept, advance to the next GAME and keep the match history. If the timer is also reset, return to GAME 1 and start a fresh match history. Token and counter names are kept while their values are cleared.', resetTimerToo:'Reset timer too', cancel:'CANCEL', reset:'RESET', resetBoth:'LP and timer reset', resetLP:'LP reset'
     },
     ko: {
       life:'라이프', history:'기록', utility:'유틸리티', settings:'설정', time:'시간', turnLabel:'턴', nextTurn:'턴 진행', turnAdvanced:n=>`턴 ${n}`, 
@@ -2204,8 +2252,8 @@ select, .text-input {
       manualStorageTitle:'10. 저장되는 정보', manualStorageBody:'브라우저에 계속 저장되는 것은 플레이어 이름과 각종 설정뿐입니다. 현재 LP, 타이머, 기록, 토큰, 카드 카운터 등의 듀얼 데이터는 페이지를 새로고침하면 유지되지 않습니다. 모든 설정 삭제는 저장된 설정만 초기화하며 현재 진행 중인 듀얼 데이터에는 영향을 주지 않습니다.',
       manualWakeTitle:'11. 화면 절전 방지', manualWakeBody:'ON이면 지원 브라우저에서 Screen Wake Lock을 요청해 화면을 켜 둡니다. 브라우저나 OS가 지원하지 않으면 사용할 수 없습니다. 다른 탭에서 돌아오면 가능한 경우 다시 잠금을 요청합니다.',
       manualNote:'대회나 이벤트에서의 단말기 사용 가능 여부는 반드시 주최 측 규정을 우선해 주세요. 절전 설정이나 브라우저 사양에 따라 일부 기능의 동작이 달라질 수 있습니다.',
-      manualTitle:'사용 설명서', manualLifeShortTitle:'LP', manualTimerShortTitle:'타이머', manualControlsShortTitle:'기본 조작', manualStorageShortTitle:'저장', manualUtilityTitle:'UTILITY', manualStorageShort:'저장되는 것은 플레이어 이름과 설정뿐입니다. LP, 턴, 타이머, 기록, UTILITY, MEMO는 새로고침하면 초기화됩니다.', manualNoteShort:'대회·이벤트에서는 주최 측의 단말기 사용 규정을 우선해 주세요.', manualVersionTitle:'VERSION / 업데이트 내역', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'업데이트 내역', manualChangelogV101A:'iPhone 노치／Dynamic Island 대응 여백과 화면 회전 시 LP 재렌더링 추가', manualChangelogV101D:'LIFE와 HISTORY에 FIRST / SECOND 표시 추가', manualChangelogV100:'릴리스', manualLife:'선공 / 후공 표시가 ON일 때 FIRST / SECOND를 탭하면 선공·후공을 바꿀 수 있습니다. LP를 탭해 계산합니다. 1~2자리 입력은 뒤에 00을 보조하며 +, −, ×2, ÷2, LP 지정이 가능합니다. LP는 0 아래로 내려가지 않습니다. LP 아래 DOMINUS 영역을 탭하면 빛·어둠·땅·물·불·바람 6속성의 발동 불가 상태를 한 번에 편집할 수 있으며, LIFE 화면에는 발동 불가 속성만 원형 아이콘으로 표시됩니다. 표시 기능은 설정에서 끌 수 있습니다.', manualTimer:'TURN을 탭해 턴을 진행합니다. 듀얼 타이머는 재생/일시정지 아이콘으로 조작하고 목표 A의 B분 전부터 강조됩니다. 왼쪽 시계는 형식과 표시 여부를 변경할 수 있습니다.', manualHeader:'헤더는 항상 표시되며 아이콘으로 P1/P2 교체, UNDO, RESET을 조작합니다. 푸터는 HIDE / SHOW로 접고 펼칩니다. 배경 애니메이션은 설정의 드롭다운에서 OFF 또는 반복 패턴을 선택합니다.', manualHistory:'HISTORY는 GAME→TURN 순서로 구분되며 선공 / 후공 표시가 ON이면 각 GAME의 초기 행에 FIRST / SECOND와 8000 / 8000을 표시합니다. 타이머까지 리셋하면 다음 GAME으로 진행하고 TURN 1과 새 초기 상태를 기록합니다.', manualUtility:'UTILITY에서 코인/주사위, 여러 토큰, 카드 카운터를 사용할 수 있으며 MEMO는 독립 탭입니다.', manualWake:'화면 절전 방지와 화면 방향 고정은 지원 브라우저에서만 작동합니다. iPhone Safari에서는 방향 고정을 사용할 수 없을 수 있습니다.', creator:'제작자: GYONIC', clearAllSettings:'모든 설정 삭제', clearSettingsTitle:'설정 초기화', clearSettingsBody:'플레이어 이름을 포함한 저장된 모든 설정을 초기값으로 되돌립니다. 현재 LP, 타이머, 기록, 토큰, 카운터의 듀얼 정보는 변경하지 않습니다.', clearSettingsDone:'저장된 설정을 초기화했습니다',
-      resetTitle:'RESET LIFE', resetBody:'양쪽 LP를 8000으로 되돌리고 TURN 1로 초기화합니다. 타이머도 리셋하면 다음 GAME으로 진행하고 HISTORY에 새 TURN 1과 8000 / 8000을 추가합니다. 토큰/카운터는 이름을 남기고 수치만 초기화합니다.', resetTimerToo:'타이머도 리셋', cancel:'취소', reset:'리셋', resetBoth:'LP와 타이머를 리셋했습니다', resetLP:'LP를 리셋했습니다'
+      manualTitle:'사용 설명서', manualLifeShortTitle:'LP', manualTimerShortTitle:'타이머', manualControlsShortTitle:'기본 조작', manualStorageShortTitle:'저장', manualUtilityTitle:'UTILITY', manualStorageShort:'저장되는 것은 플레이어 이름과 설정뿐입니다. LP, 턴, 타이머, 기록, UTILITY, MEMO는 새로고침하면 초기화됩니다.', manualNoteShort:'대회·이벤트에서는 주최 측의 단말기 사용 규정을 우선해 주세요.', manualVersionTitle:'VERSION / 업데이트 내역', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'GAME 기록과 RESET 시 게임 진행·초기화 동작 개선', manualChangelogV102B:'UTILITY·SETTINGS 해치 열림 상태를 새로고침 전까지 유지하도록 변경', manualChangelogV102C:'코인·주사위 결과 표시와 토큰 수치 표시 조정', manualChangelogV102D:'헤더의 타이머·TURN·조작 버튼 배치 조정', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'업데이트 내역', manualChangelogV101A:'iPhone 노치／Dynamic Island 대응 여백과 화면 회전 시 LP 재렌더링 추가', manualChangelogV101D:'LIFE와 HISTORY에 FIRST / SECOND 표시 추가', manualChangelogV100:'릴리스', manualLife:'선공 / 후공 표시가 ON일 때 FIRST / SECOND를 탭하면 선공·후공을 바꿀 수 있습니다. LP를 탭해 계산합니다. 1~2자리 입력은 뒤에 00을 보조하며 +, −, ×2, ÷2, LP 지정이 가능합니다. LP는 0 아래로 내려가지 않습니다. LP 아래 DOMINUS 영역을 탭하면 빛·어둠·땅·물·불·바람 6속성의 발동 불가 상태를 한 번에 편집할 수 있으며, LIFE 화면에는 발동 불가 속성만 원형 아이콘으로 표시됩니다. 표시 기능은 설정에서 끌 수 있습니다.', manualTimer:'TURN을 탭해 턴을 진행합니다. 듀얼 타이머는 재생/일시정지 아이콘으로 조작하고 목표 A의 B분 전부터 강조됩니다. 왼쪽 시계는 형식과 표시 여부를 변경할 수 있습니다.', manualHeader:'헤더는 항상 표시되며 아이콘으로 P1/P2 교체, UNDO, RESET을 조작합니다. 푸터는 HIDE / SHOW로 접고 펼칩니다. 배경 애니메이션은 설정의 드롭다운에서 OFF 또는 반복 패턴을 선택합니다.', manualHistory:'HISTORY는 GAME→TURN 순서로 구분되며 선공 / 후공 표시가 ON이면 각 GAME의 초기 행에 FIRST / SECOND와 8000 / 8000을 표시합니다. 타이머를 유지한 채 RESET하면 다음 GAME으로 진행하고 시작 시간·TURN 1·초기 LP를 기록합니다. 타이머도 리셋하면 GAME 1로 돌아가 새 매치 기록으로 초기화됩니다.', manualUtility:'UTILITY에서 코인/주사위, 여러 토큰, 카드 카운터를 사용할 수 있으며 MEMO는 독립 탭입니다.', manualWake:'화면 절전 방지와 화면 방향 고정은 지원 브라우저에서만 작동합니다. iPhone Safari에서는 방향 고정을 사용할 수 없을 수 있습니다.', creator:'제작자: GYONIC', clearAllSettings:'모든 설정 삭제', clearSettingsTitle:'설정 초기화', clearSettingsBody:'플레이어 이름을 포함한 저장된 모든 설정을 초기값으로 되돌립니다. 현재 LP, 타이머, 기록, 토큰, 카운터의 듀얼 정보는 변경하지 않습니다.', clearSettingsDone:'저장된 설정을 초기화했습니다',
+      resetTitle:'RESET LIFE', resetBody:'양쪽 LP를 8000으로 되돌리고 TURN 1로 초기화합니다. 타이머를 유지하면 다음 GAME으로 진행하며 HISTORY를 계속 유지합니다. 타이머도 리셋하면 GAME 1로 돌아가 새 매치 기록으로 초기화합니다. 토큰/카운터는 이름을 남기고 수치만 초기화합니다.', resetTimerToo:'타이머도 리셋', cancel:'취소', reset:'리셋', resetBoth:'LP와 타이머를 리셋했습니다', resetLP:'LP를 리셋했습니다'
     }
   };
   const t = (key, ...args) => {
@@ -2344,30 +2392,25 @@ select, .text-input {
       Store.state.dominusPresets = clone(defaults.dominusPresets);
 
       if (resetTimer) {
-        // タイマーをリセットする場合は新しいゲームとして履歴を継続する。
-        Store.state.game = resetGame + 1;
-        Store.state.gameStarts.push({ game: Store.state.game, turnOrder: { ...Store.state.turnOrder } });
+        // タイマーをリセットする場合は新しいマッチとしてGAME 1から再開する。
+        Store.state.game = 1;
+        Store.state.history = [];
+        Store.state.gameStarts = [{
+          game: 1,
+          timerMs: 0,
+          turnOrder: { ...Store.state.turnOrder }
+        }];
         Store.state.lastChange = { p1: null, p2: null };
         Timer.reset();
       } else {
-        ['p1','p2'].forEach(player => {
-          const before = resetFrom[player];
-          if (before === 8000) return;
-          const entry = {
-            id: `${Date.now()}-${player}-${Math.random().toString(16).slice(2)}`,
-            player,
-            before,
-            after: 8000,
-            delta: 8000 - before,
-            expression: 'RESET',
-            timerMs: resetAt,
-            game: resetGame,
-            turn: resetTurn
-          };
-          Store.state.history.unshift(entry);
-          Store.state.lastChange[player] = entry;
+        // マッチタイマーを維持したまま次のGAMEへ進む。
+        Store.state.game = resetGame + 1;
+        Store.state.gameStarts.push({
+          game: Store.state.game,
+          timerMs: resetAt,
+          turnOrder: { ...Store.state.turnOrder }
         });
-        Store.state.history = Store.state.history.slice(0, MAX_HISTORY);
+        Store.state.lastChange = { p1: null, p2: null };
       }
 
       // RESET時は常にターンをTURN 1へ戻す。
@@ -2620,11 +2663,13 @@ select, .text-input {
       };
       const pushInitialRow = game => {
         const order = getGameTurnOrder(game);
+        const start = (Store.state.gameStarts || []).find(item => Math.max(1, Math.trunc(item.game || 1)) === game);
+        const startTimerMs = Math.max(0, Math.trunc(start?.timerMs || 0));
         const orderBadge = role => `<div class="history-order ${role}">${role === 'first' ? 'FIRST' : 'SECOND'}</div>`;
         rows.push(`
           <tr>
             <td><div class="history-cell p1 initial">${orderBadge(order.p1)}<div class="history-lp">8000</div></div></td>
-            <td class="time-col"><span class="history-time">0:00</span></td>
+            <td class="time-col"><span class="history-time">${formatTime(startTimerMs)}</span></td>
             <td><div class="history-cell p2 initial">${orderBadge(order.p2)}<div class="history-lp">8000</div></div></td>
           </tr>`);
       };
@@ -2672,7 +2717,7 @@ select, .text-input {
     clearConfirmed() {
       Store.state.history = [];
       Store.state.game = 1;
-      Store.state.gameStarts = [{ game: 1 }];
+      Store.state.gameStarts = [{ game: 1, timerMs: 0, turnOrder: { ...Store.state.turnOrder } }];
       Store.state.lastChange = { p1: null, p2: null };
       this.render();
       UI.renderLP();
@@ -2977,6 +3022,12 @@ select, .text-input {
     dieMarkup(value, rolling = false) {
       return `<div class="die ${rolling ? 'rolling' : ''}" data-value="${value}" aria-label="${value}">${Array.from({length:9}, (_,i) => `<span class="pip p${i+1}"></span>`).join('')}</div>`;
     },
+    visualGrid(content, count) {
+      const oneRow = count <= 4;
+      const cols = oneRow ? count : Math.ceil(count / 2);
+      const cls = oneRow ? 'one-row' : 'two-rows';
+      return `<div class="utility-visuals ${cls}" style="--result-count:${Math.max(1,count)};--result-cols:${Math.max(1,cols)}">${content}</div>`;
+    },
     renderLast() {
       const root = $('#utilityResult');
       if (!root) return;
@@ -2988,11 +3039,11 @@ select, .text-input {
         const { results } = this.last;
         const heads = results.filter(v => v === 'heads').length;
         const tails = results.length - heads;
-        root.innerHTML = `<div class="utility-visuals">${results.map((v, i) => this.coinMarkup(v, false, i)).join('')}</div><div class="utility-summary">${escapeHTML(t('heads'))}：${heads}　${escapeHTML(t('tails'))}：${tails}</div>`;
+        root.innerHTML = `${this.visualGrid(results.map((v, i) => this.coinMarkup(v, false, i)).join(''), results.length)}<div class="utility-summary">${escapeHTML(t('heads'))}：${heads}　${escapeHTML(t('tails'))}：${tails}</div>`;
       } else {
         const { results } = this.last;
         const total = results.reduce((a,b) => a+b, 0);
-        root.innerHTML = `<div class="utility-visuals">${results.map(v => this.dieMarkup(v)).join('')}</div><div class="utility-summary">${escapeHTML(t('total'))}：${total}</div>`;
+        root.innerHTML = `${this.visualGrid(results.map(v => this.dieMarkup(v)).join(''), results.length)}<div class="utility-summary">${escapeHTML(t('total'))}：${total}</div>`;
       }
     },
     coin() {
@@ -3004,7 +3055,7 @@ select, .text-input {
       input.value = count;
       const results = Array.from({length: count}, () => Math.random() < .5 ? 'heads' : 'tails');
       const root = $('#utilityResult');
-      root.innerHTML = `<div class="utility-visuals">${results.map((v, i) => this.coinMarkup(v, true, i)).join('')}</div><div class="utility-summary">${escapeHTML(t('tossing'))}</div>`;
+      root.innerHTML = `${this.visualGrid(results.map((v, i) => this.coinMarkup(v, true, i)).join(''), results.length)}<div class="utility-summary">${escapeHTML(t('tossing'))}</div>`;
       this.timer = setTimeout(() => {
         this.last = { type:'coin', results };
         this.renderLast();
@@ -3020,7 +3071,7 @@ select, .text-input {
       const results = Array.from({length: count}, () => Math.floor(Math.random() * 6) + 1);
       const root = $('#utilityResult');
       const rollingValues = results.map(() => Math.floor(Math.random() * 6) + 1);
-      root.innerHTML = `<div class="utility-visuals">${rollingValues.map(v => this.dieMarkup(v, true)).join('')}</div><div class="utility-summary">${escapeHTML(t('rolling'))}</div>`;
+      root.innerHTML = `${this.visualGrid(rollingValues.map(v => this.dieMarkup(v, true)).join(''), rollingValues.length)}<div class="utility-summary">${escapeHTML(t('rolling'))}</div>`;
       const diceEls = [...root.querySelectorAll('.die')];
       this.diceTicker = setInterval(() => {
         diceEls.forEach(die => {
@@ -3104,6 +3155,34 @@ select, .text-input {
         nameInput.addEventListener('blur', e => this.normalizeName(id, e.target));
         card.querySelectorAll('[data-token-stat]').forEach(btn => btn.addEventListener('click', () => TokenCalculator.open(id, btn.dataset.tokenStat)));
         card.querySelector('[data-token-delete]').addEventListener('click', () => this.remove(id));
+      });
+      this.fitValueNumbers();
+    },
+    fitValueNumbers() {
+      requestAnimationFrame(() => {
+        $$('#tokenList .token-value-number').forEach(el => {
+          // Fit to the actual available width rather than using digit-count breakpoints.
+          el.style.fontSize = '44px';
+          el.style.letterSpacing = '-.055em';
+          const available = Math.max(1, el.clientWidth);
+          if (!available) return;
+
+          let low = 6, high = 44, best = low;
+          while (low <= high) {
+            const mid = Math.floor((low + high) / 2);
+            el.style.fontSize = `${mid}px`;
+            if (el.scrollWidth <= available + 0.5) {
+              best = mid;
+              low = mid + 1;
+            } else {
+              high = mid - 1;
+            }
+          }
+          el.style.fontSize = `${best}px`;
+          if (el.scrollWidth > available + 0.5) {
+            el.style.letterSpacing = '-.12em';
+          }
+        });
       });
     },
     bind() {
@@ -3290,7 +3369,7 @@ select, .text-input {
         Theme.apply();
         requestAnimationFrame(() => UI.fitAllLP());
         if (document.fonts?.ready) {
-          document.fonts.ready.then(() => requestAnimationFrame(() => UI.fitAllLP()));
+          document.fonts.ready.then(() => requestAnimationFrame(() => { UI.fitAllLP(); TokenTool.fitValueNumbers(); }));
         }
       });
       $('#playerNamesVisibleSetting').addEventListener('change', e => {
@@ -3422,7 +3501,7 @@ select, .text-input {
       const currentGame = Math.max(1, Math.trunc(Store.state.game || 1));
       const start = (Store.state.gameStarts || []).find(item => Math.max(1, Math.trunc(item.game || 1)) === currentGame);
       if (start) start.turnOrder = { ...Store.state.turnOrder };
-      else Store.state.gameStarts.push({ game: currentGame, turnOrder: { ...Store.state.turnOrder } });
+      else Store.state.gameStarts.push({ game: currentGame, timerMs: currentGame === 1 ? 0 : Timer.currentMs(), turnOrder: { ...Store.state.turnOrder } });
       this.renderTurnOrder();
       History.render();
     },
@@ -3579,7 +3658,10 @@ select, .text-input {
       });
 
       clearTimeout(this.viewportReflowTimer);
-      const refit = () => requestAnimationFrame(() => requestAnimationFrame(() => this.fitAllLP()));
+      const refit = () => requestAnimationFrame(() => requestAnimationFrame(() => {
+        this.fitAllLP();
+        TokenTool.fitValueNumbers();
+      }));
       refit();
       this.viewportReflowTimer = setTimeout(refit, 120);
       setTimeout(refit, 320);
@@ -3808,13 +3890,9 @@ select, .text-input {
       $$('.screen').forEach(el => el.classList.toggle('hidden', el.dataset.screen !== screen));
       $$('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.nav === screen));
       if (screen === 'history') History.render();
-      if (screen === 'settings') {
-        Settings.render();
-        $$('.settings-section').forEach(section => { section.open = false; });
-      }
-      if (screen === 'utility') {
-        $$('.utility-section').forEach(section => { section.open = false; });
-      }
+      if (screen === 'settings') Settings.render();
+      // Hatches keep their open/closed state while the page remains loaded.
+      // No state is persisted, so a reload restores the markup default (closed).
       if (screen === 'life') requestAnimationFrame(() => this.fitAllLP());
     },
     bind() {
@@ -3869,6 +3947,7 @@ select, .text-input {
       });
     },
     init() {
+      $$('.utility-section, .settings-section').forEach(section => { section.open = false; });
       this.renderNames();
       this.renderTurn();
       this.renderTurnOrder();
