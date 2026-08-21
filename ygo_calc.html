@@ -583,6 +583,35 @@ html[data-clock-format="datetime12s"] .header-clock { font-size: clamp(9px, 1.95
   font-size: 27px; line-height: .78; font-weight: 950; letter-spacing: -.045em;
 }
 .turn-display:active { opacity:.72; transform:scale(.97); }
+
+.game-display {
+  min-width: 43px;
+  height: 34px;
+  padding: 0 1px 2px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
+  color: var(--accent-contrast);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  text-shadow: 0 1px 3px rgba(0,0,0,.28);
+  pointer-events: none;
+}
+.game-display .game-label {
+  padding-bottom: 2px;
+  font-size: 7px;
+  line-height: .9;
+  font-weight: 900;
+  letter-spacing: .115em;
+  opacity: .7;
+}
+.game-display .game-number {
+  font-size: 22px;
+  line-height: .78;
+  font-weight: 950;
+  letter-spacing: -.035em;
+}
 .header-separator {
   width: 1px; height: 24px; margin: 0 7px 3px; flex: 0 0 auto;
   background: color-mix(in srgb, var(--accent-contrast) 44%, transparent);
@@ -707,7 +736,7 @@ html[data-clock-format="datetime12s"] .header-clock { font-size: clamp(9px, 1.95
   z-index: 20;
   top: 4px;
   left: 7px;
-  right: clamp(84px, 20vw, 108px);
+  right: 7px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -722,15 +751,107 @@ html[data-clock-format="datetime12s"] .header-clock { font-size: clamp(9px, 1.95
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .player-tag { font-size: 10px; font-weight: 900; letter-spacing: .135em; color: var(--player-color); }
-.turn-order-btn {
+
+.player-win-row {
   position: absolute;
-  z-index: 42;
-  top: 4px;
+  z-index: 21;
+  top: clamp(31px, 6.2vw, 38px);
+  left: 7px;
   right: 7px;
-  min-width: clamp(68px, 17vw, 92px);
-  height: clamp(32px, 8vw, 40px);
+  min-height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display-font) !important;
+  font-size: clamp(11px, 2.8vw, 16px);
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: .12em;
+  color: var(--text);
+  pointer-events: none;
+  text-shadow: 0 1px 0 color-mix(in srgb, var(--surface) 80%, transparent);
+}
+html[data-player-names="off"] .player-win-row { top: 5px; }
+html[data-wins="off"] .player-win-row { display: none !important; }
+
+.history-win-row td {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  font-family: var(--display-font);
+  font-size: clamp(14px, 3vw, 18px);
+  font-weight: 950;
+  letter-spacing: .12em;
+}
+.history-win-row td:first-child { color: var(--p1); }
+.history-win-row td:last-child { color: var(--p2); }
+.history-win-row .time-col { color: var(--muted); font-size: 10px; letter-spacing: .08em; }
+.history-cell.game-winner {
+  background: color-mix(in srgb, var(--success) 30%, var(--surface)) !important;
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--success) 78%, var(--text)), 0 0 16px color-mix(in srgb, var(--success) 24%, transparent);
+}
+.history-cell.game-winner::before {
+  content: "WIN";
+  display: block;
+  margin-bottom: 4px;
+  color: var(--success);
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 1000;
+  letter-spacing: .14em;
+}
+
+.history-table td.game-winner-cell {
+  background: color-mix(in srgb, var(--success) 20%, var(--surface)) !important;
+  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--success) 82%, var(--text));
+}
+.history-table td.game-winner-cell .history-cell {
+  background: color-mix(in srgb, var(--success) 24%, var(--surface)) !important;
+}
+.winner-choice-grid {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+.winner-choice-btn {
+  min-height: 74px;
+  padding: 12px;
+  border-radius: 15px;
+  border: 2px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-weight: 950;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.winner-choice-btn.p1 { border-color: var(--p1); }
+.winner-choice-btn.p2 { border-color: var(--p2); }
+.winner-choice-btn strong { display:block; font-size:16px; letter-spacing:.06em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.winner-choice-btn span { display:block; margin-top:5px; font-size:11px; color:var(--muted); letter-spacing:.08em; }
+.player-status-row {
+  position: absolute;
+  z-index: 35;
+  left: 7px;
+  right: 7px;
+  bottom: 5px;
+  min-height: clamp(58px, 14vw, 72px);
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 6px;
+  pointer-events: none;
+}
+.turn-order-btn {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 auto;
+  align-self: stretch;
+  min-width: clamp(76px, 19vw, 104px);
+  height: auto;
   padding: 0 12px;
-  border-radius: 999px;
+  border-radius: 18px;
   border: 1px solid color-mix(in srgb, var(--player-color) 62%, var(--border));
   display: inline-grid;
   place-items: center;
@@ -740,6 +861,7 @@ html[data-clock-format="datetime12s"] .header-clock { font-size: clamp(9px, 1.95
   letter-spacing: .095em;
   cursor: pointer;
   touch-action: manipulation;
+  pointer-events: auto;
   box-shadow: 0 2px 8px rgba(0,0,0,.12);
   transition: transform .12s ease, background .12s ease, color .12s ease, border-color .12s ease;
 }
@@ -789,13 +911,11 @@ html[data-theme="high-contrast"] .dominus-zone {
 }
 html[data-turn-order="off"] .turn-order-btn { display: none !important; }
 html[data-turn-order="off"] .history-order { display: none !important; }
-html[data-turn-order="off"] .player-head { right: 7px; }
 .dominus-zone {
-  position: absolute;
-  z-index: 35;
-  left: 7px;
-  right: 7px;
-  bottom: 5px;
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  min-width: 0;
   min-height: clamp(58px, 14vw, 72px);
   display: flex;
   align-items: center;
@@ -992,6 +1112,185 @@ html[data-turn-order="off"] .player-head { right: 7px; }
   color: var(--muted);
   font-weight: 800;
 }
+
+/* DOMINUS editor: large, viewport-relative, and always scroll-free. */
+.dominus-modal {
+  align-self: center !important;
+  width: min(94vw, 920px) !important;
+  max-width: min(94vw, 920px) !important;
+  height: min(88dvh, 760px) !important;
+  max-height: calc(100dvh - max(16px, env(safe-area-inset-top)) - max(16px, env(safe-area-inset-bottom))) !important;
+  overflow: hidden !important;
+  padding: clamp(12px, 2.2dvh, 22px) !important;
+  border-radius: clamp(18px, 3vw, 28px) !important;
+  display: grid !important;
+  grid-template-rows: auto auto minmax(0, .9fr) minmax(0, 1.15fr) auto;
+  gap: clamp(6px, 1.2dvh, 12px);
+}
+.dominus-modal .modal-head {
+  margin: 0;
+  min-height: 0;
+}
+.dominus-modal .modal-title {
+  font-size: clamp(18px, min(4.4vw, 3.2dvh), 28px);
+  line-height: 1.05;
+}
+.dominus-modal .calc-player {
+  margin-top: clamp(2px, .5dvh, 5px);
+  font-size: clamp(11px, min(2.8vw, 2dvh), 15px);
+}
+.dominus-modal .close-btn {
+  width: clamp(38px, min(10vw, 7dvh), 52px);
+  height: clamp(38px, min(10vw, 7dvh), 52px);
+  font-size: clamp(20px, min(5vw, 3.6dvh), 28px);
+  flex: 0 0 auto;
+}
+.dominus-modal .confirm-text {
+  align-self: center;
+  padding: clamp(6px, 1dvh, 10px) clamp(8px, 1.6vw, 14px);
+  font-size: clamp(11px, min(2.8vw, 1.9dvh), 14px);
+  line-height: 1.25;
+  overflow: hidden;
+}
+.dominus-modal .dominus-choice-grid {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  justify-items: stretch;
+  gap: clamp(6px, min(2vw, 1.3dvh), 12px);
+  padding: 0;
+}
+.dominus-modal .dominus-choice-wrap {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2px, .5dvh, 5px);
+}
+.dominus-modal .dominus-choice {
+  width: min(15vw, 9dvh, 72px);
+  height: min(15vw, 9dvh, 72px);
+  min-width: 42px;
+  min-height: 42px;
+  font-size: clamp(17px, min(5vw, 3.5dvh), 26px);
+}
+.dominus-modal .dominus-choice-label {
+  display: block;
+  max-width: 100%;
+  font-size: clamp(9px, min(2.5vw, 1.6dvh), 12px);
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dominus-modal .dominus-preset-section {
+  min-height: 0;
+  margin: 0;
+  padding-top: clamp(5px, 1dvh, 9px);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  border-top: 1px solid var(--border);
+}
+.dominus-modal .dominus-preset-title {
+  margin: 0 0 clamp(5px, .8dvh, 9px);
+  font-size: clamp(10px, min(2.7vw, 1.8dvh), 13px);
+}
+.dominus-modal .dominus-preset-grid {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: clamp(6px, min(1.8vw, 1.2dvh), 10px);
+}
+.dominus-modal .dominus-preset-btn {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  padding: clamp(5px, 1dvh, 10px) clamp(7px, 1.4vw, 12px);
+  border-radius: clamp(10px, 2vw, 15px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.dominus-modal .dominus-preset-jp {
+  font-size: clamp(10px, min(2.8vw, 1.9dvh), 14px);
+  line-height: 1.15;
+}
+.dominus-modal .dominus-preset-en {
+  font-size: clamp(8px, min(2.3vw, 1.5dvh), 11px);
+  line-height: 1.1;
+}
+.dominus-modal .dominus-preset-attrs {
+  font-size: clamp(8px, min(2.2vw, 1.45dvh), 10px);
+  line-height: 1.1;
+}
+.dominus-modal .modal-actions {
+  margin: 0;
+  gap: clamp(8px, 2vw, 14px);
+}
+.dominus-modal .modal-actions .action-btn {
+  min-height: clamp(42px, 6.5dvh, 54px);
+  padding-block: clamp(6px, 1dvh, 10px);
+  font-size: clamp(11px, min(3vw, 2dvh), 14px);
+}
+
+/* Landscape: use almost the full screen, with attributes/cards in single rows. */
+@media (orientation: landscape) {
+  .dominus-modal {
+    width: min(94vw, 1040px) !important;
+    max-width: min(94vw, 1040px) !important;
+    height: min(90dvh, 620px) !important;
+    grid-template-rows: auto auto minmax(0, .75fr) minmax(0, 1fr) auto;
+    padding: clamp(8px, 2dvh, 16px) !important;
+    gap: clamp(4px, 1dvh, 8px);
+  }
+  .dominus-modal .dominus-choice-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr);
+  }
+  .dominus-modal .dominus-choice {
+    width: min(8vw, 12dvh, 62px);
+    height: min(8vw, 12dvh, 62px);
+    min-width: 36px;
+    min-height: 36px;
+  }
+  .dominus-modal .dominus-preset-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr);
+  }
+  .dominus-modal .dominus-preset-btn {
+    padding: clamp(4px, 1dvh, 7px) clamp(5px, 1vw, 9px);
+  }
+}
+
+/* Very short landscape screens: preserve all controls without scrolling. */
+@media (orientation: landscape) and (max-height: 430px) {
+  .dominus-modal {
+    height: calc(100dvh - max(8px, env(safe-area-inset-top)) - max(8px, env(safe-area-inset-bottom))) !important;
+    max-height: calc(100dvh - max(8px, env(safe-area-inset-top)) - max(8px, env(safe-area-inset-bottom))) !important;
+    padding: 6px 10px !important;
+    gap: 3px;
+    grid-template-rows: auto auto minmax(54px, .72fr) minmax(66px, 1fr) auto;
+  }
+  .dominus-modal .modal-title { font-size: 14px; }
+  .dominus-modal .calc-player { font-size: 9px; margin-top: 0; }
+  .dominus-modal .close-btn { width: 30px; height: 30px; font-size: 17px; }
+  .dominus-modal .confirm-text { padding: 3px 6px; font-size: 9px; line-height: 1.05; }
+  .dominus-modal .dominus-choice { width: min(7vw, 11dvh, 42px); height: min(7vw, 11dvh, 42px); min-width: 30px; min-height: 30px; font-size: 14px; }
+  .dominus-modal .dominus-choice-label { font-size: 7px; }
+  .dominus-modal .dominus-preset-section { padding-top: 2px; }
+  .dominus-modal .dominus-preset-title { margin-bottom: 2px; font-size: 8px; }
+  .dominus-modal .dominus-preset-btn { padding: 2px 4px; border-radius: 8px; }
+  .dominus-modal .dominus-preset-jp { font-size: 8px; }
+  .dominus-modal .dominus-preset-en { font-size: 7px; }
+  .dominus-modal .dominus-preset-attrs { font-size: 7px; }
+  .dominus-modal .modal-actions .action-btn { min-height: 30px; padding-block: 3px; font-size: 9px; }
+}
+
 .dominus-icon[data-attr="light"], .dominus-choice[data-attr="light"] { --attr-color: #d8b84f; --attr-text: #171717; }
 .dominus-icon[data-attr="dark"], .dominus-choice[data-attr="dark"] { --attr-color: #6d4a91; }
 .dominus-icon[data-attr="earth"], .dominus-choice[data-attr="earth"] { --attr-color: #9a6638; }
@@ -1013,7 +1312,8 @@ html[data-turn-order="off"] .player-head { right: 7px; }
   cursor: pointer;
   border-radius: 14px;
 }
-.player-card.dominus-enabled .lp-button {
+.player-card.dominus-enabled .lp-button,
+html[data-turn-order="on"] .player-card .lp-button {
   padding-bottom: clamp(108px, 24vw, 136px);
 }
 .lp-button:active { background: var(--tap); }
@@ -2010,6 +2310,106 @@ button, input, select, textarea { max-width: 100%; }
   .header-separator { margin-left: 2px; margin-right: 2px; }
 }
 
+
+/* v1.1.x: unified player header + compact match statistics */
+.player-head {
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  width: 100%;
+  min-height: clamp(34px, 7vw, 46px);
+  padding: clamp(5px, 1.15vw, 8px) clamp(10px, 2.2vw, 16px) !important;
+  border-radius: calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--player-color) 62%, var(--border));
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.player-head::after { left: 0 !important; }
+.player-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: none !important;
+}
+.player-win-inline {
+  flex: 0 0 auto;
+  min-width: 0;
+  margin-left: 10px;
+  padding-left: 10px;
+  border-left: 1px solid color-mix(in srgb, var(--text) 28%, transparent);
+  font-family: var(--display-font) !important;
+  font-size: clamp(11px, 2.7vw, 16px);
+  line-height: 1;
+  font-weight: 1000;
+  letter-spacing: .105em;
+  color: var(--text);
+  white-space: nowrap;
+  text-shadow: 0 1px 0 color-mix(in srgb, var(--surface) 72%, transparent);
+}
+html[data-wins="off"] .player-win-inline { display: none !important; }
+html[data-player-names="off"] .player-head { display: flex !important; justify-content: flex-end; }
+html[data-player-names="off"] .player-name { display: none !important; }
+html[data-player-names="off"][data-wins="off"] .player-head { display: none !important; }
+html[data-player-names="off"] .player-win-inline { margin-left: 0; padding-left: 0; border-left: 0; }
+/* Legacy separate WIN row is no longer used. */
+.player-win-row { display: none !important; }
+
+.history-win-row td {
+  vertical-align: middle;
+  padding: 10px 7px !important;
+}
+.history-match-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+}
+.history-match-stat-main {
+  font-family: var(--display-font);
+  font-size: clamp(13px, 2.8vw, 18px);
+  line-height: 1.05;
+  font-weight: 1000;
+  letter-spacing: .07em;
+  white-space: nowrap;
+}
+.history-match-stat-split {
+  font-size: clamp(8px, 1.9vw, 11px);
+  line-height: 1.2;
+  font-weight: 850;
+  letter-spacing: .035em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+@media (max-width: 420px) {
+  .player-head { min-height: 34px; padding-left: 9px !important; padding-right: 9px !important; }
+  .player-win-inline { margin-left: 6px; padding-left: 6px; font-size: clamp(10px, 2.55vw, 13px); }
+  .history-match-stat-main { font-size: clamp(11px, 2.7vw, 15px); }
+  .history-match-stat-split { font-size: clamp(7px, 1.75vw, 9px); letter-spacing: .015em; }
+}
+
+</style>
+
+<style id="lp-center-fix">
+/* Keep LP numerals geometrically centered in each player panel regardless of
+   player-name / FIRST-SECOND / DOMINUS visibility. Status elements remain
+   overlays and no longer change the LP content box. */
+.lp-button {
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 12% !important;
+}
+.player-card.dominus-enabled .lp-button,
+html[data-turn-order="on"] .player-card .lp-button,
+html[data-player-names="off"] .lp-button {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.lp-number {
+  align-self: center !important;
+  justify-self: center !important;
+  text-align: center !important;
+}
 </style>
 </head>
 <body>
@@ -2025,6 +2425,7 @@ button, input, select, textarea { max-width: 100%; }
       <div class="turn-control" aria-label="Turn counter">
         <button type="button" class="turn-display" id="turnDisplay" aria-label="Advance turn" title="NEXT TURN"><span class="turn-label">TURN</span><span class="turn-number">1</span></button>
       </div>
+      <div class="game-display" id="gameDisplay" aria-label="Game counter"><span class="game-label">GAME</span><span class="game-number">1</span></div>
     </div>
     <div class="top-actions">
       <button class="header-action-btn" id="swapPlayers" aria-label="Swap P1 and P2" title="SWAP"><span class="header-action-icon">⇄</span></button>
@@ -2038,15 +2439,18 @@ button, input, select, textarea { max-width: 100%; }
       <article class="player-card p1">
         <div class="player-head">
           <div class="player-name" id="p1NameDisplay">PLAYER 1</div>
+          <div class="player-win-inline" id="p1WinDisplay">WIN 0</div>
         </div>
-        <button type="button" class="turn-order-btn first" id="p1TurnOrder" data-turn-order-player="p1" aria-label="Set first or second player">FIRST</button>
         <button type="button" class="lp-button" id="p1LPButton" data-player="p1" aria-label="PLAYER 1 のライフポイントを計算">
           <span class="lp-number" id="p1LP">8000</span>
         </button>
-        <button type="button" class="dominus-zone" data-dominus-player="p1" aria-label="P1 Dominus restrictions">
-          <span class="dominus-placeholder">DOMINUS</span>
-          <span class="dominus-icons" data-dominus-icons="p1"></span>
-        </button>
+        <div class="player-status-row">
+          <button type="button" class="turn-order-btn first" id="p1TurnOrder" data-turn-order-player="p1" aria-label="Set first or second player">FIRST</button>
+          <button type="button" class="dominus-zone" data-dominus-player="p1" aria-label="P1 Dominus restrictions">
+            <span class="dominus-placeholder">DOMINUS</span>
+            <span class="dominus-icons" data-dominus-icons="p1"></span>
+          </button>
+        </div>
         <div class="change-line">
           <span id="p1LastLabel">タップして計算</span>
           <span class="change-badge" id="p1LastDelta">—</span>
@@ -2056,15 +2460,18 @@ button, input, select, textarea { max-width: 100%; }
       <article class="player-card p2">
         <div class="player-head">
           <div class="player-name" id="p2NameDisplay">PLAYER 2</div>
+          <div class="player-win-inline" id="p2WinDisplay">WIN 0</div>
         </div>
-        <button type="button" class="turn-order-btn second" id="p2TurnOrder" data-turn-order-player="p2" aria-label="Set first or second player">SECOND</button>
         <button type="button" class="lp-button" id="p2LPButton" data-player="p2" aria-label="PLAYER 2 のライフポイントを計算">
           <span class="lp-number" id="p2LP">8000</span>
         </button>
-        <button type="button" class="dominus-zone" data-dominus-player="p2" aria-label="P2 Dominus restrictions">
-          <span class="dominus-placeholder">DOMINUS</span>
-          <span class="dominus-icons" data-dominus-icons="p2"></span>
-        </button>
+        <div class="player-status-row">
+          <button type="button" class="turn-order-btn second" id="p2TurnOrder" data-turn-order-player="p2" aria-label="Set first or second player">SECOND</button>
+          <button type="button" class="dominus-zone" data-dominus-player="p2" aria-label="P2 Dominus restrictions">
+            <span class="dominus-placeholder">DOMINUS</span>
+            <span class="dominus-icons" data-dominus-icons="p2"></span>
+          </button>
+        </div>
         <div class="change-line">
           <span id="p2LastLabel">タップして計算</span>
           <span class="change-badge" id="p2LastDelta">—</span>
@@ -2183,6 +2590,13 @@ button, input, select, textarea { max-width: 100%; }
               <div class="setting-desc" data-i18n="turnOrderDisplayDesc">LIFE・HISTORYのFIRST / SECOND表示を使用</div>
             </div>
             <label class="switch"><input type="checkbox" id="turnOrderVisibleSetting" checked><span class="slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label" data-i18n="winCountDisplay">WINカウント</div>
+              <div class="setting-desc" data-i18n="winCountDisplayDesc">LIFE・LOGにゲーム勝利数を表示・記録</div>
+            </div>
+            <label class="switch"><input type="checkbox" id="winCountVisibleSetting" checked><span class="slider"></span></label>
           </div>
           <div class="setting-row">
             <div>
@@ -2321,6 +2735,14 @@ button, input, select, textarea { max-width: 100%; }
           <div class="manual-chapter"><h3 data-i18n="manualHomeTitle">ホーム画面から使う</h3><p data-i18n="manualHome">iPhone / iPadではSafariの共有メニューから「ホーム画面に追加」を選ぶと、ホーム画面からアプリのように起動できます。AndroidではChrome等でメニューから「ホーム画面に追加」または「アプリをインストール」を選択します。端末やブラウザによって項目名・表示方法・対応機能が異なる場合があります。</p></div>
           <div class="manual-chapter manual-version manual-changelog">
             <h3 data-i18n="manualVersionTitle">VERSION / 更新履歴</h3>
+            <p><strong>v1.2.0</strong> <span class="manual-version-date" data-i18n="manualVersionDateV120">2026/08/22</span></p>
+            <ul>
+              <li data-i18n="manualChangelogV120A">FIRST / SECONDをDOMINUSと同じステータス行へ移動し、LP表示を常に中央配置するよう改善</li>
+              <li data-i18n="manualChangelogV120B">WINカウントとGAME表示を追加し、RESET時の勝者記録・ゲーム進行と連動</li>
+              <li data-i18n="manualChangelogV120C">LOGに勝率・先攻／後攻別戦績を追加し、各GAMEの勝者側セル全体を強調表示</li>
+              <li data-i18n="manualChangelogV120D">DOMINUS編集ポップアップを画面サイズに応じた大型レイアウトへ調整</li>
+              <li data-i18n="manualChangelogV120E">LP表示部のヘッダー行を再設計し、プレイヤー名・WINカウントの視認性を改善</li>
+            </ul>
             <p><strong>v1.1.1</strong> <span class="manual-version-date" data-i18n="manualVersionDateV111">2026/08/21</span></p>
             <ul>
               <li data-i18n="manualChangelogV111A">端末・ブラウザ差による要素重なりを抑えるレスポンシブレイアウト補正を追加</li>
@@ -2365,7 +2787,7 @@ button, input, select, textarea { max-width: 100%; }
 
   <nav class="bottom-nav" aria-label="Main menu">
     <button class="nav-btn active" data-nav="life"><span class="nav-icon">♥</span><span>LIFE</span></button>
-    <button class="nav-btn" data-nav="history"><span class="nav-icon">≡</span><span>HISTORY</span></button>
+    <button class="nav-btn" data-nav="history"><span class="nav-icon">≡</span><span>LOG</span></button>
     <button class="nav-btn" data-nav="utility"><span class="nav-icon">⚄</span><span>UTILITY</span></button>
     <button class="nav-btn" data-nav="memo"><span class="nav-icon">✎</span><span>MEMO</span></button>
     <button class="nav-btn" data-nav="settings"><span class="nav-icon">⚙</span><span>SETTINGS</span></button>
@@ -2389,11 +2811,12 @@ button, input, select, textarea { max-width: 100%; }
     names: { p1: 'PLAYER 1', p2: 'PLAYER 2' },
     history: [],
     game: 1,
-    gameStarts: [{ game: 1, timerMs: 0, turnOrder: { p1: 'first', p2: 'second' } }],
+    gameStarts: [{ game: 1, timerMs: 0, turnOrder: { p1: 'first', p2: 'second' }, winner: null }],
+    wins: { p1: 0, p2: 0 },
     turn: 1,
     turnOrder: { p1: 'first', p2: 'second' },
     timer: { elapsedMs: 0, running: false, startedAt: null },
-    settings: { mode: 'system', theme: 'standard', fontFamily: 'system', language: 'ja', playerNamesVisible: true, turnOrderVisible: true, dominusVisible: true, dynamicBackgroundPattern: 'drift', clockEnabled: true, clockFormat: '24h', wakeLock: true, orientationLock: false, timerTargetMin: 40, timerWarningLeadMin: 5 },
+    settings: { mode: 'system', theme: 'standard', fontFamily: 'system', language: 'ja', playerNamesVisible: true, turnOrderVisible: true, dominusVisible: true, winCountVisible: true, dynamicBackgroundPattern: 'drift', clockEnabled: true, clockFormat: '24h', wakeLock: true, orientationLock: false, timerTargetMin: 40, timerWarningLeadMin: 5 },
     tokenMemos: [{ id: 'token-initial', name: '原始生命態トークン', atk: '', def: '' }],
     cardCounters: [{ id: 'counter-initial', name: '', count: 0 }],
     dominusRestrictions: {
@@ -2477,7 +2900,7 @@ button, input, select, textarea { max-width: 100%; }
       utilityPrompt:'コインまたはダイスを実行してください。', tossing:'トス中…', rolling:'ロール中…', heads:'表', tails:'裏', total:'合計',
       tokenMemo:'トークンメモ', addToken:'＋ トークンを追加', tokenDefault:'トークン', tokenName:'トークン名', deleteToken:'このトークンを削除',
       cardCounters:'カードカウンター', addCard:'＋ カードを追加', cardName:'カード名', deleteCard:'このカードを削除', counterCount:'カウンター数', counterMinus:'カウンターを1減らす', counterPlus:'カウンターを1増やす', counterEmpty:'「＋ カードを追加」からカウンターを記録するカードを追加できます。', duelMemo:'メモ', memoPlaceholder:'対戦中の確認事項などを自由に入力', clearMemo:'メモを消去', memoCleared:'メモを消去しました',
-      player1Name:'PLAYER 1 名', player2Name:'PLAYER 2 名', savedBrowser:'ブラウザに保存します', appearance:'表示モード', appearanceDesc:'OS設定または明暗を選択', designTheme:'デザインテーマ', themeDesc:'召喚法テーマまたは高コントラスト配色を選択', fontFamily:'フォント', fontFamilyDesc:'LP・ヘッダーを含む表示フォントを選択', playerNameDisplay:'プレイヤー名表示', playerNameDisplayDesc:'基本画面のプレイヤー名を表示', turnOrderDisplay:'先攻・後攻表示', turnOrderDisplayDesc:'LIFE・HISTORYのFIRST / SECOND表示を使用', dominusDisplay:'ドミナス制約表示', dominusDisplayDesc:'LIFE画面の属性制約表示を使用', dynamicBackground:'背景効果', dynamicBackgroundDesc:'テーマ色に連動した背景効果', backgroundAnimation:'背景アニメーション', backgroundAnimationDesc:'背景効果を残したまま動きだけ停止', dynamicBackgroundPattern:'背景アニメーション', dynamicBackgroundPatternDesc:'OFFまたはループアニメーションを選択', clockDisplay:'時計表示', clockDisplayDesc:'ヘッダー左端に現在時刻を表示', clockFormat:'時計形式', clockFormatDesc:'時刻・秒・日付を含む表示形式を選択', language:'言語', languageDesc:'表示言語を選択', system:'システム', light:'ライト', dark:'ダーク',
+      player1Name:'PLAYER 1 名', player2Name:'PLAYER 2 名', savedBrowser:'ブラウザに保存します', appearance:'表示モード', appearanceDesc:'OS設定または明暗を選択', designTheme:'デザインテーマ', themeDesc:'召喚法テーマまたは高コントラスト配色を選択', fontFamily:'フォント', fontFamilyDesc:'LP・ヘッダーを含む表示フォントを選択', playerNameDisplay:'プレイヤー名表示', playerNameDisplayDesc:'基本画面のプレイヤー名を表示', turnOrderDisplay:'先攻・後攻表示', turnOrderDisplayDesc:'LIFE・HISTORYのFIRST / SECOND表示を使用', dominusDisplay:'ドミナス制約表示', dominusDisplayDesc:'LIFE画面の属性制約表示を使用', winCountDisplay:'WINカウント', winCountDisplayDesc:'LIFE・LOGにゲーム勝利数を表示・記録', dynamicBackground:'背景効果', dynamicBackgroundDesc:'テーマ色に連動した背景効果', backgroundAnimation:'背景アニメーション', backgroundAnimationDesc:'背景効果を残したまま動きだけ停止', dynamicBackgroundPattern:'背景アニメーション', dynamicBackgroundPatternDesc:'OFFまたはループアニメーションを選択', clockDisplay:'時計表示', clockDisplayDesc:'ヘッダー左端に現在時刻を表示', clockFormat:'時計形式', clockFormatDesc:'時刻・秒・日付を含む表示形式を選択', language:'言語', languageDesc:'表示言語を選択', system:'システム', light:'ライト', dark:'ダーク',
       timer:'対戦タイマー', timerStart:'タイマー開始', timerPause:'タイマー一時停止', timerResume:'タイマー再開', collapseHeader:'ヘッダーを閉じる', expandHeader:'ヘッダーを開く', collapseFooter:'フッターを閉じる', expandFooter:'フッターを開く', undo:'1操作元に戻す', resetMatch:'対戦をリセット', swapPlayers:'P1とP2を入れ替え', playersSwapped:'P1とP2を入れ替えました', wakeLock:'画面スリープ防止', wakeLockDesc:'対応ブラウザで対戦中の画面スリープを防止', wakeUnsupported:'このブラウザは画面スリープ防止に対応していません', orientationLock:'画面向き固定', orientationLockDesc:'現在の縦／横向きを固定（対応ブラウザのみ）', orientationUnsupported:'このブラウザは画面向き固定に対応していません', orientationLockFailed:'画面向きを固定できませんでした。ブラウザによってはフルスクリーンが必要です', orientationLocked:'現在の画面向きを固定しました', orientationUnlocked:'画面向き固定を解除しました',
       historyAria:'LP変更履歴', historyExportTitle:'HISTORYを書き出す', historyExportHtml:'HTML', historyExportHtmlDesc:'表示用HTMLファイル', historyExportPdf:'PDF', historyExportPdfDesc:'印刷画面からPDF保存', historyExportPdfHint:'PDFは印刷画面を開きます。端末の「PDFとして保存」または共有機能を使用してください。', historyExportHtmlDone:'HISTORYのHTMLを書き出しました', historyExportPopupBlocked:'PDF表示を開けませんでした。ポップアップを許可してください。', calculator:'LIFE CALCULATOR', lpCalculator:'LP電卓', close:'閉じる', currentLP:'現在LP', currentTimes2:'現在LP ×2', currentHalf:'現在LP ÷2', setLP:'指定LP', applyLP:'LPへ反映', resultAfter:'反映後', enterNumber:'数値を入力してください', noChange:'LPは変更されませんでした', noUndo:'元に戻せる操作がありません', undoDone:(p,lp)=>`${p} を ${lp} LP に戻しました`,
       confirm:'確定', dominusTitle:'ドミナス属性制約', dominusHint:'モンスター効果を発動できない属性をまとめて選択してください。基本画面には発動不可の属性だけを表示します。', dominusClear:'全て発動可', maxRows:n=>`最大${n}件までです`, keepOneToken:'トークンは1件以上残してください', tokenStatInput:(stat)=>`トークン${stat}入力`,
@@ -2495,8 +2918,8 @@ button, input, select, textarea { max-width: 100%; }
       manualStorageTitle:'10. 保存される情報', manualStorageBody:'ブラウザへ永続保存するのはプレイヤー名と各種設定だけです。現在LP、タイマー、履歴、トークン、カードカウンターなどの対戦データはページ再読み込み後には保持されません。「全ての設定を削除」は保存済み設定だけを初期値へ戻し、現在進行中の対戦データには影響しません。',
       manualWakeTitle:'11. 画面スリープ防止', manualWakeBody:'ON時はScreen Wake Lock APIに対応するブラウザで画面点灯を維持します。ブラウザやOSが非対応の場合は利用できず、タブを離れた後に戻った場合は可能な範囲で再取得します。',
       manualNote:'大会・イベントのルールや端末利用可否は主催者の案内を優先してください。端末の省電力設定やブラウザ仕様により、一部機能の動作が異なる場合があります。',
-      manualTitle:'操作マニュアル', manualLifeShortTitle:'LP', manualTimerShortTitle:'タイマー', manualControlsShortTitle:'基本操作', manualStorageShortTitle:'保存', manualUtilityTitle:'UTILITY', manualHomeTitle:'ホーム画面から使う', manualHome:'iPhone / iPadではSafariの共有メニューから「ホーム画面に追加」を選ぶと、ホーム画面からアプリのように起動できます。AndroidではChrome等のメニューから「ホーム画面に追加」または「アプリをインストール」を選択します。端末やブラウザによって項目名・表示方法・対応機能が異なる場合があります。', manualStorageShort:'保存されるのはプレイヤー名と設定のみ。LP・ターン・タイマー・履歴・UTILITY・MEMOは再読み込みで初期化されます。', manualNoteShort:'大会・イベントでは主催者の端末利用ルールを優先してください。', manualVersionTitle:'VERSION / 更新履歴', manualVersionDateV111:'2026/08/21', manualChangelogV111A:'端末・ブラウザ差による要素重なりを抑えるレスポンシブレイアウト補正を追加', manualChangelogV111B:'LP表示の自動フィット処理を強化し、プレビュー環境を含めて枠内へ収まるよう改善', manualChangelogV111C:'DOMINUS制約アイコンを基本1行表示とし、必要時のみ自動折り返しするよう変更', manualChangelogV111D:'デザインテーマを儀式・融合・シンクロ・エクシーズ・ペンデュラム・リンクの召喚法モチーフへ再編', manualChangelogV111E:'召喚法テーマごとの専用背景演出を追加し、HIGH CONTRASTテーマを復活', manualChangelogV111F:'DOMINUS制約とFIRST / SECOND表示を色だけに依存しない形状・線種表現へ改善', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'HISTORYのHTML／PDFエクスポート機能を追加し、ライト配色固定で出力するよう対応', manualChangelogV110B:'HISTORYの先攻表示、LP配置、増減値表示を改善', manualChangelogV110C:'先攻／後攻ボタンの操作性と全体の文字間隔を調整', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'GAME履歴とRESET時のゲーム進行・初期化処理を改善', manualChangelogV102B:'UTILITY・SETTINGSのハッチ開閉状態をリロードまで保持するよう変更', manualChangelogV102C:'コイン・ダイス結果表示とトークン数値表示を調整', manualChangelogV102D:'ヘッダー内のタイマー・TURN・操作ボタン配置を調整', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'更新履歴', manualChangelogV101A:'iPhone等のノッチ／Dynamic Islandを考慮した余白と画面回転時のLP再描画を追加', manualChangelogV101D:'FIRST / SECOND表示をLIFE・HISTORYへ追加', manualChangelogV100:'リリース', manualLife:'先攻・後攻表示がONの時はFIRST / SECONDをタップして入れ替えられます。LPをタップして計算します。1〜2桁は末尾00を補助し、＋／－／×2／÷2／指定LPに対応。LP下部のDOMINUS欄をタップすると6属性（光・闇・地・水・炎・風）の発動不可状態を一括編集でき、基本画面には発動不可属性だけを丸型アイコンで表示します。表示自体は設定からOFFにできます。', manualTimer:'TURNをタップしてターン進行。対戦タイマーは右側の再生／一時停止アイコンで操作し、設定AのB分前以降は強調表示されます。左の時計は表示形式とON/OFFを変更できます。', manualHeader:'ヘッダーは常時表示。右側の各アイコンからP1/P2入れ替え、UNDO、RESETを操作できます。フッターはHIDE／SHOWで開閉できます。背景アニメーションは設定のプルダウンからOFFまたはパターンを選択します。', manualHistory:'HISTORYはGAME→TURNの順に区切り、先攻・後攻表示がONの場合は各GAMEの初期行で先攻側にのみFIRSTと8000/8000を表示します。LP変動は増減値を上段、変更後LPを下段に表示します。タイマーを維持してRESETすると次のGAMEへ進み、開始時刻・TURN 1・初期LPを記録します。タイマーもリセットするとGAME 1へ戻り、履歴も新しいマッチとして初期化されます。', manualUtility:'UTILITYではコイン／ダイス、複数トークン、カードカウンターを利用できます。MEMOは独立タブです。', manualWake:'画面スリープ防止と画面向き固定は対応ブラウザでのみ動作します。iPhone Safariなどでは向き固定を利用できない場合があります。', creator:'制作者：GYONIC', clearAllSettings:'全ての設定を削除', clearSettingsTitle:'設定を初期化', clearSettingsBody:'プレイヤーネームを含む、ブラウザに保存されている全ての設定を初期値へ戻します。現在のLP・タイマー・履歴・トークン・カウンターの対戦情報は変更しません。', clearSettingsDone:'保存済み設定を初期化しました',
-      resetTitle:'RESET LIFE', resetBody:'PLAYER 1 / PLAYER 2 のLPを8000へ戻し、TURN 1へ戻します。タイマーを維持する場合は次のGAMEへ進み、履歴を継続します。タイマーもリセットする場合はGAME 1へ戻り、履歴を新しいマッチとして初期化します。トークン／カウンターは名称を残して数値のみ初期化します。', resetTimerToo:'タイマーもリセットする', cancel:'キャンセル', reset:'リセット', resetBoth:'LPとタイマーをリセットしました', resetLP:'LPをリセットしました'
+      manualTitle:'操作マニュアル', manualLifeShortTitle:'LP', manualTimerShortTitle:'タイマー', manualControlsShortTitle:'基本操作', manualStorageShortTitle:'保存', manualUtilityTitle:'UTILITY', manualHomeTitle:'ホーム画面から使う', manualHome:'iPhone / iPadではSafariの共有メニューから「ホーム画面に追加」を選ぶと、ホーム画面からアプリのように起動できます。AndroidではChrome等のメニューから「ホーム画面に追加」または「アプリをインストール」を選択します。端末やブラウザによって項目名・表示方法・対応機能が異なる場合があります。', manualStorageShort:'保存されるのはプレイヤー名と設定のみ。LP・ターン・タイマー・履歴・UTILITY・MEMOは再読み込みで初期化されます。', manualNoteShort:'大会・イベントでは主催者の端末利用ルールを優先してください。', manualVersionTitle:'VERSION / 更新履歴', manualVersionDateV120:'2026/08/22', manualChangelogV120A:'FIRST / SECONDをDOMINUSと同じステータス行へ移動し、LP表示を常に中央配置するよう改善', manualChangelogV120B:'WINカウントとGAME表示を追加し、RESET時の勝者記録・ゲーム進行と連動', manualChangelogV120C:'LOGに勝率・先攻／後攻別戦績を追加し、各GAMEの勝者側セル全体を強調表示', manualChangelogV120D:'DOMINUS編集ポップアップを画面サイズに応じた大型レイアウトへ調整', manualChangelogV120E:'LP表示部のヘッダー行を再設計し、プレイヤー名・WINカウントの視認性を改善', manualVersionDateV111:'2026/08/21', manualChangelogV111A:'端末・ブラウザ差による要素重なりを抑えるレスポンシブレイアウト補正を追加', manualChangelogV111B:'LP表示の自動フィット処理を強化し、プレビュー環境を含めて枠内へ収まるよう改善', manualChangelogV111C:'DOMINUS制約アイコンを基本1行表示とし、必要時のみ自動折り返しするよう変更', manualChangelogV111D:'デザインテーマを儀式・融合・シンクロ・エクシーズ・ペンデュラム・リンクの召喚法モチーフへ再編', manualChangelogV111E:'召喚法テーマごとの専用背景演出を追加し、HIGH CONTRASTテーマを復活', manualChangelogV111F:'DOMINUS制約とFIRST / SECOND表示を色だけに依存しない形状・線種表現へ改善', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'HISTORYのHTML／PDFエクスポート機能を追加し、ライト配色固定で出力するよう対応', manualChangelogV110B:'HISTORYの先攻表示、LP配置、増減値表示を改善', manualChangelogV110C:'先攻／後攻ボタンの操作性と全体の文字間隔を調整', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'GAME履歴とRESET時のゲーム進行・初期化処理を改善', manualChangelogV102B:'UTILITY・SETTINGSのハッチ開閉状態をリロードまで保持するよう変更', manualChangelogV102C:'コイン・ダイス結果表示とトークン数値表示を調整', manualChangelogV102D:'ヘッダー内のタイマー・TURN・操作ボタン配置を調整', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'更新履歴', manualChangelogV101A:'iPhone等のノッチ／Dynamic Islandを考慮した余白と画面回転時のLP再描画を追加', manualChangelogV101D:'FIRST / SECOND表示をLIFE・HISTORYへ追加', manualChangelogV100:'リリース', manualLife:'先攻・後攻表示がONの時はFIRST / SECONDをタップして入れ替えられます。LPをタップして計算します。1〜2桁は末尾00を補助し、＋／－／×2／÷2／指定LPに対応。LP下部のDOMINUS欄をタップすると6属性（光・闇・地・水・炎・風）の発動不可状態を一括編集でき、基本画面には発動不可属性だけを丸型アイコンで表示します。表示自体は設定からOFFにできます。', manualTimer:'TURNをタップしてターン進行。対戦タイマーは右側の再生／一時停止アイコンで操作し、設定AのB分前以降は強調表示されます。左の時計は表示形式とON/OFFを変更できます。', manualHeader:'ヘッダーは常時表示。右側の各アイコンからP1/P2入れ替え、UNDO、RESETを操作できます。フッターはHIDE／SHOWで開閉できます。背景アニメーションは設定のプルダウンからOFFまたはパターンを選択します。', manualHistory:'LOGは先頭にマッチ内のWIN数を表示し、GAME→TURNの順に区切ります。WINカウントON時は通常RESETで勝者を記録し、勝者側のGAME初期セルを強調します。先攻・後攻表示がONの場合は各GAMEの初期行で先攻側にのみFIRSTと8000/8000を表示します。LP変動は増減値を上段、変更後LPを下段に表示します。タイマーを維持してRESETすると次のGAMEへ進み、開始時刻・TURN 1・初期LPを記録します。タイマーもリセットするとGAME 1へ戻り、履歴も新しいマッチとして初期化されます。', manualUtility:'UTILITYではコイン／ダイス、複数トークン、カードカウンターを利用できます。MEMOは独立タブです。', manualWake:'画面スリープ防止と画面向き固定は対応ブラウザでのみ動作します。iPhone Safariなどでは向き固定を利用できない場合があります。', creator:'制作者：GYONIC', clearAllSettings:'全ての設定を削除', clearSettingsTitle:'設定を初期化', clearSettingsBody:'プレイヤーネームを含む、ブラウザに保存されている全ての設定を初期値へ戻します。現在のLP・タイマー・履歴・トークン・カウンターの対戦情報は変更しません。', clearSettingsDone:'保存済み設定を初期化しました',
+      resetTitle:'RESET LIFE', resetBody:'PLAYER 1 / PLAYER 2 のLPを8000へ戻し、TURN 1へ戻します。WINカウントON時、タイマーを維持するRESETでは勝者を記録して次のGAMEへ進みます。LPが0なら勝者を自動判定し、両者とも0以外なら勝者を選択します。タイマーもリセットする場合はGAME 1・WIN 0へ戻り、履歴を新しいマッチとして初期化します。トークン／カウンターは名称を残して数値のみ初期化します。', resetTimerToo:'タイマーもリセットする', cancel:'キャンセル', reset:'リセット', resetBoth:'LPとタイマーをリセットしました', resetLP:'LPをリセットしました', chooseWinnerTitle:'勝者を選択', chooseWinnerBody:'このGAMEの勝者を選択してください。選択したプレイヤーのWINを1加算して次のGAMEへ進みます。', noWinner:'勝者なし', winRecorded:name=>`${name}：WIN +1`
     },
     en: {
       life:'LIFE', history:'HISTORY', utility:'UTILITY', settings:'SETTINGS', time:'TIME', turnLabel:'TURN', nextTurn:'Advance turn', turnAdvanced:n=>`TURN ${n}`, 
@@ -2504,7 +2927,7 @@ button, input, select, textarea { max-width: 100%; }
       utilityPrompt:'Run a coin toss or dice roll.', tossing:'TOSSING…', rolling:'ROLLING…', heads:'Heads', tails:'Tails', total:'Total',
       tokenMemo:'TOKEN MEMO', addToken:'+ ADD TOKEN', tokenDefault:'Token', tokenName:'Token name', deleteToken:'Delete this token',
       cardCounters:'CARD COUNTERS', addCard:'+ ADD CARD', cardName:'Card name', deleteCard:'Delete this card', counterCount:'Counter count', counterMinus:'Decrease counter by 1', counterPlus:'Increase counter by 1', counterEmpty:'Add a card to record its counters.', duelMemo:'MEMO', memoPlaceholder:'Write any duel notes here', clearMemo:'CLEAR MEMO', memoCleared:'Memo cleared',
-      player1Name:'PLAYER 1 NAME', player2Name:'PLAYER 2 NAME', savedBrowser:'Saved in this browser', appearance:'APPEARANCE', appearanceDesc:'Use system, light, or dark mode', designTheme:'DESIGN THEME', themeDesc:'Choose a summon-method theme or High Contrast', fontFamily:'FONT', fontFamilyDesc:'Choose the font used for LP and the header', playerNameDisplay:'PLAYER NAMES', playerNameDisplayDesc:'Show player names on the LIFE screen', turnOrderDisplay:'FIRST / SECOND', turnOrderDisplayDesc:'Show first/second indicators on LIFE and HISTORY', dominusDisplay:'DOMINUS DISPLAY', dominusDisplayDesc:'Show attribute restrictions on the LIFE screen', dynamicBackground:'BACKGROUND EFFECT', dynamicBackgroundDesc:'Show a theme-colored background effect', backgroundAnimation:'BACKGROUND ANIMATION', backgroundAnimationDesc:'Keep the background effect but stop its motion', dynamicBackgroundPattern:'BACKGROUND MOTION', dynamicBackgroundPatternDesc:'Choose OFF or a looping animation pattern', clockDisplay:'CLOCK', clockDisplayDesc:'Show the current time at the left of the header', clockFormat:'CLOCK FORMAT', clockFormatDesc:'Choose time, seconds, date, and 12/24-hour formats', language:'LANGUAGE', languageDesc:'Choose display language', system:'SYSTEM', light:'LIGHT', dark:'DARK',
+      player1Name:'PLAYER 1 NAME', player2Name:'PLAYER 2 NAME', savedBrowser:'Saved in this browser', appearance:'APPEARANCE', appearanceDesc:'Use system, light, or dark mode', designTheme:'DESIGN THEME', themeDesc:'Choose a summon-method theme or High Contrast', fontFamily:'FONT', fontFamilyDesc:'Choose the font used for LP and the header', playerNameDisplay:'PLAYER NAMES', playerNameDisplayDesc:'Show player names on the LIFE screen', turnOrderDisplay:'FIRST / SECOND', turnOrderDisplayDesc:'Show first/second indicators on LIFE and HISTORY', dominusDisplay:'DOMINUS DISPLAY', dominusDisplayDesc:'Show attribute restrictions on the LIFE screen', winCountDisplay:'WIN COUNT', winCountDisplayDesc:'Show and record game wins on LIFE and LOG', dynamicBackground:'BACKGROUND EFFECT', dynamicBackgroundDesc:'Show a theme-colored background effect', backgroundAnimation:'BACKGROUND ANIMATION', backgroundAnimationDesc:'Keep the background effect but stop its motion', dynamicBackgroundPattern:'BACKGROUND MOTION', dynamicBackgroundPatternDesc:'Choose OFF or a looping animation pattern', clockDisplay:'CLOCK', clockDisplayDesc:'Show the current time at the left of the header', clockFormat:'CLOCK FORMAT', clockFormatDesc:'Choose time, seconds, date, and 12/24-hour formats', language:'LANGUAGE', languageDesc:'Choose display language', system:'SYSTEM', light:'LIGHT', dark:'DARK',
       timer:'Duel timer', timerStart:'Start timer', timerPause:'Pause timer', timerResume:'Resume timer', collapseHeader:'Collapse header', expandHeader:'Expand header', collapseFooter:'Collapse footer', expandFooter:'Expand footer', undo:'Undo last LP change', resetMatch:'Reset duel', swapPlayers:'Swap P1 and P2', playersSwapped:'P1 and P2 swapped', wakeLock:'PREVENT SLEEP', wakeLockDesc:'Keep the screen awake during a duel on supported browsers', wakeUnsupported:'Screen wake lock is not supported by this browser', orientationLock:'LOCK ORIENTATION', orientationLockDesc:'Lock the current portrait / landscape orientation when supported', orientationUnsupported:'Screen orientation lock is not supported by this browser', orientationLockFailed:'Could not lock the screen orientation. Some browsers require fullscreen mode', orientationLocked:'Current screen orientation locked', orientationUnlocked:'Screen orientation unlocked',
       historyAria:'LP change history', historyExportTitle:'EXPORT HISTORY', historyExportHtml:'HTML', historyExportHtmlDesc:'Standalone history file', historyExportPdf:'PDF', historyExportPdfDesc:'Save from print view', historyExportPdfHint:'PDF opens a print view. Choose Save as PDF or the device sharing option.', historyExportHtmlDone:'History HTML exported', historyExportPopupBlocked:'Could not open the PDF view. Allow pop-ups and try again.', calculator:'LIFE CALCULATOR', lpCalculator:'LP calculator', close:'Close', currentLP:'CURRENT LP', currentTimes2:'CURRENT LP ×2', currentHalf:'CURRENT LP ÷2', setLP:'SET LP', applyLP:'APPLY TO LP', resultAfter:'After', enterNumber:'Enter a number', noChange:'LP did not change', noUndo:'Nothing to undo', undoDone:(p,lp)=>`${p} restored to ${lp} LP`,
       confirm:'CONFIRM', dominusTitle:'DOMINUS RESTRICTIONS', dominusHint:'Select every attribute whose monster effects cannot be activated. Only blocked attributes are shown on the LIFE screen.', dominusClear:'ALLOW ALL', maxRows:n=>`Maximum ${n} entries`, keepOneToken:'At least one token must remain', tokenStatInput:(stat)=>`Token ${stat} input`,
@@ -2522,8 +2945,8 @@ button, input, select, textarea { max-width: 100%; }
       manualStorageTitle:'10. What is saved', manualStorageBody:'Only player names and settings are stored persistently in the browser. Duel data such as current LP, timer, history, tokens, and card counters is not retained after a page reload. DELETE ALL SETTINGS resets saved preferences only and does not alter the duel currently in progress.',
       manualWakeTitle:'11. Prevent sleep', manualWakeBody:'When enabled, the app requests Screen Wake Lock on supported browsers to keep the display awake. It cannot work when the browser or OS does not support the API. After returning to the tab, the app attempts to reacquire the lock when possible.',
       manualNote:'Always follow the organizer’s rules on device use at tournaments or events. Power-saving settings and browser behavior can affect some features.',
-      manualTitle:'USER MANUAL', manualLifeShortTitle:'LP', manualTimerShortTitle:'Timer', manualControlsShortTitle:'Controls', manualStorageShortTitle:'Storage', manualUtilityTitle:'UTILITY', manualHomeTitle:'Use from the Home Screen', manualHome:'On iPhone / iPad, open this tool in Safari and choose Share → Add to Home Screen to launch it more like an app. On Android, use Chrome or a similar browser and choose Add to Home screen or Install app from the menu. Menu labels, appearance, and supported features may vary by device and browser.', manualStorageShort:'Only player names and settings are saved. LP, turn, timer, history, UTILITY, and MEMO reset when the page reloads.', manualNoteShort:'Follow the organizer’s rules on device use at tournaments and events.', manualVersionTitle:'VERSION / CHANGELOG', manualVersionDateV111:'2026/08/21', manualChangelogV111A:'Added responsive layout corrections to reduce element overlap across devices and browsers', manualChangelogV111B:'Improved LP auto-fit so values stay inside their panels, including preview environments', manualChangelogV111C:'Changed DOMINUS restriction icons to a single-line layout with wrapping only when needed', manualChangelogV111D:'Reorganized design themes around Ritual, Fusion, Synchro, Xyz, Pendulum, and Link Summoning motifs', manualChangelogV111E:'Added summon-theme-specific background effects and restored the HIGH CONTRAST theme', manualChangelogV111F:'Improved DOMINUS and FIRST / SECOND indicators with shapes and line styles that do not rely on color alone', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'Added HTML / PDF export for HISTORY with fixed light-mode output', manualChangelogV110B:'Improved FIRST indication, LP alignment, and delta presentation in HISTORY', manualChangelogV110C:'Improved FIRST / SECOND button usability and adjusted global letter spacing', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'Improved GAME history and game progression / initialization behavior on RESET', manualChangelogV102B:'UTILITY and SETTINGS hatch states now persist until page reload', manualChangelogV102C:'Refined coin / dice result layout and token value sizing', manualChangelogV102D:'Adjusted timer, TURN, and header control layout', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'CHANGELOG', manualChangelogV101A:'Added safer spacing for iPhone notches / Dynamic Island and LP redraw on orientation changes', manualChangelogV101D:'Added FIRST / SECOND indicators to LIFE and HISTORY', manualChangelogV100:'Release', manualLife:'When FIRST / SECOND display is enabled, tap it to swap who goes first. Tap an LP value to calculate. One- or two-digit input appends 00. +, −, ×2, ÷2, and SET LP are supported. Tap the DOMINUS area below LP to edit blocked attributes together. Six attributes are supported (LIGHT, DARK, EARTH, WATER, FIRE, and WIND), and only blocked attributes appear as round icons on the LIFE screen. The display can be disabled in Settings.', manualTimer:'Tap TURN to advance the turn. Use the play/pause icon to control the duel timer; it is highlighted from B minutes before target A. The left clock supports multiple formats and can be hidden.', manualHeader:'The header is always shown. Use its icons to swap P1/P2, undo, or reset. Use HIDE / SHOW for the footer. Choose OFF or a looping background animation from the Settings dropdown.', manualHistory:'HISTORY is grouped by GAME and TURN. When FIRST / SECOND display is enabled, each GAME shows FIRST only on the player going first, together with 8000 / 8000. LP changes show the delta on the upper line and the resulting LP below it. Reset while keeping the timer running to advance to the next GAME and record its start time, TURN 1, and initial LP. Resetting the timer returns to GAME 1. EXPORT saves the current view as HTML or opens a print-ready view for PDF saving.', manualUtility:'UTILITY provides coin/dice, multiple token tools, and card counters. MEMO has its own tab.', manualWake:'Prevent Sleep and orientation lock work only in supported browsers. Orientation lock may be unavailable in iPhone Safari.', creator:'Creator: GYONIC', clearAllSettings:'DELETE ALL SETTINGS', clearSettingsTitle:'RESET SETTINGS', clearSettingsBody:'Reset every saved preference, including player names, to its default. Current LP, timer, history, token, and counter duel data are not changed.', clearSettingsDone:'Saved settings were reset',
-      resetTitle:'RESET LIFE', resetBody:'Return both players to 8000 LP and TURN 1. If the timer is kept, advance to the next GAME and keep the match history. If the timer is also reset, return to GAME 1 and start a fresh match history. Token and counter names are kept while their values are cleared.', resetTimerToo:'Reset timer too', cancel:'CANCEL', reset:'RESET', resetBoth:'LP and timer reset', resetLP:'LP reset'
+      manualTitle:'USER MANUAL', manualLifeShortTitle:'LP', manualTimerShortTitle:'Timer', manualControlsShortTitle:'Controls', manualStorageShortTitle:'Storage', manualUtilityTitle:'UTILITY', manualHomeTitle:'Use from the Home Screen', manualHome:'On iPhone / iPad, open this tool in Safari and choose Share → Add to Home Screen to launch it more like an app. On Android, use Chrome or a similar browser and choose Add to Home screen or Install app from the menu. Menu labels, appearance, and supported features may vary by device and browser.', manualStorageShort:'Only player names and settings are saved. LP, turn, timer, history, UTILITY, and MEMO reset when the page reloads.', manualNoteShort:'Follow the organizer’s rules on device use at tournaments and events.', manualVersionTitle:'VERSION / CHANGELOG', manualVersionDateV120:'2026/08/22', manualChangelogV120A:'Moved FIRST / SECOND into the shared DOMINUS status row and kept LP values centered at all times', manualChangelogV120B:'Added WIN counting and GAME display, linked with winner recording and game progression on RESET', manualChangelogV120C:'Added win rate and first/second records to LOG, with winner-side cells highlighted throughout each GAME', manualChangelogV120D:'Expanded the DOMINUS editor into a large responsive layout sized to the screen', manualChangelogV120E:'Redesigned the LP header row to improve player-name and WIN-count readability', manualVersionDateV111:'2026/08/21', manualChangelogV111A:'Added responsive layout corrections to reduce element overlap across devices and browsers', manualChangelogV111B:'Improved LP auto-fit so values stay inside their panels, including preview environments', manualChangelogV111C:'Changed DOMINUS restriction icons to a single-line layout with wrapping only when needed', manualChangelogV111D:'Reorganized design themes around Ritual, Fusion, Synchro, Xyz, Pendulum, and Link Summoning motifs', manualChangelogV111E:'Added summon-theme-specific background effects and restored the HIGH CONTRAST theme', manualChangelogV111F:'Improved DOMINUS and FIRST / SECOND indicators with shapes and line styles that do not rely on color alone', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'Added HTML / PDF export for HISTORY with fixed light-mode output', manualChangelogV110B:'Improved FIRST indication, LP alignment, and delta presentation in HISTORY', manualChangelogV110C:'Improved FIRST / SECOND button usability and adjusted global letter spacing', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'Improved GAME history and game progression / initialization behavior on RESET', manualChangelogV102B:'UTILITY and SETTINGS hatch states now persist until page reload', manualChangelogV102C:'Refined coin / dice result layout and token value sizing', manualChangelogV102D:'Adjusted timer, TURN, and header control layout', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'CHANGELOG', manualChangelogV101A:'Added safer spacing for iPhone notches / Dynamic Island and LP redraw on orientation changes', manualChangelogV101D:'Added FIRST / SECOND indicators to LIFE and HISTORY', manualChangelogV100:'Release', manualLife:'When FIRST / SECOND display is enabled, tap it to swap who goes first. Tap an LP value to calculate. One- or two-digit input appends 00. +, −, ×2, ÷2, and SET LP are supported. Tap the DOMINUS area below LP to edit blocked attributes together. Six attributes are supported (LIGHT, DARK, EARTH, WATER, FIRE, and WIND), and only blocked attributes appear as round icons on the LIFE screen. The display can be disabled in Settings.', manualTimer:'Tap TURN to advance the turn. Use the play/pause icon to control the duel timer; it is highlighted from B minutes before target A. The left clock supports multiple formats and can be hidden.', manualHeader:'The header is always shown. Use its icons to swap P1/P2, undo, or reset. Use HIDE / SHOW for the footer. Choose OFF or a looping background animation from the Settings dropdown.', manualHistory:'LOG starts with the match WIN count, then groups records by GAME and TURN. With WIN COUNT enabled, a normal RESET records the winner and highlights that player in the GAME start row. When FIRST / SECOND display is enabled, each GAME shows FIRST only on the player going first, together with 8000 / 8000. LP changes show the delta on the upper line and the resulting LP below it. Reset while keeping the timer running to advance to the next GAME and record its start time, TURN 1, and initial LP. Resetting the timer returns to GAME 1. EXPORT saves the current view as HTML or opens a print-ready view for PDF saving.', manualUtility:'UTILITY provides coin/dice, multiple token tools, and card counters. MEMO has its own tab.', manualWake:'Prevent Sleep and orientation lock work only in supported browsers. Orientation lock may be unavailable in iPhone Safari.', creator:'Creator: GYONIC', clearAllSettings:'DELETE ALL SETTINGS', clearSettingsTitle:'RESET SETTINGS', clearSettingsBody:'Reset every saved preference, including player names, to its default. Current LP, timer, history, token, and counter duel data are not changed.', clearSettingsDone:'Saved settings were reset',
+      resetTitle:'RESET LIFE', resetBody:'Return both players to 8000 LP and TURN 1. With WIN COUNT enabled, a RESET that keeps the timer records the winner before advancing to the next GAME. If one LP is 0 the winner is detected automatically; otherwise choose the winner. Resetting the timer returns to GAME 1 and WIN 0 and starts a fresh match history. Token and counter names are kept while their values are cleared.', resetTimerToo:'Reset timer too', cancel:'CANCEL', reset:'RESET', resetBoth:'LP and timer reset', resetLP:'LP reset', chooseWinnerTitle:'SELECT WINNER', chooseWinnerBody:'Select the winner of this GAME. The selected player gains one WIN before the next GAME starts.', noWinner:'NO WINNER', winRecorded:name=>`${name}: WIN +1`
     },
     ko: {
       life:'라이프', history:'기록', utility:'유틸리티', settings:'설정', time:'시간', turnLabel:'턴', nextTurn:'턴 진행', turnAdvanced:n=>`턴 ${n}`, 
@@ -2531,7 +2954,7 @@ button, input, select, textarea { max-width: 100%; }
       utilityPrompt:'코인 또는 주사위를 실행하세요.', tossing:'토스 중…', rolling:'굴리는 중…', heads:'앞면', tails:'뒷면', total:'합계',
       tokenMemo:'토큰 메모', addToken:'+ 토큰 추가', tokenDefault:'토큰', tokenName:'토큰 이름', deleteToken:'이 토큰 삭제',
       cardCounters:'카드 카운터', addCard:'+ 카드 추가', cardName:'카드 이름', deleteCard:'이 카드 삭제', counterCount:'카운터 수', counterMinus:'카운터 1 감소', counterPlus:'카운터 1 증가', counterEmpty:'카운터를 기록할 카드를 추가하세요.', duelMemo:'메모', memoPlaceholder:'듀얼 중 확인할 내용을 자유롭게 입력', clearMemo:'메모 지우기', memoCleared:'메모를 지웠습니다',
-      player1Name:'PLAYER 1 이름', player2Name:'PLAYER 2 이름', savedBrowser:'브라우저에 저장됩니다', appearance:'화면 모드', appearanceDesc:'시스템·라이트·다크 선택', designTheme:'디자인 테마', themeDesc:'소환법 테마 또는 고대비 배색 선택', fontFamily:'글꼴', fontFamilyDesc:'LP와 헤더에 사용할 표시 글꼴 선택', playerNameDisplay:'플레이어 이름 표시', playerNameDisplayDesc:'LIFE 화면에 플레이어 이름 표시', dominusDisplay:'도미나스 제약 표시', dominusDisplayDesc:'LIFE 화면의 속성 제약 표시 사용', dynamicBackground:'배경 효과', dynamicBackgroundDesc:'테마 색상에 맞춘 배경 효과 표시', backgroundAnimation:'배경 애니메이션', backgroundAnimationDesc:'배경 효과는 유지하고 움직임만 정지', dynamicBackgroundPattern:'배경 애니메이션', dynamicBackgroundPatternDesc:'OFF 또는 반복 애니메이션 패턴 선택', clockDisplay:'시계 표시', clockDisplayDesc:'헤더 왼쪽에 현재 시간을 표시', clockFormat:'시계 형식', clockFormatDesc:'시간·초·날짜 및 12/24시간 형식 선택', language:'언어', languageDesc:'표시 언어 선택', system:'시스템', light:'라이트', dark:'다크',
+      player1Name:'PLAYER 1 이름', player2Name:'PLAYER 2 이름', savedBrowser:'브라우저에 저장됩니다', appearance:'화면 모드', appearanceDesc:'시스템·라이트·다크 선택', designTheme:'디자인 테마', themeDesc:'소환법 테마 또는 고대비 배색 선택', fontFamily:'글꼴', fontFamilyDesc:'LP와 헤더에 사용할 표시 글꼴 선택', playerNameDisplay:'플레이어 이름 표시', playerNameDisplayDesc:'LIFE 화면에 플레이어 이름 표시', dominusDisplay:'도미나스 제약 표시', dominusDisplayDesc:'LIFE 화면의 속성 제약 표시 사용', winCountDisplay:'WIN 카운트', winCountDisplayDesc:'LIFE와 LOG에 게임 승리 수 표시 및 기록', dynamicBackground:'배경 효과', dynamicBackgroundDesc:'테마 색상에 맞춘 배경 효과 표시', backgroundAnimation:'배경 애니메이션', backgroundAnimationDesc:'배경 효과는 유지하고 움직임만 정지', dynamicBackgroundPattern:'배경 애니메이션', dynamicBackgroundPatternDesc:'OFF 또는 반복 애니메이션 패턴 선택', clockDisplay:'시계 표시', clockDisplayDesc:'헤더 왼쪽에 현재 시간을 표시', clockFormat:'시계 형식', clockFormatDesc:'시간·초·날짜 및 12/24시간 형식 선택', language:'언어', languageDesc:'표시 언어 선택', system:'시스템', light:'라이트', dark:'다크',
       timer:'듀얼 타이머', timerStart:'타이머 시작', timerPause:'타이머 일시정지', timerResume:'타이머 재개', collapseHeader:'헤더 접기', expandHeader:'헤더 열기', collapseFooter:'푸터 접기', expandFooter:'푸터 열기', undo:'마지막 LP 변경 취소', resetMatch:'듀얼 리셋', swapPlayers:'P1과 P2 바꾸기', playersSwapped:'P1과 P2를 바꿨습니다', wakeLock:'화면 절전 방지', wakeLockDesc:'지원 브라우저에서 듀얼 중 화면이 꺼지지 않도록 유지', wakeUnsupported:'이 브라우저는 화면 절전 방지를 지원하지 않습니다', orientationLock:'화면 방향 고정', orientationLockDesc:'지원 브라우저에서 현재 세로／가로 방향 고정', orientationUnsupported:'이 브라우저는 화면 방향 고정을 지원하지 않습니다', orientationLockFailed:'화면 방향을 고정할 수 없습니다. 일부 브라우저에서는 전체 화면이 필요합니다', orientationLocked:'현재 화면 방향을 고정했습니다', orientationUnlocked:'화면 방향 고정을 해제했습니다',
       historyAria:'LP 변경 기록', historyExportTitle:'HISTORY 내보내기', historyExportHtml:'HTML', historyExportHtmlDesc:'기록 표시용 HTML 파일', historyExportPdf:'PDF', historyExportPdfDesc:'인쇄 화면에서 PDF 저장', historyExportPdfHint:'PDF는 인쇄 화면을 엽니다. PDF로 저장 또는 기기의 공유 기능을 사용하세요.', historyExportHtmlDone:'HISTORY HTML을 내보냈습니다', historyExportPopupBlocked:'PDF 화면을 열 수 없습니다. 팝업을 허용해 주세요.', calculator:'LIFE CALCULATOR', lpCalculator:'LP 계산기', close:'닫기', currentLP:'현재 LP', currentTimes2:'현재 LP ×2', currentHalf:'현재 LP ÷2', setLP:'LP 지정', applyLP:'LP에 적용', resultAfter:'적용 후', enterNumber:'숫자를 입력하세요', noChange:'LP가 변경되지 않았습니다', noUndo:'되돌릴 변경이 없습니다', undoDone:(p,lp)=>`${p}를 ${lp} LP로 되돌렸습니다`,
       confirm:'확정', dominusTitle:'도미나스 속성 제약', dominusHint:'몬스터 효과를 발동할 수 없는 속성을 한 번에 선택하세요. LIFE 화면에는 발동 불가 속성만 표시됩니다.', dominusClear:'모두 허용', maxRows:n=>`최대 ${n}개까지 가능합니다`, keepOneToken:'토큰은 1개 이상 남겨야 합니다', tokenStatInput:(stat)=>`토큰 ${stat} 입력`,
@@ -2549,8 +2972,8 @@ button, input, select, textarea { max-width: 100%; }
       manualStorageTitle:'10. 저장되는 정보', manualStorageBody:'브라우저에 계속 저장되는 것은 플레이어 이름과 각종 설정뿐입니다. 현재 LP, 타이머, 기록, 토큰, 카드 카운터 등의 듀얼 데이터는 페이지를 새로고침하면 유지되지 않습니다. 모든 설정 삭제는 저장된 설정만 초기화하며 현재 진행 중인 듀얼 데이터에는 영향을 주지 않습니다.',
       manualWakeTitle:'11. 화면 절전 방지', manualWakeBody:'ON이면 지원 브라우저에서 Screen Wake Lock을 요청해 화면을 켜 둡니다. 브라우저나 OS가 지원하지 않으면 사용할 수 없습니다. 다른 탭에서 돌아오면 가능한 경우 다시 잠금을 요청합니다.',
       manualNote:'대회나 이벤트에서의 단말기 사용 가능 여부는 반드시 주최 측 규정을 우선해 주세요. 절전 설정이나 브라우저 사양에 따라 일부 기능의 동작이 달라질 수 있습니다.',
-      manualTitle:'사용 설명서', manualLifeShortTitle:'LP', manualTimerShortTitle:'타이머', manualControlsShortTitle:'기본 조작', manualStorageShortTitle:'저장', manualUtilityTitle:'UTILITY', manualHomeTitle:'홈 화면에서 사용', manualHome:'iPhone / iPad에서는 Safari의 공유 메뉴에서 홈 화면에 추가를 선택하면 홈 화면에서 앱처럼 실행할 수 있습니다. Android에서는 Chrome 등의 메뉴에서 홈 화면에 추가 또는 앱 설치를 선택하세요. 기기와 브라우저에 따라 메뉴 명칭, 표시 방식, 지원 기능이 다를 수 있습니다.', manualStorageShort:'저장되는 것은 플레이어 이름과 설정뿐입니다. LP, 턴, 타이머, 기록, UTILITY, MEMO는 새로고침하면 초기화됩니다.', manualNoteShort:'대회·이벤트에서는 주최 측의 단말기 사용 규정을 우선해 주세요.', manualVersionTitle:'VERSION / 업데이트 내역', manualVersionDateV111:'2026/08/21', manualChangelogV111A:'기기·브라우저 차이로 인한 요소 겹침을 줄이는 반응형 레이아웃 보정 추가', manualChangelogV111B:'미리보기 환경을 포함해 LP 값이 패널 안에 들어오도록 자동 맞춤 처리 개선', manualChangelogV111C:'DOMINUS 제약 아이콘을 기본 1줄 표시로 변경하고 필요할 때만 자동 줄바꿈', manualChangelogV111D:'디자인 테마를 의식·융합·싱크로·엑시즈·펜듈럼·링크 소환법 모티프로 재구성', manualChangelogV111E:'소환법 테마별 전용 배경 효과를 추가하고 HIGH CONTRAST 테마를 복원', manualChangelogV111F:'DOMINUS 제약과 FIRST / SECOND 표시를 색상에만 의존하지 않는 형태·선 스타일 표현으로 개선', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'HISTORY HTML / PDF 내보내기 기능을 추가하고 라이트 배색으로 고정 출력하도록 개선', manualChangelogV110B:'HISTORY의 FIRST 표시, LP 정렬, 증감값 표시를 개선', manualChangelogV110C:'FIRST / SECOND 버튼 조작성과 전체 자간을 조정', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'GAME 기록과 RESET 시 게임 진행·초기화 동작 개선', manualChangelogV102B:'UTILITY·SETTINGS 해치 열림 상태를 새로고침 전까지 유지하도록 변경', manualChangelogV102C:'코인·주사위 결과 표시와 토큰 수치 표시 조정', manualChangelogV102D:'헤더의 타이머·TURN·조작 버튼 배치 조정', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'업데이트 내역', manualChangelogV101A:'iPhone 노치／Dynamic Island 대응 여백과 화면 회전 시 LP 재렌더링 추가', manualChangelogV101D:'LIFE와 HISTORY에 FIRST / SECOND 표시 추가', manualChangelogV100:'릴리스', manualLife:'선공 / 후공 표시가 ON일 때 FIRST / SECOND를 탭하면 선공·후공을 바꿀 수 있습니다. LP를 탭해 계산합니다. 1~2자리 입력은 뒤에 00을 보조하며 +, −, ×2, ÷2, LP 지정이 가능합니다. LP는 0 아래로 내려가지 않습니다. LP 아래 DOMINUS 영역을 탭하면 빛·어둠·땅·물·불·바람 6속성의 발동 불가 상태를 한 번에 편집할 수 있으며, LIFE 화면에는 발동 불가 속성만 원형 아이콘으로 표시됩니다. 표시 기능은 설정에서 끌 수 있습니다.', manualTimer:'TURN을 탭해 턴을 진행합니다. 듀얼 타이머는 재생/일시정지 아이콘으로 조작하고 목표 A의 B분 전부터 강조됩니다. 왼쪽 시계는 형식과 표시 여부를 변경할 수 있습니다.', manualHeader:'헤더는 항상 표시되며 아이콘으로 P1/P2 교체, UNDO, RESET을 조작합니다. 푸터는 HIDE / SHOW로 접고 펼칩니다. 배경 애니메이션은 설정의 드롭다운에서 OFF 또는 반복 패턴을 선택합니다.', manualHistory:'HISTORY는 GAME→TURN 순서로 구분되며 선공 / 후공 표시가 ON이면 각 GAME의 초기 행에서 선공 플레이어에만 FIRST와 8000 / 8000을 표시합니다. LP 변동은 증감값을 위쪽 줄에, 변경 후 LP를 아래쪽 줄에 표시합니다. 타이머를 유지한 채 RESET하면 다음 GAME으로 진행하고 시작 시간·TURN 1·초기 LP를 기록합니다. 타이머도 리셋하면 GAME 1로 돌아갑니다. EXPORT에서 현재 표시를 HTML로 저장하거나 인쇄 화면을 통해 PDF로 저장할 수 있습니다.', manualUtility:'UTILITY에서 코인/주사위, 여러 토큰, 카드 카운터를 사용할 수 있으며 MEMO는 독립 탭입니다.', manualWake:'화면 절전 방지와 화면 방향 고정은 지원 브라우저에서만 작동합니다. iPhone Safari에서는 방향 고정을 사용할 수 없을 수 있습니다.', creator:'제작자: GYONIC', clearAllSettings:'모든 설정 삭제', clearSettingsTitle:'설정 초기화', clearSettingsBody:'플레이어 이름을 포함한 저장된 모든 설정을 초기값으로 되돌립니다. 현재 LP, 타이머, 기록, 토큰, 카운터의 듀얼 정보는 변경하지 않습니다.', clearSettingsDone:'저장된 설정을 초기화했습니다',
-      resetTitle:'RESET LIFE', resetBody:'양쪽 LP를 8000으로 되돌리고 TURN 1로 초기화합니다. 타이머를 유지하면 다음 GAME으로 진행하며 HISTORY를 계속 유지합니다. 타이머도 리셋하면 GAME 1로 돌아가 새 매치 기록으로 초기화합니다. 토큰/카운터는 이름을 남기고 수치만 초기화합니다.', resetTimerToo:'타이머도 리셋', cancel:'취소', reset:'리셋', resetBoth:'LP와 타이머를 리셋했습니다', resetLP:'LP를 리셋했습니다'
+      manualTitle:'사용 설명서', manualLifeShortTitle:'LP', manualTimerShortTitle:'타이머', manualControlsShortTitle:'기본 조작', manualStorageShortTitle:'저장', manualUtilityTitle:'UTILITY', manualHomeTitle:'홈 화면에서 사용', manualHome:'iPhone / iPad에서는 Safari의 공유 메뉴에서 홈 화면에 추가를 선택하면 홈 화면에서 앱처럼 실행할 수 있습니다. Android에서는 Chrome 등의 메뉴에서 홈 화면에 추가 또는 앱 설치를 선택하세요. 기기와 브라우저에 따라 메뉴 명칭, 표시 방식, 지원 기능이 다를 수 있습니다.', manualStorageShort:'저장되는 것은 플레이어 이름과 설정뿐입니다. LP, 턴, 타이머, 기록, UTILITY, MEMO는 새로고침하면 초기화됩니다.', manualNoteShort:'대회·이벤트에서는 주최 측의 단말기 사용 규정을 우선해 주세요.', manualVersionTitle:'VERSION / 업데이트 내역', manualVersionDateV120:'2026/08/22', manualChangelogV120A:'FIRST / SECOND를 DOMINUS와 같은 상태 행으로 이동하고 LP 값을 항상 중앙 정렬하도록 개선', manualChangelogV120B:'WIN 카운트와 GAME 표시를 추가하고 RESET 시 승자 기록 및 게임 진행과 연동', manualChangelogV120C:'LOG에 승률과 선공/후공 전적을 추가하고 각 GAME의 승자 측 셀 전체를 강조 표시', manualChangelogV120D:'DOMINUS 편집 팝업을 화면 크기에 맞춘 대형 반응형 레이아웃으로 조정', manualChangelogV120E:'LP 표시부 헤더 행을 재설계해 플레이어 이름과 WIN 카운트의 가독성을 개선', manualVersionDateV111:'2026/08/21', manualChangelogV111A:'기기·브라우저 차이로 인한 요소 겹침을 줄이는 반응형 레이아웃 보정 추가', manualChangelogV111B:'미리보기 환경을 포함해 LP 값이 패널 안에 들어오도록 자동 맞춤 처리 개선', manualChangelogV111C:'DOMINUS 제약 아이콘을 기본 1줄 표시로 변경하고 필요할 때만 자동 줄바꿈', manualChangelogV111D:'디자인 테마를 의식·융합·싱크로·엑시즈·펜듈럼·링크 소환법 모티프로 재구성', manualChangelogV111E:'소환법 테마별 전용 배경 효과를 추가하고 HIGH CONTRAST 테마를 복원', manualChangelogV111F:'DOMINUS 제약과 FIRST / SECOND 표시를 색상에만 의존하지 않는 형태·선 스타일 표현으로 개선', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'HISTORY HTML / PDF 내보내기 기능을 추가하고 라이트 배색으로 고정 출력하도록 개선', manualChangelogV110B:'HISTORY의 FIRST 표시, LP 정렬, 증감값 표시를 개선', manualChangelogV110C:'FIRST / SECOND 버튼 조작성과 전체 자간을 조정', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'GAME 기록과 RESET 시 게임 진행·초기화 동작 개선', manualChangelogV102B:'UTILITY·SETTINGS 해치 열림 상태를 새로고침 전까지 유지하도록 변경', manualChangelogV102C:'코인·주사위 결과 표시와 토큰 수치 표시 조정', manualChangelogV102D:'헤더의 타이머·TURN·조작 버튼 배치 조정', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'업데이트 내역', manualChangelogV101A:'iPhone 노치／Dynamic Island 대응 여백과 화면 회전 시 LP 재렌더링 추가', manualChangelogV101D:'LIFE와 HISTORY에 FIRST / SECOND 표시 추가', manualChangelogV100:'릴리스', manualLife:'선공 / 후공 표시가 ON일 때 FIRST / SECOND를 탭하면 선공·후공을 바꿀 수 있습니다. LP를 탭해 계산합니다. 1~2자리 입력은 뒤에 00을 보조하며 +, −, ×2, ÷2, LP 지정이 가능합니다. LP는 0 아래로 내려가지 않습니다. LP 아래 DOMINUS 영역을 탭하면 빛·어둠·땅·물·불·바람 6속성의 발동 불가 상태를 한 번에 편집할 수 있으며, LIFE 화면에는 발동 불가 속성만 원형 아이콘으로 표시됩니다. 표시 기능은 설정에서 끌 수 있습니다.', manualTimer:'TURN을 탭해 턴을 진행합니다. 듀얼 타이머는 재생/일시정지 아이콘으로 조작하고 목표 A의 B분 전부터 강조됩니다. 왼쪽 시계는 형식과 표시 여부를 변경할 수 있습니다.', manualHeader:'헤더는 항상 표시되며 아이콘으로 P1/P2 교체, UNDO, RESET을 조작합니다. 푸터는 HIDE / SHOW로 접고 펼칩니다. 배경 애니메이션은 설정의 드롭다운에서 OFF 또는 반복 패턴을 선택합니다.', manualHistory:'LOG는 맨 위에 매치 WIN 수를 표시한 뒤 GAME→TURN 순서로 구분됩니다. WIN 카운트가 켜져 있으면 일반 RESET에서 승자를 기록하고 해당 GAME의 승자 셀을 강조합니다. 선공 / 후공 표시가 ON이면 각 GAME의 초기 행에서 선공 플레이어에만 FIRST와 8000 / 8000을 표시합니다. LP 변동은 증감값을 위쪽 줄에, 변경 후 LP를 아래쪽 줄에 표시합니다. 타이머를 유지한 채 RESET하면 다음 GAME으로 진행하고 시작 시간·TURN 1·초기 LP를 기록합니다. 타이머도 리셋하면 GAME 1로 돌아갑니다. EXPORT에서 현재 표시를 HTML로 저장하거나 인쇄 화면을 통해 PDF로 저장할 수 있습니다.', manualUtility:'UTILITY에서 코인/주사위, 여러 토큰, 카드 카운터를 사용할 수 있으며 MEMO는 독립 탭입니다.', manualWake:'화면 절전 방지와 화면 방향 고정은 지원 브라우저에서만 작동합니다. iPhone Safari에서는 방향 고정을 사용할 수 없을 수 있습니다.', creator:'제작자: GYONIC', clearAllSettings:'모든 설정 삭제', clearSettingsTitle:'설정 초기화', clearSettingsBody:'플레이어 이름을 포함한 저장된 모든 설정을 초기값으로 되돌립니다. 현재 LP, 타이머, 기록, 토큰, 카운터의 듀얼 정보는 변경하지 않습니다.', clearSettingsDone:'저장된 설정을 초기화했습니다',
+      resetTitle:'RESET LIFE', resetBody:'양쪽 LP를 8000으로 되돌리고 TURN 1로 초기화합니다. WIN 카운트가 켜져 있으면 타이머를 유지하는 RESET에서 승자를 기록한 뒤 다음 GAME으로 진행합니다. 한쪽 LP가 0이면 승자를 자동 판정하고, 둘 다 0이 아니면 승자를 선택합니다. 타이머도 리셋하면 GAME 1·WIN 0으로 돌아가 새 매치 기록으로 초기화합니다. 토큰/카운터는 이름을 남기고 수치만 초기화합니다.', resetTimerToo:'타이머도 리셋', cancel:'취소', reset:'리셋', resetBoth:'LP와 타이머를 리셋했습니다', resetLP:'LP를 리셋했습니다', chooseWinnerTitle:'승자 선택', chooseWinnerBody:'이 GAME의 승자를 선택하세요. 선택한 플레이어의 WIN을 1 증가시키고 다음 GAME으로 진행합니다.', noWinner:'승자 없음', winRecorded:name=>`${name}: WIN +1`
     }
   };
   const t = (key, ...args) => {
@@ -2611,6 +3034,7 @@ button, input, select, textarea { max-width: 100%; }
       document.documentElement.dataset.font = fontFamily || 'system';
       document.documentElement.dataset.playerNames = playerNamesVisible === false ? 'off' : 'on';
       document.documentElement.dataset.turnOrder = turnOrderVisible === false ? 'off' : 'on';
+      document.documentElement.dataset.wins = Store.state.settings.winCountVisible === false ? 'off' : 'on';
       const bgPattern = dynamicBackgroundPattern || 'drift';
       document.documentElement.dataset.dynamicBg = bgPattern === 'off' ? 'off' : 'on';
       document.documentElement.dataset.bgPattern = bgPattern;
@@ -2672,11 +3096,18 @@ button, input, select, textarea { max-width: 100%; }
       UI.syncUndoButtons();
       toast(t('undoDone', entry.player.toUpperCase(), entry.before));
     },
-    reset(resetTimer) {
+    reset(resetTimer, winner = null) {
       const resetFrom = { p1: Store.state.lp.p1, p2: Store.state.lp.p2 };
       const resetAt = Timer.currentMs();
       const resetTurn = Math.max(1, Math.trunc(Store.state.turn || 1));
       const resetGame = Math.max(1, Math.trunc(Store.state.game || 1));
+      const winEnabled = Store.state.settings.winCountVisible !== false;
+
+      if (!resetTimer && winEnabled && (winner === 'p1' || winner === 'p2')) {
+        Store.state.wins[winner] = Math.max(0, Math.trunc(Store.state.wins?.[winner] || 0)) + 1;
+        const endedGame = (Store.state.gameStarts || []).find(item => Math.max(1, Math.trunc(item.game || 1)) === resetGame);
+        if (endedGame) endedGame.winner = winner;
+      }
 
       Store.state.lp.p1 = 8000;
       Store.state.lp.p2 = 8000;
@@ -2691,11 +3122,13 @@ button, input, select, textarea { max-width: 100%; }
       if (resetTimer) {
         // タイマーをリセットする場合は新しいマッチとしてGAME 1から再開する。
         Store.state.game = 1;
+        Store.state.wins = { p1: 0, p2: 0 };
         Store.state.history = [];
         Store.state.gameStarts = [{
           game: 1,
           timerMs: 0,
-          turnOrder: { ...Store.state.turnOrder }
+          turnOrder: { ...Store.state.turnOrder },
+          winner: null
         }];
         Store.state.lastChange = { p1: null, p2: null };
         Timer.reset();
@@ -2705,7 +3138,8 @@ button, input, select, textarea { max-width: 100%; }
         Store.state.gameStarts.push({
           game: Store.state.game,
           timerMs: resetAt,
-          turnOrder: { ...Store.state.turnOrder }
+          turnOrder: { ...Store.state.turnOrder },
+          winner: null
         });
         Store.state.lastChange = { p1: null, p2: null };
       }
@@ -2715,6 +3149,7 @@ button, input, select, textarea { max-width: 100%; }
       Store.save();
 
       UI.renderTurn();
+      UI.renderWins();
       UI.renderLP();
       if (resetFrom.p1 !== 8000) UI.animateLPChange('p1', resetFrom.p1, 8000);
       if (resetFrom.p2 !== 8000) UI.animateLPChange('p2', resetFrom.p2, 8000);
@@ -2963,13 +3398,42 @@ button, input, select, textarea { max-width: 100%; }
         const start = (Store.state.gameStarts || []).find(item => Math.max(1, Math.trunc(item.game || 1)) === game);
         const startTimerMs = Math.max(0, Math.trunc(start?.timerMs || 0));
         const orderBadge = role => role === 'first' ? '<div class="history-order first">FIRST</div>' : '';
+        const winner = Store.state.settings.winCountVisible !== false ? start?.winner : null;
         rows.push(`
           <tr>
-            <td><div class="history-cell p1 initial">${orderBadge(order.p1)}<div class="history-lp">8000</div></div></td>
+            <td class="${winner === 'p1' ? 'game-winner-cell' : ''}"><div class="history-cell p1 initial ${winner === 'p1' ? 'game-winner' : ''}">${orderBadge(order.p1)}<div class="history-lp">8000</div></div></td>
             <td class="time-col"><span class="history-time">${formatTime(startTimerMs)}</span></td>
-            <td><div class="history-cell p2 initial">${orderBadge(order.p2)}<div class="history-lp">8000</div></div></td>
+            <td class="${winner === 'p2' ? 'game-winner-cell' : ''}"><div class="history-cell p2 initial ${winner === 'p2' ? 'game-winner' : ''}">${orderBadge(order.p2)}<div class="history-lp">8000</div></div></td>
           </tr>`);
       };
+
+      if (Store.state.settings.winCountVisible !== false) {
+        const completedGames = (Store.state.gameStarts || []).filter(start => {
+          const gameNo = Math.max(1, Math.trunc(start?.game || 1));
+          return gameNo < Math.max(1, Math.trunc(Store.state.game || 1)) || !!start?.winner;
+        });
+        const statFor = player => {
+          const byRole = role => {
+            const games = completedGames.filter(start => (start?.turnOrder?.[player] || (player === 'p1' ? 'first' : 'second')) === role);
+            return { games: games.length, wins: games.filter(start => start?.winner === player).length };
+          };
+          const first = byRole('first');
+          const second = byRole('second');
+          const games = completedGames.length;
+          const wins = completedGames.filter(start => start?.winner === player).length;
+          const rate = games > 0 ? (wins / games) * 100 : 0;
+          const rateText = Number.isInteger(rate) ? `${rate.toFixed(0)}%` : `${rate.toFixed(1)}%`;
+          return { wins, rateText, first, second };
+        };
+        const statCell = player => {
+          const stat = statFor(player);
+          return `<div class="history-match-stat">
+            <div class="history-match-stat-main">WIN ${stat.wins} · ${stat.rateText}</div>
+            <div class="history-match-stat-split">(FIRST ${stat.first.wins}/${stat.first.games} · SECOND ${stat.second.wins}/${stat.second.games})</div>
+          </div>`;
+        };
+        rows.push(`<tr class="history-win-row"><td>${statCell('p1')}</td><td class="time-col">MATCH</td><td>${statCell('p2')}</td></tr>`);
+      }
 
       gameNumbers.forEach(game => {
         pushGameRow(game);
@@ -2977,6 +3441,8 @@ button, input, select, textarea { max-width: 100%; }
         pushInitialRow(game);
 
         let shownTurn = 1;
+        const gameStart = (Store.state.gameStarts || []).find(item => Math.max(1, Math.trunc(item.game || 1)) === game);
+        const gameWinner = Store.state.settings.winCountVisible !== false ? gameStart?.winner : null;
         entries.filter(h => Math.max(1, Math.trunc(h.game || 1)) === game).forEach(h => {
           const turn = Math.max(1, Math.trunc(h.turn || 1));
           if (shownTurn !== turn) {
@@ -2990,9 +3456,9 @@ button, input, select, textarea { max-width: 100%; }
             </div>`;
           rows.push(`
             <tr>
-              <td>${h.player === 'p1' ? cell : '<span class="history-empty-cell">—</span>'}</td>
+              <td class="${gameWinner === 'p1' ? 'game-winner-cell' : ''}">${h.player === 'p1' ? cell : '<span class="history-empty-cell">—</span>'}</td>
               <td class="time-col"><span class="history-time">${formatTime(h.timerMs || 0)}</span></td>
-              <td>${h.player === 'p2' ? cell : '<span class="history-empty-cell">—</span>'}</td>
+              <td class="${gameWinner === 'p2' ? 'game-winner-cell' : ''}">${h.player === 'p2' ? cell : '<span class="history-empty-cell">—</span>'}</td>
             </tr>`);
         });
       });
@@ -3014,7 +3480,8 @@ button, input, select, textarea { max-width: 100%; }
     clearConfirmed() {
       Store.state.history = [];
       Store.state.game = 1;
-      Store.state.gameStarts = [{ game: 1, timerMs: 0, turnOrder: { ...Store.state.turnOrder } }];
+      Store.state.gameStarts = [{ game: 1, timerMs: 0, turnOrder: { ...Store.state.turnOrder }, winner: null }];
+      Store.state.wins = { p1: 0, p2: 0 };
       Store.state.lastChange = { p1: null, p2: null };
       this.render();
       UI.renderLP();
@@ -3085,6 +3552,17 @@ body{margin:0;padding:24px;font-family:var(--font);-webkit-print-color-adjust:ex
   .history-table th,.history-table td{padding:8px 6px;}
 }
 
+@media (max-width: 430px) {
+  .game-display { min-width: 36px; gap: 1px; }
+  .game-display .game-label { font-size: 6px; }
+  .game-display .game-number { font-size: 19px; }
+}
+@media (max-width: 360px) {
+  .game-display { min-width: 32px; }
+  .game-display .game-label { font-size: 5px; }
+  .game-display .game-number { font-size: 17px; }
+}
+
 /* LIFE card outer breathing room: preserve existing screen-edge gutters. */
 .screen.life-screen {
   column-gap: clamp(8px, 1.6vw, 16px);
@@ -3106,6 +3584,28 @@ body{margin:0;padding:24px;font-family:var(--font);-webkit-print-color-adjust:ex
     padding-top: 7px;
     padding-bottom: 7px;
   }
+}
+</style>
+
+<style id="lp-center-fix">
+/* Keep LP numerals geometrically centered in each player panel regardless of
+   player-name / FIRST-SECOND / DOMINUS visibility. Status elements remain
+   overlays and no longer change the LP content box. */
+.lp-button {
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 12% !important;
+}
+.player-card.dominus-enabled .lp-button,
+html[data-turn-order="on"] .player-card .lp-button,
+html[data-player-names="off"] .lp-button {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.lp-number {
+  align-self: center !important;
+  justify-self: center !important;
+  text-align: center !important;
 }
 </style>
 </head>
@@ -3736,9 +4236,51 @@ ${printScript}
         </div>`, () => {
           $('#confirmReset').addEventListener('click', () => {
             const withTimer = $('#resetTimerCheck').checked;
-            LP.reset(withTimer);
+            const winEnabled = Store.state.settings.winCountVisible !== false;
+            if (withTimer || !winEnabled) {
+              LP.reset(withTimer, null);
+              Modal.close();
+              toast(withTimer ? t('resetBoth') : t('resetLP'));
+              return;
+            }
+
+            const p1Zero = Store.state.lp.p1 <= 0;
+            const p2Zero = Store.state.lp.p2 <= 0;
+            if (p1Zero !== p2Zero) {
+              const winner = p1Zero ? 'p2' : 'p1';
+              LP.reset(false, winner);
+              Modal.close();
+              toast(t('winRecorded', Store.state.names[winner]));
+              return;
+            }
+            this.chooseWinner();
+          });
+        });
+    },
+    chooseWinner() {
+      Modal.show(`
+        <div class="modal small" role="dialog" aria-modal="true" aria-label="${escapeHTML(t('chooseWinnerTitle'))}">
+          <div class="modal-head"><div class="modal-title">${escapeHTML(t('chooseWinnerTitle'))}</div><button class="close-btn" data-modal-close aria-label="${escapeHTML(t('close'))}">×</button></div>
+          <div class="confirm-text">${escapeHTML(t('chooseWinnerBody'))}</div>
+          <div class="winner-choice-grid">
+            <button type="button" class="winner-choice-btn p1" data-winner="p1"><strong>${escapeHTML(Store.state.names.p1)}</strong><span>WIN +1</span></button>
+            <button type="button" class="winner-choice-btn p2" data-winner="p2"><strong>${escapeHTML(Store.state.names.p2)}</strong><span>WIN +1</span></button>
+          </div>
+          <div class="modal-actions" style="margin-top:10px">
+            <button class="action-btn" data-modal-close>${escapeHTML(t('cancel'))}</button>
+            <button class="action-btn" id="resetWithoutWinner">${escapeHTML(t('noWinner'))}</button>
+          </div>
+        </div>`, () => {
+          $$('[data-winner]').forEach(btn => btn.addEventListener('click', () => {
+            const winner = btn.dataset.winner;
+            LP.reset(false, winner);
             Modal.close();
-            toast(withTimer ? t('resetBoth') : t('resetLP'));
+            toast(t('winRecorded', Store.state.names[winner]));
+          }));
+          $('#resetWithoutWinner')?.addEventListener('click', () => {
+            LP.reset(false, null);
+            Modal.close();
+            toast(t('resetLP'));
           });
         });
     },
@@ -3763,6 +4305,7 @@ ${printScript}
             Language.apply();
             Settings.render();
             UI.renderNames();
+            UI.renderWins();
             UI.renderDominusRestrictions();
             History.render();
             Timer.render();
@@ -3783,6 +4326,7 @@ ${printScript}
       $('#languageSelect').value = Store.state.settings.language || 'ja';
       $('#playerNamesVisibleSetting').checked = Store.state.settings.playerNamesVisible !== false;
       $('#turnOrderVisibleSetting').checked = Store.state.settings.turnOrderVisible !== false;
+      $('#winCountVisibleSetting').checked = Store.state.settings.winCountVisible !== false;
       $('#dominusVisibleSetting').checked = Store.state.settings.dominusVisible !== false;
       $('#dynamicBackgroundPatternSelect').value = Store.state.settings.dynamicBackgroundPattern || 'drift';
       $('#clockEnabledSetting').checked = Store.state.settings.clockEnabled !== false;
@@ -3833,6 +4377,14 @@ ${printScript}
         Store.state.settings.turnOrderVisible = e.target.checked;
         Store.save();
         Theme.apply();
+        History.render();
+        requestAnimationFrame(() => UI.fitAllLP());
+      });
+      $('#winCountVisibleSetting').addEventListener('change', e => {
+        Store.state.settings.winCountVisible = e.target.checked;
+        Store.save();
+        Theme.apply();
+        UI.renderWins();
         History.render();
         requestAnimationFrame(() => UI.fitAllLP());
       });
@@ -3923,12 +4475,27 @@ ${printScript}
       this.footerCollapsed = !this.footerCollapsed;
       this.updateChrome();
     },
+    renderWins() {
+      const enabled = Store.state.settings.winCountVisible !== false;
+      ['p1','p2'].forEach(player => {
+        const el = $(`#${player}WinDisplay`);
+        if (!el) return;
+        el.textContent = `WIN ${Math.max(0, Math.trunc(Store.state.wins?.[player] || 0))}`;
+        el.hidden = !enabled;
+      });
+    },
     renderTurn() {
       const el = $('#turnDisplay');
-      if (!el) return;
-      const number = el.querySelector('.turn-number');
-      if (number) number.textContent = String(Store.state.turn);
-      else el.innerHTML = `<span class="turn-label">TURN</span><span class="turn-number">${Store.state.turn}</span>`;
+      if (el) {
+        const number = el.querySelector('.turn-number');
+        if (number) number.textContent = String(Store.state.turn);
+        else el.innerHTML = `<span class="turn-label">TURN</span><span class="turn-number">${Store.state.turn}</span>`;
+      }
+      const gameEl = $('#gameDisplay');
+      if (gameEl) {
+        const gameNumber = gameEl.querySelector('.game-number');
+        if (gameNumber) gameNumber.textContent = String(Math.max(1, Math.trunc(Store.state.game || 1)));
+      }
     },
     nextTurn() {
       Store.state.turn = Math.max(1, Math.trunc(Store.state.turn || 1) + 1);
@@ -4193,6 +4760,7 @@ ${printScript}
       [Store.state.dominusManualRestrictions.p1, Store.state.dominusManualRestrictions.p2] = [Store.state.dominusManualRestrictions.p2, Store.state.dominusManualRestrictions.p1];
       [Store.state.dominusPresets.p1, Store.state.dominusPresets.p2] = [Store.state.dominusPresets.p2, Store.state.dominusPresets.p1];
       [Store.state.turnOrder.p1, Store.state.turnOrder.p2] = [Store.state.turnOrder.p2, Store.state.turnOrder.p1];
+      [Store.state.wins.p1, Store.state.wins.p2] = [Store.state.wins.p2, Store.state.wins.p1];
 
       Store.state.history = Store.state.history.map(entry => ({
         ...entry,
@@ -4200,7 +4768,8 @@ ${printScript}
       }));
       Store.state.gameStarts = (Store.state.gameStarts || []).map(start => ({
         ...start,
-        turnOrder: start.turnOrder ? { p1: start.turnOrder.p2, p2: start.turnOrder.p1 } : undefined
+        turnOrder: start.turnOrder ? { p1: start.turnOrder.p2, p2: start.turnOrder.p1 } : undefined,
+        winner: start.winner === 'p1' ? 'p2' : start.winner === 'p2' ? 'p1' : null
       }));
       Store.state.lastChange = {
         p1: Store.state.history.find(h => h.player === 'p1') || null,
@@ -4209,6 +4778,7 @@ ${printScript}
 
       Store.save();
       this.renderNames();
+      this.renderWins();
       this.renderTurn();
       this.renderTurnOrder();
       this.renderLP();
@@ -4330,7 +4900,7 @@ ${printScript}
         </button>`;
 
       Modal.show(`
-        <div class="modal small" role="dialog" aria-modal="true" aria-label="${escapeHTML(t('dominusTitle'))}">
+        <div class="modal small dominus-modal" role="dialog" aria-modal="true" aria-label="${escapeHTML(t('dominusTitle'))}">
           <div class="modal-head">
             <div>
               <div class="modal-title">${escapeHTML(t('dominusTitle'))}</div>
@@ -4470,6 +5040,7 @@ ${printScript}
     init() {
       $$('.utility-section, .settings-section').forEach(section => { section.open = false; });
       this.renderNames();
+      this.renderWins();
       this.renderTurn();
       this.renderTurnOrder();
       this.renderLP();
@@ -4629,5 +5200,109 @@ ${printScript}
     height: 30px;
     border-radius: 8px;
   }
+}
+</style>
+
+<style>
+/* v1.1.1 UI refinement: player header tint + DOMINUS editor typography */
+.player-head {
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  min-height: clamp(30px, 6.2vw, 42px);
+  padding: clamp(5px, 1.15vw, 8px) clamp(9px, 2vw, 14px);
+  border-bottom: 1px solid color-mix(in srgb, var(--player-color) 62%, var(--border));
+  background:
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--player-color) 62%, var(--surface)) 0%,
+      color-mix(in srgb, var(--player-color) 38%, var(--surface)) 58%,
+      color-mix(in srgb, var(--player-color) 22%, var(--surface)) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.player-head::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--player-color);
+}
+.player-name {
+  max-width: 100% !important;
+  text-shadow: 0 1px 1px color-mix(in srgb, var(--surface) 45%, transparent);
+}
+html[data-mode="dark"] .player-head {
+  background:
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--player-color) 52%, var(--surface)) 0%,
+      color-mix(in srgb, var(--player-color) 30%, var(--surface)) 58%,
+      color-mix(in srgb, var(--player-color) 16%, var(--surface)) 100%);
+}
+html[data-theme="high-contrast"] .player-head {
+  background: var(--surface);
+  border-bottom: 2px solid var(--text);
+}
+html[data-theme="high-contrast"] .player-head::after { width: 6px; }
+
+/* Keep WIN clear of the now taller colored header. */
+.player-win-row {
+  top: clamp(34px, 7vw, 46px) !important;
+}
+html[data-player-names="off"] .player-win-row { top: 5px !important; }
+
+/* DOMINUS editor: scale typography with the large modal instead of staying tiny. */
+.dominus-modal .modal-title {
+  font-size: clamp(22px, min(5.2vw, 4.2dvh), 34px) !important;
+  letter-spacing: .055em;
+}
+.dominus-modal .calc-player {
+  font-size: clamp(13px, min(3.3vw, 2.55dvh), 18px) !important;
+  line-height: 1.15;
+}
+.dominus-modal .confirm-text {
+  font-size: clamp(13px, min(3.1vw, 2.35dvh), 17px) !important;
+  line-height: 1.28 !important;
+}
+.dominus-modal .dominus-choice {
+  font-size: clamp(21px, min(5.8vw, 4.2dvh), 31px) !important;
+}
+.dominus-modal .dominus-choice-label {
+  font-size: clamp(11px, min(2.9vw, 2.05dvh), 15px) !important;
+  line-height: 1.1 !important;
+}
+.dominus-modal .dominus-preset-title {
+  font-size: clamp(12px, min(3vw, 2.1dvh), 16px) !important;
+}
+.dominus-modal .dominus-preset-jp {
+  font-size: clamp(12px, min(3.15vw, 2.25dvh), 17px) !important;
+  line-height: 1.16 !important;
+}
+.dominus-modal .dominus-preset-en {
+  font-size: clamp(10px, min(2.65vw, 1.9dvh), 14px) !important;
+  line-height: 1.12 !important;
+}
+.dominus-modal .dominus-preset-attrs {
+  font-size: clamp(10px, min(2.55vw, 1.8dvh), 13px) !important;
+  line-height: 1.12 !important;
+}
+.dominus-modal .modal-actions .action-btn {
+  font-size: clamp(13px, min(3.1vw, 2.15dvh), 17px) !important;
+  font-weight: 900;
+}
+
+/* Short landscape still remains scroll-free, but text no longer collapses to unreadable sizes. */
+@media (orientation: landscape) and (max-height: 430px) {
+  .dominus-modal .modal-title { font-size: clamp(16px, 4.4dvh, 20px) !important; }
+  .dominus-modal .calc-player { font-size: clamp(10px, 2.8dvh, 13px) !important; }
+  .dominus-modal .confirm-text { font-size: clamp(10px, 2.65dvh, 13px) !important; line-height: 1.1 !important; }
+  .dominus-modal .dominus-choice { font-size: clamp(16px, 4.2dvh, 20px) !important; }
+  .dominus-modal .dominus-choice-label { font-size: clamp(8px, 2.25dvh, 11px) !important; }
+  .dominus-modal .dominus-preset-title { font-size: clamp(9px, 2.4dvh, 12px) !important; }
+  .dominus-modal .dominus-preset-jp { font-size: clamp(9px, 2.5dvh, 12px) !important; }
+  .dominus-modal .dominus-preset-en,
+  .dominus-modal .dominus-preset-attrs { font-size: clamp(8px, 2.1dvh, 10px) !important; }
+  .dominus-modal .modal-actions .action-btn { font-size: clamp(10px, 2.5dvh, 13px) !important; }
 }
 </style>
