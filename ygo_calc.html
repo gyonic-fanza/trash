@@ -54,84 +54,86 @@ html[data-mode="dark"] {
   --tap: rgba(255,255,255,.08);
 }
 
-html[data-theme="red"] {
-  --accent: #a61e2d;
-  --p1: #8f2431;
-  --p2: #5f4044;
+html[data-theme="ritual"] {
+  /* Ritual Monster frame: deep ceremonial blue */
+  --accent: #2f6f9f;
+  --p1: #347fae;
+  --p2: #285b82;
 }
-html[data-theme="blue"] {
-  --accent: #1e5ea8;
-  --p1: #1e66b3;
-  --p2: #415f80;
+html[data-theme="fusion"] {
+  /* Fusion Monster frame: violet / purple */
+  --accent: #6d3f91;
+  --p1: #8050a6;
+  --p2: #593573;
 }
-html[data-theme="green"] {
-  --accent: #237a4b;
-  --p1: #2f8757;
-  --p2: #4f6f5d;
+html[data-theme="synchro"] {
+  /* Synchro Monster frame: white / silver */
+  --accent: #7f8998;
+  --p1: #aeb6c2;
+  --p2: #7b8491;
 }
-html[data-theme="purple"] {
-  --accent: #7045a8;
-  --p1: #7650a8;
-  --p2: #5e5278;
+html[data-theme="synchro"][data-mode="dark"] {
+  --accent: #d6dbe2;
+  --p1: #aeb7c4;
+  --p2: #7d8795;
+  --accent-contrast: #111318;
 }
-html[data-theme="amber"] {
-  --accent: #9a6500;
-  --p1: #a96d00;
-  --p2: #7a6541;
+html[data-theme="xyz"] {
+  /* Xyz Monster frame: black / graphite */
+  --accent: #30323a;
+  --p1: #474a55;
+  --p2: #666a77;
 }
-html[data-theme="teal"] {
-  --accent: #087a7a;
-  --p1: #0c8585;
-  --p2: #426f73;
+html[data-theme="xyz"][data-mode="dark"] {
+  --accent: #d4d6dc;
+  --p1: #555965;
+  --p2: #737885;
+  --accent-contrast: #111318;
 }
-html[data-theme="versus"] {
-  --accent: #6c4aa3;
-  --p1: #b22a3a;
-  --p2: #2368b5;
+html[data-theme="pendulum"] {
+  /* Pendulum frame: emerald base with scale-like cyan/magenta contrast */
+  --accent: #16866f;
+  --p1: #148f9b;
+  --p2: #9a4f86;
 }
-html[data-theme="monochrome"] {
-  --accent: #111111;
-  --p1: #343434;
-  --p2: #666666;
+html[data-theme="link"] {
+  /* Link Monster frame: vivid circuit blue */
+  --accent: #155cc7;
+  --p1: #176fd1;
+  --p2: #244f92;
 }
-html[data-theme="monochrome"][data-mode="dark"] {
-  --bg: #090909;
-  --surface: #171717;
-  --surface-2: #292929;
-  --text: #f7f7f7;
-  --muted: #c3c3c3;
-  --border: rgba(255,255,255,.22);
-  --accent: #f2f2f2;
-  --accent-contrast: #111111;
-  --p1: #d8d8d8;
-  --p2: #929292;
-}
-html[data-theme="monochrome"][data-mode="dark"] .player-card.p1,
-html[data-theme="monochrome"][data-mode="dark"] .player-card.p2 { color: var(--text); }
 html[data-theme="high-contrast"] {
+  /* Accessibility theme kept separate from summon-method themes. */
   --bg: #ffffff;
   --surface: #ffffff;
-  --surface-2: #f0f0f0;
+  --surface-2: #f2f2f2;
   --text: #000000;
-  --muted: #222222;
+  --muted: #202020;
   --border: #000000;
   --accent: #000000;
   --accent-contrast: #ffffff;
-  --p1: #003e7e;
-  --p2: #7c2500;
+  --p1: #0057b8;
+  --p2: #b53b00;
+  --danger: #a00000;
+  --success: #005f2f;
   --shadow: none;
+  --tap: rgba(0,0,0,.12);
 }
 html[data-theme="high-contrast"][data-mode="dark"] {
   --bg: #000000;
   --surface: #000000;
-  --surface-2: #121212;
+  --surface-2: #151515;
   --text: #ffffff;
-  --muted: #dedede;
+  --muted: #e8e8e8;
   --border: #ffffff;
   --accent: #ffffff;
   --accent-contrast: #000000;
-  --p1: #5bb8ff;
-  --p2: #ff9d75;
+  --p1: #5cb8ff;
+  --p2: #ff9a66;
+  --danger: #ff8f8f;
+  --success: #8ff0ae;
+  --shadow: none;
+  --tap: rgba(255,255,255,.14);
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -425,9 +427,87 @@ html[data-dynamic-bg="on"] .screen.life-screen {
     color-mix(in srgb, var(--p2) 8%, transparent) 50% 100%);
 }
 
+
+/* Theme-linked motion layer. The selected background pattern remains active,
+   while each summon-method theme adds its own recognizable motif. */
+.main::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: -18%;
+  pointer-events: none;
+  opacity: 0;
+  background-repeat: repeat;
+  will-change: transform, background-position, opacity;
+}
+.screen { position: relative; z-index: 1; }
+
+html[data-dynamic-bg="on"][data-theme="ritual"] .main::before {
+  opacity: .34;
+  background:
+    repeating-radial-gradient(circle at 50% 50%, transparent 0 34px, color-mix(in srgb, var(--accent) 54%, transparent) 36px 39px, transparent 41px 70px),
+    conic-gradient(from 0deg at 50% 50%, transparent 0 10%, color-mix(in srgb, var(--accent) 34%, transparent) 12% 14%, transparent 16% 35%, color-mix(in srgb, var(--p1) 28%, transparent) 37% 39%, transparent 41% 60%, color-mix(in srgb, var(--p2) 28%, transparent) 62% 64%, transparent 66% 100%);
+  animation: themeRitualOrbit 22s linear infinite;
+}
+html[data-dynamic-bg="on"][data-theme="fusion"] .main::before {
+  opacity: .40;
+  background:
+    conic-gradient(from 0deg at 50% 50%, transparent 0 8%, color-mix(in srgb, var(--p1) 56%, transparent) 12% 18%, transparent 24% 42%, color-mix(in srgb, var(--p2) 56%, transparent) 48% 55%, transparent 62% 100%),
+    radial-gradient(circle at 50% 50%, transparent 0 20%, color-mix(in srgb, var(--accent) 35%, transparent) 35%, transparent 62%);
+  filter: blur(4px) saturate(1.35);
+  animation: themeFusionVortex 15s linear infinite;
+}
+html[data-dynamic-bg="on"][data-theme="synchro"] .main::before {
+  opacity: .46;
+  inset: -10% -40%;
+  background: repeating-linear-gradient(115deg, transparent 0 42px, color-mix(in srgb, #ffffff 62%, transparent) 44px 47px, transparent 49px 88px, color-mix(in srgb, var(--accent) 34%, transparent) 90px 92px, transparent 94px 132px);
+  animation: themeSynchroLines 8s linear infinite;
+}
+html[data-dynamic-bg="on"][data-theme="xyz"] .main::before {
+  opacity: .48;
+  background-image:
+    radial-gradient(circle, color-mix(in srgb, var(--text) 74%, transparent) 0 1.6px, transparent 2px),
+    radial-gradient(circle, color-mix(in srgb, var(--accent) 58%, transparent) 0 1.2px, transparent 1.8px);
+  background-size: 46px 46px, 71px 71px;
+  background-position: 0 0, 18px 27px;
+  animation: themeXyzParticles 18s linear infinite;
+}
+html[data-dynamic-bg="on"][data-theme="pendulum"] .main::before {
+  opacity: .46;
+  inset: -10% -25%;
+  background:
+    linear-gradient(118deg, transparent 0 36%, color-mix(in srgb, var(--p1) 62%, transparent) 42% 48%, transparent 54% 100%),
+    linear-gradient(62deg, transparent 0 36%, color-mix(in srgb, var(--p2) 62%, transparent) 42% 48%, transparent 54% 100%);
+  animation: themePendulumCross 10s linear infinite;
+}
+html[data-dynamic-bg="on"][data-theme="link"] .main::before {
+  opacity: .48;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--accent) 42%, transparent) 1px, transparent 1px),
+    linear-gradient(0deg, color-mix(in srgb, var(--accent) 42%, transparent) 1px, transparent 1px),
+    radial-gradient(circle, color-mix(in srgb, #ffffff 74%, transparent) 0 2px, transparent 2.6px);
+  background-size: 42px 42px, 42px 42px, 84px 84px;
+  animation: themeLinkGrid 12s linear infinite;
+}
+html[data-dynamic-bg="on"][data-theme="high-contrast"] .main::before {
+  opacity: .26;
+  inset: -10% -30%;
+  background: repeating-linear-gradient(135deg, transparent 0 30px, currentColor 31px 33px, transparent 34px 64px);
+  color: var(--text);
+  animation: themeHighContrast 14s linear infinite;
+}
+@keyframes themeRitualOrbit { from { transform: rotate(0deg) scale(1.02); } to { transform: rotate(360deg) scale(1.02); } }
+@keyframes themeFusionVortex { from { transform: rotate(0deg) scale(1.08); } to { transform: rotate(-360deg) scale(1.08); } }
+@keyframes themeSynchroLines { from { background-position: 0 0; transform: translateX(-5%); } to { background-position: 360px 0; transform: translateX(-5%); } }
+@keyframes themeXyzParticles { from { background-position: 0 0, 18px 27px; } to { background-position: 184px 138px, -124px 169px; } }
+@keyframes themePendulumCross { from { background-position: -180px 0, 180px 0; } to { background-position: 180px 0, -180px 0; } }
+@keyframes themeLinkGrid { from { background-position: 0 0, 0 0, 0 0; } to { background-position: 84px 42px, 84px 42px, 168px 84px; } }
+@keyframes themeHighContrast { from { background-position: 0 0; } to { background-position: 180px 0; } }
+
 @media (prefers-reduced-motion: reduce) {
   html[data-dynamic-bg="on"] .app::before,
-  html[data-dynamic-bg="on"] .app::after { animation: none !important; }
+  html[data-dynamic-bg="on"] .app::after,
+  html[data-dynamic-bg="on"] .main::before { animation: none !important; }
 }
 
 html[data-player-names="off"] .player-head { display: none; }
@@ -672,6 +752,41 @@ html[data-clock-format="datetime12s"] .header-clock { font-size: clamp(9px, 1.95
   background: color-mix(in srgb, var(--surface) 68%, transparent);
   color: var(--text);
 }
+/* Non-color cues for first/second status. */
+.turn-order-btn::before {
+  display: inline-block;
+  margin-right: .42em;
+  font-size: .82em;
+  line-height: 1;
+  font-weight: 1000;
+}
+.turn-order-btn.first {
+  border-width: 2px;
+  border-style: solid;
+  box-shadow: inset 0 -3px 0 rgba(255,255,255,.34), 0 2px 8px rgba(0,0,0,.12);
+}
+.turn-order-btn.first::before { content: "▶"; }
+.turn-order-btn.second {
+  border-width: 2px;
+  border-style: dashed;
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--text) 12%, transparent);
+}
+.turn-order-btn.second::before { content: "○"; }
+html[data-theme="high-contrast"] .player-card,
+html[data-theme="high-contrast"] .panel,
+html[data-theme="high-contrast"] .history-table-wrap,
+html[data-theme="high-contrast"] .utility-section,
+html[data-theme="high-contrast"] .token-card,
+html[data-theme="high-contrast"] .counter-row {
+  border-width: 2px;
+  box-shadow: none !important;
+}
+html[data-theme="high-contrast"] .action-btn,
+html[data-theme="high-contrast"] .header-action-btn,
+html[data-theme="high-contrast"] .nav-btn,
+html[data-theme="high-contrast"] .dominus-zone {
+  border-width: 2px;
+}
 html[data-turn-order="off"] .turn-order-btn { display: none !important; }
 html[data-turn-order="off"] .history-order { display: none !important; }
 html[data-turn-order="off"] .player-head { right: 7px; }
@@ -745,6 +860,45 @@ html[data-turn-order="off"] .player-head { right: 7px; }
   background: #ff3b30;
   transform: rotate(-34deg);
   box-shadow: 0 0 0 1px rgba(255,255,255,.28);
+}
+/* Blocked state stays recognizable without relying on hue. */
+.dominus-icon {
+  border-style: double;
+  border-width: 3px;
+  outline: 1px solid color-mix(in srgb, var(--text) 68%, transparent);
+  outline-offset: 1px;
+}
+.dominus-icon::before {
+  content: "×";
+  position: absolute;
+  right: -4px;
+  top: -5px;
+  width: 14px;
+  height: 14px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid currentColor;
+  font-size: 10px;
+  font-weight: 1000;
+  line-height: 1;
+}
+.dominus-choice { position: relative; }
+.dominus-choice[aria-pressed="true"] {
+  outline: 3px double var(--text);
+  outline-offset: 2px;
+}
+.dominus-choice[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  width: 118%;
+  height: 3px;
+  border-radius: 3px;
+  background: currentColor;
+  transform: rotate(-34deg);
+  box-shadow: 0 0 0 1px var(--surface);
 }
 .dominus-choice {
   cursor: pointer;
@@ -2041,7 +2195,7 @@ button, input, select, textarea { max-width: 100%; }
       </details>
 
       <details class="panel settings-section">
-        <summary data-i18n="settingsDisplay">表示・操作</summary>
+        <summary data-i18n="settingsAppearance">外観</summary>
         <div class="settings-section-body">
           <div class="setting-row">
             <div>
@@ -2060,16 +2214,7 @@ button, input, select, textarea { max-width: 100%; }
               <div class="setting-desc" data-i18n="themeDesc">配色テーマを選択</div>
             </div>
             <select id="themeSelect">
-              <option value="standard">STANDARD</option>
-              <option value="red">RED</option>
-              <option value="blue">BLUE</option>
-              <option value="green">GREEN</option>
-              <option value="purple">PURPLE</option>
-              <option value="amber">AMBER</option>
-              <option value="teal">TEAL</option>
-              <option value="versus">VERSUS</option>
-              <option value="monochrome">MONOCHROME</option>
-              <option value="high-contrast">HIGH CONTRAST</option>
+              <option value="standard">STANDARD</option><option value="ritual">RITUAL</option><option value="fusion">FUSION</option><option value="synchro">SYNCHRO</option><option value="xyz">XYZ</option><option value="pendulum">PENDULUM</option><option value="link">LINK</option><option value="high-contrast">HIGH CONTRAST</option>
             </select>
           </div>
           <div class="setting-row">
@@ -2078,13 +2223,7 @@ button, input, select, textarea { max-width: 100%; }
               <div class="setting-desc" data-i18n="fontFamilyDesc">表示フォントを選択</div>
             </div>
             <select id="fontFamilySelect">
-              <option value="system">SYSTEM</option>
-              <option value="orbitron">ORBITRON</option>
-              <option value="rajdhani">RAJDHANI</option>
-              <option value="sans">NOTO SANS</option>
-              <option value="serif">NOTO SERIF</option>
-              <option value="mono">ROBOTO MONO</option>
-              <option value="rounded">M PLUS ROUNDED</option>
+              <option value="system">SYSTEM</option><option value="orbitron">ORBITRON</option><option value="rajdhani">RAJDHANI</option><option value="sans">NOTO SANS</option><option value="serif">NOTO SERIF</option><option value="mono">ROBOTO MONO</option><option value="rounded">M PLUS ROUNDED</option>
             </select>
           </div>
           <div class="setting-row">
@@ -2093,80 +2232,30 @@ button, input, select, textarea { max-width: 100%; }
               <div class="setting-desc" data-i18n="dynamicBackgroundPatternDesc">OFFまたは動き方を選択</div>
             </div>
             <select id="dynamicBackgroundPatternSelect">
-              <option value="off">OFF</option>
-              <option value="drift">DRIFT</option>
-              <option value="aurora">AURORA</option>
-              <option value="waves">WAVES</option>
-              <option value="pulse">PULSE</option>
-              <option value="nebula">NEBULA</option>
-              <option value="beams">BEAMS</option>
-              <option value="orbit">ORBIT</option>
-              <option value="duel">DUEL</option>
-            </select>
-          </div>
-          <div class="setting-row">
-            <div>
-              <div class="setting-label" data-i18n="language">言語</div>
-              <div class="setting-desc" data-i18n="languageDesc">表示言語を選択</div>
-            </div>
-            <select id="languageSelect">
-              <option value="ja">日本語</option>
-              <option value="en">English</option>
-              <option value="ko">한국어</option>
+              <option value="off">OFF</option><option value="drift">DRIFT</option><option value="aurora">AURORA</option><option value="waves">WAVES</option><option value="pulse">PULSE</option><option value="nebula">NEBULA</option><option value="beams">BEAMS</option><option value="orbit">ORBIT</option><option value="duel">DUEL</option>
             </select>
           </div>
         </div>
       </details>
 
       <details class="panel settings-section">
-        <summary data-i18n="settingsTimerScreen">タイマー・画面</summary>
+        <summary data-i18n="settingsDuelDisplay">ヘッダー・対戦表示</summary>
         <div class="settings-section-body">
           <div class="setting-row">
             <div>
               <div class="setting-label" data-i18n="clockDisplay">時計表示</div>
               <div class="setting-desc" data-i18n="clockDisplayDesc">ヘッダー左端に現在時刻を表示</div>
             </div>
-            <label class="switch">
-              <input type="checkbox" id="clockEnabledSetting" checked />
-              <span class="slider"></span>
-            </label>
+            <label class="switch"><input type="checkbox" id="clockEnabledSetting" checked /><span class="slider"></span></label>
           </div>
           <div class="setting-row">
             <div>
               <div class="setting-label" data-i18n="clockFormat">時計形式</div>
-              <div class="setting-desc" data-i18n="clockFormatDesc">24時間表記または12時間表記</div>
+              <div class="setting-desc" data-i18n="clockFormatDesc">時刻・秒・日付を含む表示形式を選択</div>
             </div>
             <select id="clockFormatSelect">
-              <option value="24h">HH:MM</option>
-              <option value="24hs">HH:MM:SS</option>
-              <option value="12h">h:MM AM/PM</option>
-              <option value="12hs">h:MM:SS AM/PM</option>
-              <option value="date">yyyy/mm/dd</option>
-              <option value="datetime24">yyyy/mm/dd HH:MM</option>
-              <option value="datetime24s">yyyy/mm/dd HH:MM:SS</option>
-              <option value="datetime12">yyyy/mm/dd h:MM AM/PM</option>
-              <option value="datetime12s">yyyy/mm/dd h:MM:SS AM/PM</option>
+              <option value="24h">HH:MM</option><option value="24hs">HH:MM:SS</option><option value="12h">h:MM AM/PM</option><option value="12hs">h:MM:SS AM/PM</option><option value="date">yyyy/mm/dd</option><option value="datetime24">yyyy/mm/dd HH:MM</option><option value="datetime24s">yyyy/mm/dd HH:MM:SS</option><option value="datetime12">yyyy/mm/dd h:MM AM/PM</option><option value="datetime12s">yyyy/mm/dd h:MM:SS AM/PM</option>
             </select>
-          </div>
-          <div class="setting-row">
-            <div>
-              <div class="setting-label" data-i18n="wakeLock">画面スリープ防止</div>
-              <div class="setting-desc" data-i18n="wakeLockDesc">対応ブラウザで対戦中の画面スリープを防止</div>
-            </div>
-            <label class="switch">
-              <input type="checkbox" id="wakeLockSetting" checked />
-              <span class="slider"></span>
-            </label>
-          </div>
-          <div class="setting-row">
-            <div>
-              <div class="setting-label" data-i18n="orientationLock">画面向き固定</div>
-              <div class="setting-desc" data-i18n="orientationLockDesc">現在の縦／横向きを固定（対応ブラウザのみ）</div>
-            </div>
-            <label class="switch">
-              <input type="checkbox" id="orientationLockSetting" />
-              <span class="slider"></span>
-            </label>
           </div>
           <div class="setting-row">
             <div>
@@ -2186,9 +2275,38 @@ button, input, select, textarea { max-width: 100%; }
       </details>
 
       <details class="panel settings-section">
-        <summary data-i18n="settingsData">設定データ</summary>
-        <div class="settings-section-body" style="padding-top:12px;padding-bottom:12px">
-          <button class="settings-danger" id="clearAllSettings" data-i18n="clearAllSettings">全ての設定を削除</button>
+        <summary data-i18n="settingsDevice">端末</summary>
+        <div class="settings-section-body">
+          <div class="setting-row">
+            <div>
+              <div class="setting-label" data-i18n="wakeLock">画面スリープ防止</div>
+              <div class="setting-desc" data-i18n="wakeLockDesc">対応ブラウザで対戦中の画面スリープを防止</div>
+            </div>
+            <label class="switch"><input type="checkbox" id="wakeLockSetting" checked /><span class="slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label" data-i18n="orientationLock">画面向き固定</div>
+              <div class="setting-desc" data-i18n="orientationLockDesc">現在の縦／横向きを固定（対応ブラウザのみ）</div>
+            </div>
+            <label class="switch"><input type="checkbox" id="orientationLockSetting" /><span class="slider"></span></label>
+          </div>
+        </div>
+      </details>
+
+      <details class="panel settings-section">
+        <summary data-i18n="settingsGeneral">言語・データ</summary>
+        <div class="settings-section-body">
+          <div class="setting-row">
+            <div>
+              <div class="setting-label" data-i18n="language">言語</div>
+              <div class="setting-desc" data-i18n="languageDesc">表示言語を選択</div>
+            </div>
+            <select id="languageSelect"><option value="ja">日本語</option><option value="en">English</option><option value="ko">한국어</option></select>
+          </div>
+          <div style="padding:12px 0 6px">
+            <button class="settings-danger" id="clearAllSettings" data-i18n="clearAllSettings">全ての設定を削除</button>
+          </div>
         </div>
       </details>
 
@@ -2200,6 +2318,7 @@ button, input, select, textarea { max-width: 100%; }
           <div class="manual-chapter"><h3 data-i18n="manualControlsShortTitle">操作</h3><p data-i18n="manualHeader">ヘッダーからP1/P2入れ替え、UNDO、対戦リセットを操作できます。ヘッダーとフッターは開閉できます。</p></div>
           <div class="manual-chapter"><h3 data-i18n="manualUtilityTitle">UTILITY</h3><p data-i18n="manualUtility">コイントス、ダイス、トークン、カードカウンター、メモを利用できます。</p></div>
           <div class="manual-chapter"><h3 data-i18n="manualStorageShortTitle">保存</h3><p data-i18n="manualStorageShort">永続保存されるのはプレイヤー名と設定のみです。LPや履歴、UTILITYの対戦情報は再読み込みで初期化されます。</p></div>
+          <div class="manual-chapter"><h3 data-i18n="manualHomeTitle">ホーム画面から使う</h3><p data-i18n="manualHome">iPhone / iPadではSafariの共有メニューから「ホーム画面に追加」を選ぶと、ホーム画面からアプリのように起動できます。AndroidではChrome等でメニューから「ホーム画面に追加」または「アプリをインストール」を選択します。端末やブラウザによって項目名・表示方法・対応機能が異なる場合があります。</p></div>
           <div class="manual-chapter manual-version manual-changelog">
             <h3 data-i18n="manualVersionTitle">VERSION / 更新履歴</h3>
             <p><strong>v1.1.1</strong> <span class="manual-version-date" data-i18n="manualVersionDateV111">2026/08/21</span></p>
@@ -2207,6 +2326,9 @@ button, input, select, textarea { max-width: 100%; }
               <li data-i18n="manualChangelogV111A">端末・ブラウザ差による要素重なりを抑えるレスポンシブレイアウト補正を追加</li>
               <li data-i18n="manualChangelogV111B">LP表示の自動フィット処理を強化し、プレビュー環境を含めて枠内へ収まるよう改善</li>
               <li data-i18n="manualChangelogV111C">DOMINUS制約アイコンを基本1行表示とし、必要時のみ自動折り返しするよう変更</li>
+              <li data-i18n="manualChangelogV111D">デザインテーマを儀式・融合・シンクロ・エクシーズ・ペンデュラム・リンクの召喚法モチーフへ再編</li>
+              <li data-i18n="manualChangelogV111E">召喚法テーマごとの専用背景演出を追加し、HIGH CONTRASTテーマを復活</li>
+              <li data-i18n="manualChangelogV111F">DOMINUS制約とFIRST / SECOND表示を色だけに依存しない形状・線種表現へ改善</li>
             </ul>
             <p><strong>v1.1.0</strong> <span class="manual-version-date" data-i18n="manualVersionDateV110">2026/08/21</span></p>
             <ul>
@@ -2305,6 +2427,8 @@ button, input, select, textarea { max-width: 100%; }
         }
         delete this.state.settings.dynamicBackground;
         delete this.state.settings.backgroundAnimation;
+        const validThemes = new Set(['standard', 'ritual', 'fusion', 'synchro', 'xyz', 'pendulum', 'link', 'high-contrast']);
+        if (!validThemes.has(this.state.settings.theme)) this.state.settings.theme = 'standard';
         // 対戦情報は保持せず、旧バージョンで保存された値も読み戻さない。
         this.save();
       } catch (_) {
@@ -2353,12 +2477,12 @@ button, input, select, textarea { max-width: 100%; }
       utilityPrompt:'コインまたはダイスを実行してください。', tossing:'トス中…', rolling:'ロール中…', heads:'表', tails:'裏', total:'合計',
       tokenMemo:'トークンメモ', addToken:'＋ トークンを追加', tokenDefault:'トークン', tokenName:'トークン名', deleteToken:'このトークンを削除',
       cardCounters:'カードカウンター', addCard:'＋ カードを追加', cardName:'カード名', deleteCard:'このカードを削除', counterCount:'カウンター数', counterMinus:'カウンターを1減らす', counterPlus:'カウンターを1増やす', counterEmpty:'「＋ カードを追加」からカウンターを記録するカードを追加できます。', duelMemo:'メモ', memoPlaceholder:'対戦中の確認事項などを自由に入力', clearMemo:'メモを消去', memoCleared:'メモを消去しました',
-      player1Name:'PLAYER 1 名', player2Name:'PLAYER 2 名', savedBrowser:'ブラウザに保存します', appearance:'表示モード', appearanceDesc:'OS設定または明暗を選択', designTheme:'デザインテーマ', themeDesc:'配色テーマを選択', fontFamily:'フォント', fontFamilyDesc:'LP・ヘッダーを含む表示フォントを選択', playerNameDisplay:'プレイヤー名表示', playerNameDisplayDesc:'基本画面のプレイヤー名を表示', turnOrderDisplay:'先攻・後攻表示', turnOrderDisplayDesc:'LIFE・HISTORYのFIRST / SECOND表示を使用', dominusDisplay:'ドミナス制約表示', dominusDisplayDesc:'LIFE画面の属性制約表示を使用', dynamicBackground:'背景効果', dynamicBackgroundDesc:'テーマ色に連動した背景効果', backgroundAnimation:'背景アニメーション', backgroundAnimationDesc:'背景効果を残したまま動きだけ停止', dynamicBackgroundPattern:'背景アニメーション', dynamicBackgroundPatternDesc:'OFFまたはループアニメーションを選択', clockDisplay:'時計表示', clockDisplayDesc:'ヘッダー左端に現在時刻を表示', clockFormat:'時計形式', clockFormatDesc:'時刻・秒・日付を含む表示形式を選択', language:'言語', languageDesc:'表示言語を選択', system:'システム', light:'ライト', dark:'ダーク',
+      player1Name:'PLAYER 1 名', player2Name:'PLAYER 2 名', savedBrowser:'ブラウザに保存します', appearance:'表示モード', appearanceDesc:'OS設定または明暗を選択', designTheme:'デザインテーマ', themeDesc:'召喚法テーマまたは高コントラスト配色を選択', fontFamily:'フォント', fontFamilyDesc:'LP・ヘッダーを含む表示フォントを選択', playerNameDisplay:'プレイヤー名表示', playerNameDisplayDesc:'基本画面のプレイヤー名を表示', turnOrderDisplay:'先攻・後攻表示', turnOrderDisplayDesc:'LIFE・HISTORYのFIRST / SECOND表示を使用', dominusDisplay:'ドミナス制約表示', dominusDisplayDesc:'LIFE画面の属性制約表示を使用', dynamicBackground:'背景効果', dynamicBackgroundDesc:'テーマ色に連動した背景効果', backgroundAnimation:'背景アニメーション', backgroundAnimationDesc:'背景効果を残したまま動きだけ停止', dynamicBackgroundPattern:'背景アニメーション', dynamicBackgroundPatternDesc:'OFFまたはループアニメーションを選択', clockDisplay:'時計表示', clockDisplayDesc:'ヘッダー左端に現在時刻を表示', clockFormat:'時計形式', clockFormatDesc:'時刻・秒・日付を含む表示形式を選択', language:'言語', languageDesc:'表示言語を選択', system:'システム', light:'ライト', dark:'ダーク',
       timer:'対戦タイマー', timerStart:'タイマー開始', timerPause:'タイマー一時停止', timerResume:'タイマー再開', collapseHeader:'ヘッダーを閉じる', expandHeader:'ヘッダーを開く', collapseFooter:'フッターを閉じる', expandFooter:'フッターを開く', undo:'1操作元に戻す', resetMatch:'対戦をリセット', swapPlayers:'P1とP2を入れ替え', playersSwapped:'P1とP2を入れ替えました', wakeLock:'画面スリープ防止', wakeLockDesc:'対応ブラウザで対戦中の画面スリープを防止', wakeUnsupported:'このブラウザは画面スリープ防止に対応していません', orientationLock:'画面向き固定', orientationLockDesc:'現在の縦／横向きを固定（対応ブラウザのみ）', orientationUnsupported:'このブラウザは画面向き固定に対応していません', orientationLockFailed:'画面向きを固定できませんでした。ブラウザによってはフルスクリーンが必要です', orientationLocked:'現在の画面向きを固定しました', orientationUnlocked:'画面向き固定を解除しました',
       historyAria:'LP変更履歴', historyExportTitle:'HISTORYを書き出す', historyExportHtml:'HTML', historyExportHtmlDesc:'表示用HTMLファイル', historyExportPdf:'PDF', historyExportPdfDesc:'印刷画面からPDF保存', historyExportPdfHint:'PDFは印刷画面を開きます。端末の「PDFとして保存」または共有機能を使用してください。', historyExportHtmlDone:'HISTORYのHTMLを書き出しました', historyExportPopupBlocked:'PDF表示を開けませんでした。ポップアップを許可してください。', calculator:'LIFE CALCULATOR', lpCalculator:'LP電卓', close:'閉じる', currentLP:'現在LP', currentTimes2:'現在LP ×2', currentHalf:'現在LP ÷2', setLP:'指定LP', applyLP:'LPへ反映', resultAfter:'反映後', enterNumber:'数値を入力してください', noChange:'LPは変更されませんでした', noUndo:'元に戻せる操作がありません', undoDone:(p,lp)=>`${p} を ${lp} LP に戻しました`,
       confirm:'確定', dominusTitle:'ドミナス属性制約', dominusHint:'モンスター効果を発動できない属性をまとめて選択してください。基本画面には発動不可の属性だけを表示します。', dominusClear:'全て発動可', maxRows:n=>`最大${n}件までです`, keepOneToken:'トークンは1件以上残してください', tokenStatInput:(stat)=>`トークン${stat}入力`,
       timerTarget:'タイマー目標時間 A', timerTargetDesc:'この時間を基準に強調表示します（分）', timerWarningLead:'強調開始 B', timerWarningLeadDesc:'目標時間Aの何分前から強調するか（分）',
-      settingsPlayers:'プレイヤー', settingsDisplay:'表示・操作', settingsTimerScreen:'タイマー・画面', settingsData:'設定データ',
+      settingsPlayers:'プレイヤー', settingsAppearance:'外観', settingsDuelDisplay:'ヘッダー・対戦表示', settingsDevice:'端末', settingsGeneral:'言語・データ', settingsDisplay:'表示・操作', settingsTimerScreen:'タイマー・画面', settingsData:'設定データ',
       manualOverviewTitle:'1. 基本画面', manualOverviewBody:'画面中央の左右にPLAYER 1 / PLAYER 2を常時表示します。LP数字が最優先で大きく表示され、プレイヤー名は各LP領域上部に表示されます。ヘッダーは常時固定表示、フッターは必要に応じて折りたためます。',
       manualLifeTitle:'2. LPの変更', manualLifeBody:'LP数字をタップして電卓を開きます。＋／－では1〜2桁入力時に末尾00を自動補助し、3桁以上は入力値をそのまま使います。×2は即時2倍、÷2は減算される値だけを2で割って端数切り捨てするため、25 LPなら12減って13 LPになります。指定LPも同じ0補助入力に対応し、LPは0未満にはなりません。',
       manualAnimationTitle:'3. LP表示とUNDO', manualAnimationBody:'LP変更時は旧値から新値まで数値が連続して変化し、増加は上方向・減少は下方向の色付きアニメーションで示します。ヘッダーのUNDOは直前のLP変更1件だけを取り消します。',
@@ -2371,7 +2495,7 @@ button, input, select, textarea { max-width: 100%; }
       manualStorageTitle:'10. 保存される情報', manualStorageBody:'ブラウザへ永続保存するのはプレイヤー名と各種設定だけです。現在LP、タイマー、履歴、トークン、カードカウンターなどの対戦データはページ再読み込み後には保持されません。「全ての設定を削除」は保存済み設定だけを初期値へ戻し、現在進行中の対戦データには影響しません。',
       manualWakeTitle:'11. 画面スリープ防止', manualWakeBody:'ON時はScreen Wake Lock APIに対応するブラウザで画面点灯を維持します。ブラウザやOSが非対応の場合は利用できず、タブを離れた後に戻った場合は可能な範囲で再取得します。',
       manualNote:'大会・イベントのルールや端末利用可否は主催者の案内を優先してください。端末の省電力設定やブラウザ仕様により、一部機能の動作が異なる場合があります。',
-      manualTitle:'操作マニュアル', manualLifeShortTitle:'LP', manualTimerShortTitle:'タイマー', manualControlsShortTitle:'基本操作', manualStorageShortTitle:'保存', manualUtilityTitle:'UTILITY', manualStorageShort:'保存されるのはプレイヤー名と設定のみ。LP・ターン・タイマー・履歴・UTILITY・MEMOは再読み込みで初期化されます。', manualNoteShort:'大会・イベントでは主催者の端末利用ルールを優先してください。', manualVersionTitle:'VERSION / 更新履歴', manualVersionDateV111:'2026/08/21', manualChangelogV111A:'端末・ブラウザ差による要素重なりを抑えるレスポンシブレイアウト補正を追加', manualChangelogV111B:'LP表示の自動フィット処理を強化し、プレビュー環境を含めて枠内へ収まるよう改善', manualChangelogV111C:'DOMINUS制約アイコンを基本1行表示とし、必要時のみ自動折り返しするよう変更', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'HISTORYのHTML／PDFエクスポート機能を追加し、ライト配色固定で出力するよう対応', manualChangelogV110B:'HISTORYの先攻表示、LP配置、増減値表示を改善', manualChangelogV110C:'先攻／後攻ボタンの操作性と全体の文字間隔を調整', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'GAME履歴とRESET時のゲーム進行・初期化処理を改善', manualChangelogV102B:'UTILITY・SETTINGSのハッチ開閉状態をリロードまで保持するよう変更', manualChangelogV102C:'コイン・ダイス結果表示とトークン数値表示を調整', manualChangelogV102D:'ヘッダー内のタイマー・TURN・操作ボタン配置を調整', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'更新履歴', manualChangelogV101A:'iPhone等のノッチ／Dynamic Islandを考慮した余白と画面回転時のLP再描画を追加', manualChangelogV101D:'FIRST / SECOND表示をLIFE・HISTORYへ追加', manualChangelogV100:'リリース', manualLife:'先攻・後攻表示がONの時はFIRST / SECONDをタップして入れ替えられます。LPをタップして計算します。1〜2桁は末尾00を補助し、＋／－／×2／÷2／指定LPに対応。LP下部のDOMINUS欄をタップすると6属性（光・闇・地・水・炎・風）の発動不可状態を一括編集でき、基本画面には発動不可属性だけを丸型アイコンで表示します。表示自体は設定からOFFにできます。', manualTimer:'TURNをタップしてターン進行。対戦タイマーは右側の再生／一時停止アイコンで操作し、設定AのB分前以降は強調表示されます。左の時計は表示形式とON/OFFを変更できます。', manualHeader:'ヘッダーは常時表示。右側の各アイコンからP1/P2入れ替え、UNDO、RESETを操作できます。フッターはHIDE／SHOWで開閉できます。背景アニメーションは設定のプルダウンからOFFまたはパターンを選択します。', manualHistory:'HISTORYはGAME→TURNの順に区切り、先攻・後攻表示がONの場合は各GAMEの初期行で先攻側にのみFIRSTと8000/8000を表示します。LP変動は増減値を上段、変更後LPを下段に表示します。タイマーを維持してRESETすると次のGAMEへ進み、開始時刻・TURN 1・初期LPを記録します。タイマーもリセットするとGAME 1へ戻り、履歴も新しいマッチとして初期化されます。', manualUtility:'UTILITYではコイン／ダイス、複数トークン、カードカウンターを利用できます。MEMOは独立タブです。', manualWake:'画面スリープ防止と画面向き固定は対応ブラウザでのみ動作します。iPhone Safariなどでは向き固定を利用できない場合があります。', creator:'制作者：GYONIC', clearAllSettings:'全ての設定を削除', clearSettingsTitle:'設定を初期化', clearSettingsBody:'プレイヤーネームを含む、ブラウザに保存されている全ての設定を初期値へ戻します。現在のLP・タイマー・履歴・トークン・カウンターの対戦情報は変更しません。', clearSettingsDone:'保存済み設定を初期化しました',
+      manualTitle:'操作マニュアル', manualLifeShortTitle:'LP', manualTimerShortTitle:'タイマー', manualControlsShortTitle:'基本操作', manualStorageShortTitle:'保存', manualUtilityTitle:'UTILITY', manualHomeTitle:'ホーム画面から使う', manualHome:'iPhone / iPadではSafariの共有メニューから「ホーム画面に追加」を選ぶと、ホーム画面からアプリのように起動できます。AndroidではChrome等のメニューから「ホーム画面に追加」または「アプリをインストール」を選択します。端末やブラウザによって項目名・表示方法・対応機能が異なる場合があります。', manualStorageShort:'保存されるのはプレイヤー名と設定のみ。LP・ターン・タイマー・履歴・UTILITY・MEMOは再読み込みで初期化されます。', manualNoteShort:'大会・イベントでは主催者の端末利用ルールを優先してください。', manualVersionTitle:'VERSION / 更新履歴', manualVersionDateV111:'2026/08/21', manualChangelogV111A:'端末・ブラウザ差による要素重なりを抑えるレスポンシブレイアウト補正を追加', manualChangelogV111B:'LP表示の自動フィット処理を強化し、プレビュー環境を含めて枠内へ収まるよう改善', manualChangelogV111C:'DOMINUS制約アイコンを基本1行表示とし、必要時のみ自動折り返しするよう変更', manualChangelogV111D:'デザインテーマを儀式・融合・シンクロ・エクシーズ・ペンデュラム・リンクの召喚法モチーフへ再編', manualChangelogV111E:'召喚法テーマごとの専用背景演出を追加し、HIGH CONTRASTテーマを復活', manualChangelogV111F:'DOMINUS制約とFIRST / SECOND表示を色だけに依存しない形状・線種表現へ改善', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'HISTORYのHTML／PDFエクスポート機能を追加し、ライト配色固定で出力するよう対応', manualChangelogV110B:'HISTORYの先攻表示、LP配置、増減値表示を改善', manualChangelogV110C:'先攻／後攻ボタンの操作性と全体の文字間隔を調整', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'GAME履歴とRESET時のゲーム進行・初期化処理を改善', manualChangelogV102B:'UTILITY・SETTINGSのハッチ開閉状態をリロードまで保持するよう変更', manualChangelogV102C:'コイン・ダイス結果表示とトークン数値表示を調整', manualChangelogV102D:'ヘッダー内のタイマー・TURN・操作ボタン配置を調整', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'更新履歴', manualChangelogV101A:'iPhone等のノッチ／Dynamic Islandを考慮した余白と画面回転時のLP再描画を追加', manualChangelogV101D:'FIRST / SECOND表示をLIFE・HISTORYへ追加', manualChangelogV100:'リリース', manualLife:'先攻・後攻表示がONの時はFIRST / SECONDをタップして入れ替えられます。LPをタップして計算します。1〜2桁は末尾00を補助し、＋／－／×2／÷2／指定LPに対応。LP下部のDOMINUS欄をタップすると6属性（光・闇・地・水・炎・風）の発動不可状態を一括編集でき、基本画面には発動不可属性だけを丸型アイコンで表示します。表示自体は設定からOFFにできます。', manualTimer:'TURNをタップしてターン進行。対戦タイマーは右側の再生／一時停止アイコンで操作し、設定AのB分前以降は強調表示されます。左の時計は表示形式とON/OFFを変更できます。', manualHeader:'ヘッダーは常時表示。右側の各アイコンからP1/P2入れ替え、UNDO、RESETを操作できます。フッターはHIDE／SHOWで開閉できます。背景アニメーションは設定のプルダウンからOFFまたはパターンを選択します。', manualHistory:'HISTORYはGAME→TURNの順に区切り、先攻・後攻表示がONの場合は各GAMEの初期行で先攻側にのみFIRSTと8000/8000を表示します。LP変動は増減値を上段、変更後LPを下段に表示します。タイマーを維持してRESETすると次のGAMEへ進み、開始時刻・TURN 1・初期LPを記録します。タイマーもリセットするとGAME 1へ戻り、履歴も新しいマッチとして初期化されます。', manualUtility:'UTILITYではコイン／ダイス、複数トークン、カードカウンターを利用できます。MEMOは独立タブです。', manualWake:'画面スリープ防止と画面向き固定は対応ブラウザでのみ動作します。iPhone Safariなどでは向き固定を利用できない場合があります。', creator:'制作者：GYONIC', clearAllSettings:'全ての設定を削除', clearSettingsTitle:'設定を初期化', clearSettingsBody:'プレイヤーネームを含む、ブラウザに保存されている全ての設定を初期値へ戻します。現在のLP・タイマー・履歴・トークン・カウンターの対戦情報は変更しません。', clearSettingsDone:'保存済み設定を初期化しました',
       resetTitle:'RESET LIFE', resetBody:'PLAYER 1 / PLAYER 2 のLPを8000へ戻し、TURN 1へ戻します。タイマーを維持する場合は次のGAMEへ進み、履歴を継続します。タイマーもリセットする場合はGAME 1へ戻り、履歴を新しいマッチとして初期化します。トークン／カウンターは名称を残して数値のみ初期化します。', resetTimerToo:'タイマーもリセットする', cancel:'キャンセル', reset:'リセット', resetBoth:'LPとタイマーをリセットしました', resetLP:'LPをリセットしました'
     },
     en: {
@@ -2380,12 +2504,12 @@ button, input, select, textarea { max-width: 100%; }
       utilityPrompt:'Run a coin toss or dice roll.', tossing:'TOSSING…', rolling:'ROLLING…', heads:'Heads', tails:'Tails', total:'Total',
       tokenMemo:'TOKEN MEMO', addToken:'+ ADD TOKEN', tokenDefault:'Token', tokenName:'Token name', deleteToken:'Delete this token',
       cardCounters:'CARD COUNTERS', addCard:'+ ADD CARD', cardName:'Card name', deleteCard:'Delete this card', counterCount:'Counter count', counterMinus:'Decrease counter by 1', counterPlus:'Increase counter by 1', counterEmpty:'Add a card to record its counters.', duelMemo:'MEMO', memoPlaceholder:'Write any duel notes here', clearMemo:'CLEAR MEMO', memoCleared:'Memo cleared',
-      player1Name:'PLAYER 1 NAME', player2Name:'PLAYER 2 NAME', savedBrowser:'Saved in this browser', appearance:'APPEARANCE', appearanceDesc:'Use system, light, or dark mode', designTheme:'DESIGN THEME', themeDesc:'Choose a color theme', fontFamily:'FONT', fontFamilyDesc:'Choose the font used for LP and the header', playerNameDisplay:'PLAYER NAMES', playerNameDisplayDesc:'Show player names on the LIFE screen', turnOrderDisplay:'FIRST / SECOND', turnOrderDisplayDesc:'Show first/second indicators on LIFE and HISTORY', dominusDisplay:'DOMINUS DISPLAY', dominusDisplayDesc:'Show attribute restrictions on the LIFE screen', dynamicBackground:'BACKGROUND EFFECT', dynamicBackgroundDesc:'Show a theme-colored background effect', backgroundAnimation:'BACKGROUND ANIMATION', backgroundAnimationDesc:'Keep the background effect but stop its motion', dynamicBackgroundPattern:'BACKGROUND MOTION', dynamicBackgroundPatternDesc:'Choose OFF or a looping animation pattern', clockDisplay:'CLOCK', clockDisplayDesc:'Show the current time at the left of the header', clockFormat:'CLOCK FORMAT', clockFormatDesc:'Choose time, seconds, date, and 12/24-hour formats', language:'LANGUAGE', languageDesc:'Choose display language', system:'SYSTEM', light:'LIGHT', dark:'DARK',
+      player1Name:'PLAYER 1 NAME', player2Name:'PLAYER 2 NAME', savedBrowser:'Saved in this browser', appearance:'APPEARANCE', appearanceDesc:'Use system, light, or dark mode', designTheme:'DESIGN THEME', themeDesc:'Choose a summon-method theme or High Contrast', fontFamily:'FONT', fontFamilyDesc:'Choose the font used for LP and the header', playerNameDisplay:'PLAYER NAMES', playerNameDisplayDesc:'Show player names on the LIFE screen', turnOrderDisplay:'FIRST / SECOND', turnOrderDisplayDesc:'Show first/second indicators on LIFE and HISTORY', dominusDisplay:'DOMINUS DISPLAY', dominusDisplayDesc:'Show attribute restrictions on the LIFE screen', dynamicBackground:'BACKGROUND EFFECT', dynamicBackgroundDesc:'Show a theme-colored background effect', backgroundAnimation:'BACKGROUND ANIMATION', backgroundAnimationDesc:'Keep the background effect but stop its motion', dynamicBackgroundPattern:'BACKGROUND MOTION', dynamicBackgroundPatternDesc:'Choose OFF or a looping animation pattern', clockDisplay:'CLOCK', clockDisplayDesc:'Show the current time at the left of the header', clockFormat:'CLOCK FORMAT', clockFormatDesc:'Choose time, seconds, date, and 12/24-hour formats', language:'LANGUAGE', languageDesc:'Choose display language', system:'SYSTEM', light:'LIGHT', dark:'DARK',
       timer:'Duel timer', timerStart:'Start timer', timerPause:'Pause timer', timerResume:'Resume timer', collapseHeader:'Collapse header', expandHeader:'Expand header', collapseFooter:'Collapse footer', expandFooter:'Expand footer', undo:'Undo last LP change', resetMatch:'Reset duel', swapPlayers:'Swap P1 and P2', playersSwapped:'P1 and P2 swapped', wakeLock:'PREVENT SLEEP', wakeLockDesc:'Keep the screen awake during a duel on supported browsers', wakeUnsupported:'Screen wake lock is not supported by this browser', orientationLock:'LOCK ORIENTATION', orientationLockDesc:'Lock the current portrait / landscape orientation when supported', orientationUnsupported:'Screen orientation lock is not supported by this browser', orientationLockFailed:'Could not lock the screen orientation. Some browsers require fullscreen mode', orientationLocked:'Current screen orientation locked', orientationUnlocked:'Screen orientation unlocked',
       historyAria:'LP change history', historyExportTitle:'EXPORT HISTORY', historyExportHtml:'HTML', historyExportHtmlDesc:'Standalone history file', historyExportPdf:'PDF', historyExportPdfDesc:'Save from print view', historyExportPdfHint:'PDF opens a print view. Choose Save as PDF or the device sharing option.', historyExportHtmlDone:'History HTML exported', historyExportPopupBlocked:'Could not open the PDF view. Allow pop-ups and try again.', calculator:'LIFE CALCULATOR', lpCalculator:'LP calculator', close:'Close', currentLP:'CURRENT LP', currentTimes2:'CURRENT LP ×2', currentHalf:'CURRENT LP ÷2', setLP:'SET LP', applyLP:'APPLY TO LP', resultAfter:'After', enterNumber:'Enter a number', noChange:'LP did not change', noUndo:'Nothing to undo', undoDone:(p,lp)=>`${p} restored to ${lp} LP`,
       confirm:'CONFIRM', dominusTitle:'DOMINUS RESTRICTIONS', dominusHint:'Select every attribute whose monster effects cannot be activated. Only blocked attributes are shown on the LIFE screen.', dominusClear:'ALLOW ALL', maxRows:n=>`Maximum ${n} entries`, keepOneToken:'At least one token must remain', tokenStatInput:(stat)=>`Token ${stat} input`,
       timerTarget:'TIMER TARGET A', timerTargetDesc:'Minutes used as the timer target', timerWarningLead:'WARNING LEAD B', timerWarningLeadDesc:'Highlight this many minutes before target A',
-      settingsPlayers:'PLAYERS', settingsDisplay:'DISPLAY / CONTROLS', settingsTimerScreen:'TIMER / SCREEN', settingsData:'SAVED SETTINGS',
+      settingsPlayers:'PLAYERS', settingsAppearance:'APPEARANCE', settingsDuelDisplay:'HEADER / DUEL DISPLAY', settingsDevice:'DEVICE', settingsGeneral:'LANGUAGE / DATA', settingsDisplay:'DISPLAY / CONTROLS', settingsTimerScreen:'TIMER / SCREEN', settingsData:'SAVED SETTINGS',
       manualOverviewTitle:'1. Main screen', manualOverviewBody:'PLAYER 1 and PLAYER 2 are always shown side by side in the center. LP is given the largest possible display area, with each player name above it. The header stays fixed and always visible; the footer can be collapsed when more space is needed.',
       manualLifeTitle:'2. Changing LP', manualLifeBody:'Tap an LP number to open the calculator. For + or −, one- and two-digit entries automatically append 00; entries of three or more digits are used as typed. ×2 applies immediately. ÷2 subtracts half rounded down, so 25 LP loses 12 and becomes 13. SET LP uses the same 00 assistance, and LP never displays below 0.',
       manualAnimationTitle:'3. LP animation and Undo', manualAnimationBody:'When LP changes, the displayed number counts from the old value to the new value. Increases and decreases also use directional, color-coded motion. The header Undo control reverts only the latest LP change.',
@@ -2398,7 +2522,7 @@ button, input, select, textarea { max-width: 100%; }
       manualStorageTitle:'10. What is saved', manualStorageBody:'Only player names and settings are stored persistently in the browser. Duel data such as current LP, timer, history, tokens, and card counters is not retained after a page reload. DELETE ALL SETTINGS resets saved preferences only and does not alter the duel currently in progress.',
       manualWakeTitle:'11. Prevent sleep', manualWakeBody:'When enabled, the app requests Screen Wake Lock on supported browsers to keep the display awake. It cannot work when the browser or OS does not support the API. After returning to the tab, the app attempts to reacquire the lock when possible.',
       manualNote:'Always follow the organizer’s rules on device use at tournaments or events. Power-saving settings and browser behavior can affect some features.',
-      manualTitle:'USER MANUAL', manualLifeShortTitle:'LP', manualTimerShortTitle:'Timer', manualControlsShortTitle:'Controls', manualStorageShortTitle:'Storage', manualUtilityTitle:'UTILITY', manualStorageShort:'Only player names and settings are saved. LP, turn, timer, history, UTILITY, and MEMO reset when the page reloads.', manualNoteShort:'Follow the organizer’s rules on device use at tournaments and events.', manualVersionTitle:'VERSION / CHANGELOG', manualVersionDateV111:'2026/08/21', manualChangelogV111A:'Added responsive layout corrections to reduce element overlap across devices and browsers', manualChangelogV111B:'Improved LP auto-fit so values stay inside their panels, including preview environments', manualChangelogV111C:'Changed DOMINUS restriction icons to a single-line layout with wrapping only when needed', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'Added HTML / PDF export for HISTORY with fixed light-mode output', manualChangelogV110B:'Improved FIRST indication, LP alignment, and delta presentation in HISTORY', manualChangelogV110C:'Improved FIRST / SECOND button usability and adjusted global letter spacing', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'Improved GAME history and game progression / initialization behavior on RESET', manualChangelogV102B:'UTILITY and SETTINGS hatch states now persist until page reload', manualChangelogV102C:'Refined coin / dice result layout and token value sizing', manualChangelogV102D:'Adjusted timer, TURN, and header control layout', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'CHANGELOG', manualChangelogV101A:'Added safer spacing for iPhone notches / Dynamic Island and LP redraw on orientation changes', manualChangelogV101D:'Added FIRST / SECOND indicators to LIFE and HISTORY', manualChangelogV100:'Release', manualLife:'When FIRST / SECOND display is enabled, tap it to swap who goes first. Tap an LP value to calculate. One- or two-digit input appends 00. +, −, ×2, ÷2, and SET LP are supported. Tap the DOMINUS area below LP to edit blocked attributes together. Six attributes are supported (LIGHT, DARK, EARTH, WATER, FIRE, and WIND), and only blocked attributes appear as round icons on the LIFE screen. The display can be disabled in Settings.', manualTimer:'Tap TURN to advance the turn. Use the play/pause icon to control the duel timer; it is highlighted from B minutes before target A. The left clock supports multiple formats and can be hidden.', manualHeader:'The header is always shown. Use its icons to swap P1/P2, undo, or reset. Use HIDE / SHOW for the footer. Choose OFF or a looping background animation from the Settings dropdown.', manualHistory:'HISTORY is grouped by GAME and TURN. When FIRST / SECOND display is enabled, each GAME shows FIRST only on the player going first, together with 8000 / 8000. LP changes show the delta on the upper line and the resulting LP below it. Reset while keeping the timer running to advance to the next GAME and record its start time, TURN 1, and initial LP. Resetting the timer returns to GAME 1. EXPORT saves the current view as HTML or opens a print-ready view for PDF saving.', manualUtility:'UTILITY provides coin/dice, multiple token tools, and card counters. MEMO has its own tab.', manualWake:'Prevent Sleep and orientation lock work only in supported browsers. Orientation lock may be unavailable in iPhone Safari.', creator:'Creator: GYONIC', clearAllSettings:'DELETE ALL SETTINGS', clearSettingsTitle:'RESET SETTINGS', clearSettingsBody:'Reset every saved preference, including player names, to its default. Current LP, timer, history, token, and counter duel data are not changed.', clearSettingsDone:'Saved settings were reset',
+      manualTitle:'USER MANUAL', manualLifeShortTitle:'LP', manualTimerShortTitle:'Timer', manualControlsShortTitle:'Controls', manualStorageShortTitle:'Storage', manualUtilityTitle:'UTILITY', manualHomeTitle:'Use from the Home Screen', manualHome:'On iPhone / iPad, open this tool in Safari and choose Share → Add to Home Screen to launch it more like an app. On Android, use Chrome or a similar browser and choose Add to Home screen or Install app from the menu. Menu labels, appearance, and supported features may vary by device and browser.', manualStorageShort:'Only player names and settings are saved. LP, turn, timer, history, UTILITY, and MEMO reset when the page reloads.', manualNoteShort:'Follow the organizer’s rules on device use at tournaments and events.', manualVersionTitle:'VERSION / CHANGELOG', manualVersionDateV111:'2026/08/21', manualChangelogV111A:'Added responsive layout corrections to reduce element overlap across devices and browsers', manualChangelogV111B:'Improved LP auto-fit so values stay inside their panels, including preview environments', manualChangelogV111C:'Changed DOMINUS restriction icons to a single-line layout with wrapping only when needed', manualChangelogV111D:'Reorganized design themes around Ritual, Fusion, Synchro, Xyz, Pendulum, and Link Summoning motifs', manualChangelogV111E:'Added summon-theme-specific background effects and restored the HIGH CONTRAST theme', manualChangelogV111F:'Improved DOMINUS and FIRST / SECOND indicators with shapes and line styles that do not rely on color alone', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'Added HTML / PDF export for HISTORY with fixed light-mode output', manualChangelogV110B:'Improved FIRST indication, LP alignment, and delta presentation in HISTORY', manualChangelogV110C:'Improved FIRST / SECOND button usability and adjusted global letter spacing', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'Improved GAME history and game progression / initialization behavior on RESET', manualChangelogV102B:'UTILITY and SETTINGS hatch states now persist until page reload', manualChangelogV102C:'Refined coin / dice result layout and token value sizing', manualChangelogV102D:'Adjusted timer, TURN, and header control layout', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'CHANGELOG', manualChangelogV101A:'Added safer spacing for iPhone notches / Dynamic Island and LP redraw on orientation changes', manualChangelogV101D:'Added FIRST / SECOND indicators to LIFE and HISTORY', manualChangelogV100:'Release', manualLife:'When FIRST / SECOND display is enabled, tap it to swap who goes first. Tap an LP value to calculate. One- or two-digit input appends 00. +, −, ×2, ÷2, and SET LP are supported. Tap the DOMINUS area below LP to edit blocked attributes together. Six attributes are supported (LIGHT, DARK, EARTH, WATER, FIRE, and WIND), and only blocked attributes appear as round icons on the LIFE screen. The display can be disabled in Settings.', manualTimer:'Tap TURN to advance the turn. Use the play/pause icon to control the duel timer; it is highlighted from B minutes before target A. The left clock supports multiple formats and can be hidden.', manualHeader:'The header is always shown. Use its icons to swap P1/P2, undo, or reset. Use HIDE / SHOW for the footer. Choose OFF or a looping background animation from the Settings dropdown.', manualHistory:'HISTORY is grouped by GAME and TURN. When FIRST / SECOND display is enabled, each GAME shows FIRST only on the player going first, together with 8000 / 8000. LP changes show the delta on the upper line and the resulting LP below it. Reset while keeping the timer running to advance to the next GAME and record its start time, TURN 1, and initial LP. Resetting the timer returns to GAME 1. EXPORT saves the current view as HTML or opens a print-ready view for PDF saving.', manualUtility:'UTILITY provides coin/dice, multiple token tools, and card counters. MEMO has its own tab.', manualWake:'Prevent Sleep and orientation lock work only in supported browsers. Orientation lock may be unavailable in iPhone Safari.', creator:'Creator: GYONIC', clearAllSettings:'DELETE ALL SETTINGS', clearSettingsTitle:'RESET SETTINGS', clearSettingsBody:'Reset every saved preference, including player names, to its default. Current LP, timer, history, token, and counter duel data are not changed.', clearSettingsDone:'Saved settings were reset',
       resetTitle:'RESET LIFE', resetBody:'Return both players to 8000 LP and TURN 1. If the timer is kept, advance to the next GAME and keep the match history. If the timer is also reset, return to GAME 1 and start a fresh match history. Token and counter names are kept while their values are cleared.', resetTimerToo:'Reset timer too', cancel:'CANCEL', reset:'RESET', resetBoth:'LP and timer reset', resetLP:'LP reset'
     },
     ko: {
@@ -2407,12 +2531,12 @@ button, input, select, textarea { max-width: 100%; }
       utilityPrompt:'코인 또는 주사위를 실행하세요.', tossing:'토스 중…', rolling:'굴리는 중…', heads:'앞면', tails:'뒷면', total:'합계',
       tokenMemo:'토큰 메모', addToken:'+ 토큰 추가', tokenDefault:'토큰', tokenName:'토큰 이름', deleteToken:'이 토큰 삭제',
       cardCounters:'카드 카운터', addCard:'+ 카드 추가', cardName:'카드 이름', deleteCard:'이 카드 삭제', counterCount:'카운터 수', counterMinus:'카운터 1 감소', counterPlus:'카운터 1 증가', counterEmpty:'카운터를 기록할 카드를 추가하세요.', duelMemo:'메모', memoPlaceholder:'듀얼 중 확인할 내용을 자유롭게 입력', clearMemo:'메모 지우기', memoCleared:'메모를 지웠습니다',
-      player1Name:'PLAYER 1 이름', player2Name:'PLAYER 2 이름', savedBrowser:'브라우저에 저장됩니다', appearance:'화면 모드', appearanceDesc:'시스템·라이트·다크 선택', designTheme:'디자인 테마', themeDesc:'색상 테마 선택', fontFamily:'글꼴', fontFamilyDesc:'LP와 헤더에 사용할 표시 글꼴 선택', playerNameDisplay:'플레이어 이름 표시', playerNameDisplayDesc:'LIFE 화면에 플레이어 이름 표시', dominusDisplay:'도미나스 제약 표시', dominusDisplayDesc:'LIFE 화면의 속성 제약 표시 사용', dynamicBackground:'배경 효과', dynamicBackgroundDesc:'테마 색상에 맞춘 배경 효과 표시', backgroundAnimation:'배경 애니메이션', backgroundAnimationDesc:'배경 효과는 유지하고 움직임만 정지', dynamicBackgroundPattern:'배경 애니메이션', dynamicBackgroundPatternDesc:'OFF 또는 반복 애니메이션 패턴 선택', clockDisplay:'시계 표시', clockDisplayDesc:'헤더 왼쪽에 현재 시간을 표시', clockFormat:'시계 형식', clockFormatDesc:'시간·초·날짜 및 12/24시간 형식 선택', language:'언어', languageDesc:'표시 언어 선택', system:'시스템', light:'라이트', dark:'다크',
+      player1Name:'PLAYER 1 이름', player2Name:'PLAYER 2 이름', savedBrowser:'브라우저에 저장됩니다', appearance:'화면 모드', appearanceDesc:'시스템·라이트·다크 선택', designTheme:'디자인 테마', themeDesc:'소환법 테마 또는 고대비 배색 선택', fontFamily:'글꼴', fontFamilyDesc:'LP와 헤더에 사용할 표시 글꼴 선택', playerNameDisplay:'플레이어 이름 표시', playerNameDisplayDesc:'LIFE 화면에 플레이어 이름 표시', dominusDisplay:'도미나스 제약 표시', dominusDisplayDesc:'LIFE 화면의 속성 제약 표시 사용', dynamicBackground:'배경 효과', dynamicBackgroundDesc:'테마 색상에 맞춘 배경 효과 표시', backgroundAnimation:'배경 애니메이션', backgroundAnimationDesc:'배경 효과는 유지하고 움직임만 정지', dynamicBackgroundPattern:'배경 애니메이션', dynamicBackgroundPatternDesc:'OFF 또는 반복 애니메이션 패턴 선택', clockDisplay:'시계 표시', clockDisplayDesc:'헤더 왼쪽에 현재 시간을 표시', clockFormat:'시계 형식', clockFormatDesc:'시간·초·날짜 및 12/24시간 형식 선택', language:'언어', languageDesc:'표시 언어 선택', system:'시스템', light:'라이트', dark:'다크',
       timer:'듀얼 타이머', timerStart:'타이머 시작', timerPause:'타이머 일시정지', timerResume:'타이머 재개', collapseHeader:'헤더 접기', expandHeader:'헤더 열기', collapseFooter:'푸터 접기', expandFooter:'푸터 열기', undo:'마지막 LP 변경 취소', resetMatch:'듀얼 리셋', swapPlayers:'P1과 P2 바꾸기', playersSwapped:'P1과 P2를 바꿨습니다', wakeLock:'화면 절전 방지', wakeLockDesc:'지원 브라우저에서 듀얼 중 화면이 꺼지지 않도록 유지', wakeUnsupported:'이 브라우저는 화면 절전 방지를 지원하지 않습니다', orientationLock:'화면 방향 고정', orientationLockDesc:'지원 브라우저에서 현재 세로／가로 방향 고정', orientationUnsupported:'이 브라우저는 화면 방향 고정을 지원하지 않습니다', orientationLockFailed:'화면 방향을 고정할 수 없습니다. 일부 브라우저에서는 전체 화면이 필요합니다', orientationLocked:'현재 화면 방향을 고정했습니다', orientationUnlocked:'화면 방향 고정을 해제했습니다',
       historyAria:'LP 변경 기록', historyExportTitle:'HISTORY 내보내기', historyExportHtml:'HTML', historyExportHtmlDesc:'기록 표시용 HTML 파일', historyExportPdf:'PDF', historyExportPdfDesc:'인쇄 화면에서 PDF 저장', historyExportPdfHint:'PDF는 인쇄 화면을 엽니다. PDF로 저장 또는 기기의 공유 기능을 사용하세요.', historyExportHtmlDone:'HISTORY HTML을 내보냈습니다', historyExportPopupBlocked:'PDF 화면을 열 수 없습니다. 팝업을 허용해 주세요.', calculator:'LIFE CALCULATOR', lpCalculator:'LP 계산기', close:'닫기', currentLP:'현재 LP', currentTimes2:'현재 LP ×2', currentHalf:'현재 LP ÷2', setLP:'LP 지정', applyLP:'LP에 적용', resultAfter:'적용 후', enterNumber:'숫자를 입력하세요', noChange:'LP가 변경되지 않았습니다', noUndo:'되돌릴 변경이 없습니다', undoDone:(p,lp)=>`${p}를 ${lp} LP로 되돌렸습니다`,
       confirm:'확정', dominusTitle:'도미나스 속성 제약', dominusHint:'몬스터 효과를 발동할 수 없는 속성을 한 번에 선택하세요. LIFE 화면에는 발동 불가 속성만 표시됩니다.', dominusClear:'모두 허용', maxRows:n=>`최대 ${n}개까지 가능합니다`, keepOneToken:'토큰은 1개 이상 남겨야 합니다', tokenStatInput:(stat)=>`토큰 ${stat} 입력`,
       timerTarget:'타이머 목표 시간 A', timerTargetDesc:'강조 표시 기준 시간(분)', timerWarningLead:'강조 시작 B', timerWarningLeadDesc:'목표 시간 A의 몇 분 전부터 강조할지 설정',
-      settingsPlayers:'플레이어', settingsDisplay:'표시 / 조작', settingsTimerScreen:'타이머 / 화면', settingsData:'저장 설정',
+      settingsPlayers:'플레이어', settingsAppearance:'외관', settingsDuelDisplay:'헤더 / 듀얼 표시', settingsDevice:'기기', settingsGeneral:'언어 / 데이터', settingsDisplay:'표시 / 조작', settingsTimerScreen:'타이머 / 화면', settingsData:'저장 설정',
       manualOverviewTitle:'1. 기본 화면', manualOverviewBody:'화면 중앙에는 PLAYER 1과 PLAYER 2가 항상 좌우로 표시됩니다. LP 숫자를 가장 크게 보여 주고 플레이어 이름은 각 LP 영역 상단에 표시합니다. 헤더는 항상 고정 표시되고 푸터는 필요하면 접을 수 있습니다.',
       manualLifeTitle:'2. LP 변경', manualLifeBody:'LP 숫자를 탭하면 계산기가 열립니다. +/−에서 1~2자리 입력은 뒤에 00을 자동 보조하고 3자리 이상은 입력값 그대로 사용합니다. ×2는 즉시 2배, ÷2는 감소할 값만 절반으로 나눈 뒤 소수점을 버리므로 25 LP는 12가 감소해 13이 됩니다. LP 지정도 같은 00 보조를 사용하며 LP는 0 아래로 표시되지 않습니다.',
       manualAnimationTitle:'3. LP 애니메이션과 UNDO', manualAnimationBody:'LP가 바뀌면 이전 값에서 새 값까지 숫자가 연속으로 변화합니다. 증가와 감소는 방향과 색으로도 구분됩니다. 헤더의 UNDO는 가장 최근 LP 변경 1건만 되돌립니다.',
@@ -2425,7 +2549,7 @@ button, input, select, textarea { max-width: 100%; }
       manualStorageTitle:'10. 저장되는 정보', manualStorageBody:'브라우저에 계속 저장되는 것은 플레이어 이름과 각종 설정뿐입니다. 현재 LP, 타이머, 기록, 토큰, 카드 카운터 등의 듀얼 데이터는 페이지를 새로고침하면 유지되지 않습니다. 모든 설정 삭제는 저장된 설정만 초기화하며 현재 진행 중인 듀얼 데이터에는 영향을 주지 않습니다.',
       manualWakeTitle:'11. 화면 절전 방지', manualWakeBody:'ON이면 지원 브라우저에서 Screen Wake Lock을 요청해 화면을 켜 둡니다. 브라우저나 OS가 지원하지 않으면 사용할 수 없습니다. 다른 탭에서 돌아오면 가능한 경우 다시 잠금을 요청합니다.',
       manualNote:'대회나 이벤트에서의 단말기 사용 가능 여부는 반드시 주최 측 규정을 우선해 주세요. 절전 설정이나 브라우저 사양에 따라 일부 기능의 동작이 달라질 수 있습니다.',
-      manualTitle:'사용 설명서', manualLifeShortTitle:'LP', manualTimerShortTitle:'타이머', manualControlsShortTitle:'기본 조작', manualStorageShortTitle:'저장', manualUtilityTitle:'UTILITY', manualStorageShort:'저장되는 것은 플레이어 이름과 설정뿐입니다. LP, 턴, 타이머, 기록, UTILITY, MEMO는 새로고침하면 초기화됩니다.', manualNoteShort:'대회·이벤트에서는 주최 측의 단말기 사용 규정을 우선해 주세요.', manualVersionTitle:'VERSION / 업데이트 내역', manualVersionDateV111:'2026/08/21', manualChangelogV111A:'기기·브라우저 차이로 인한 요소 겹침을 줄이는 반응형 레이아웃 보정 추가', manualChangelogV111B:'미리보기 환경을 포함해 LP 값이 패널 안에 들어오도록 자동 맞춤 처리 개선', manualChangelogV111C:'DOMINUS 제약 아이콘을 기본 1줄 표시로 변경하고 필요할 때만 자동 줄바꿈', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'HISTORY HTML / PDF 내보내기 기능을 추가하고 라이트 배색으로 고정 출력하도록 개선', manualChangelogV110B:'HISTORY의 FIRST 표시, LP 정렬, 증감값 표시를 개선', manualChangelogV110C:'FIRST / SECOND 버튼 조작성과 전체 자간을 조정', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'GAME 기록과 RESET 시 게임 진행·초기화 동작 개선', manualChangelogV102B:'UTILITY·SETTINGS 해치 열림 상태를 새로고침 전까지 유지하도록 변경', manualChangelogV102C:'코인·주사위 결과 표시와 토큰 수치 표시 조정', manualChangelogV102D:'헤더의 타이머·TURN·조작 버튼 배치 조정', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'업데이트 내역', manualChangelogV101A:'iPhone 노치／Dynamic Island 대응 여백과 화면 회전 시 LP 재렌더링 추가', manualChangelogV101D:'LIFE와 HISTORY에 FIRST / SECOND 표시 추가', manualChangelogV100:'릴리스', manualLife:'선공 / 후공 표시가 ON일 때 FIRST / SECOND를 탭하면 선공·후공을 바꿀 수 있습니다. LP를 탭해 계산합니다. 1~2자리 입력은 뒤에 00을 보조하며 +, −, ×2, ÷2, LP 지정이 가능합니다. LP는 0 아래로 내려가지 않습니다. LP 아래 DOMINUS 영역을 탭하면 빛·어둠·땅·물·불·바람 6속성의 발동 불가 상태를 한 번에 편집할 수 있으며, LIFE 화면에는 발동 불가 속성만 원형 아이콘으로 표시됩니다. 표시 기능은 설정에서 끌 수 있습니다.', manualTimer:'TURN을 탭해 턴을 진행합니다. 듀얼 타이머는 재생/일시정지 아이콘으로 조작하고 목표 A의 B분 전부터 강조됩니다. 왼쪽 시계는 형식과 표시 여부를 변경할 수 있습니다.', manualHeader:'헤더는 항상 표시되며 아이콘으로 P1/P2 교체, UNDO, RESET을 조작합니다. 푸터는 HIDE / SHOW로 접고 펼칩니다. 배경 애니메이션은 설정의 드롭다운에서 OFF 또는 반복 패턴을 선택합니다.', manualHistory:'HISTORY는 GAME→TURN 순서로 구분되며 선공 / 후공 표시가 ON이면 각 GAME의 초기 행에서 선공 플레이어에만 FIRST와 8000 / 8000을 표시합니다. LP 변동은 증감값을 위쪽 줄에, 변경 후 LP를 아래쪽 줄에 표시합니다. 타이머를 유지한 채 RESET하면 다음 GAME으로 진행하고 시작 시간·TURN 1·초기 LP를 기록합니다. 타이머도 리셋하면 GAME 1로 돌아갑니다. EXPORT에서 현재 표시를 HTML로 저장하거나 인쇄 화면을 통해 PDF로 저장할 수 있습니다.', manualUtility:'UTILITY에서 코인/주사위, 여러 토큰, 카드 카운터를 사용할 수 있으며 MEMO는 독립 탭입니다.', manualWake:'화면 절전 방지와 화면 방향 고정은 지원 브라우저에서만 작동합니다. iPhone Safari에서는 방향 고정을 사용할 수 없을 수 있습니다.', creator:'제작자: GYONIC', clearAllSettings:'모든 설정 삭제', clearSettingsTitle:'설정 초기화', clearSettingsBody:'플레이어 이름을 포함한 저장된 모든 설정을 초기값으로 되돌립니다. 현재 LP, 타이머, 기록, 토큰, 카운터의 듀얼 정보는 변경하지 않습니다.', clearSettingsDone:'저장된 설정을 초기화했습니다',
+      manualTitle:'사용 설명서', manualLifeShortTitle:'LP', manualTimerShortTitle:'타이머', manualControlsShortTitle:'기본 조작', manualStorageShortTitle:'저장', manualUtilityTitle:'UTILITY', manualHomeTitle:'홈 화면에서 사용', manualHome:'iPhone / iPad에서는 Safari의 공유 메뉴에서 홈 화면에 추가를 선택하면 홈 화면에서 앱처럼 실행할 수 있습니다. Android에서는 Chrome 등의 메뉴에서 홈 화면에 추가 또는 앱 설치를 선택하세요. 기기와 브라우저에 따라 메뉴 명칭, 표시 방식, 지원 기능이 다를 수 있습니다.', manualStorageShort:'저장되는 것은 플레이어 이름과 설정뿐입니다. LP, 턴, 타이머, 기록, UTILITY, MEMO는 새로고침하면 초기화됩니다.', manualNoteShort:'대회·이벤트에서는 주최 측의 단말기 사용 규정을 우선해 주세요.', manualVersionTitle:'VERSION / 업데이트 내역', manualVersionDateV111:'2026/08/21', manualChangelogV111A:'기기·브라우저 차이로 인한 요소 겹침을 줄이는 반응형 레이아웃 보정 추가', manualChangelogV111B:'미리보기 환경을 포함해 LP 값이 패널 안에 들어오도록 자동 맞춤 처리 개선', manualChangelogV111C:'DOMINUS 제약 아이콘을 기본 1줄 표시로 변경하고 필요할 때만 자동 줄바꿈', manualChangelogV111D:'디자인 테마를 의식·융합·싱크로·엑시즈·펜듈럼·링크 소환법 모티프로 재구성', manualChangelogV111E:'소환법 테마별 전용 배경 효과를 추가하고 HIGH CONTRAST 테마를 복원', manualChangelogV111F:'DOMINUS 제약과 FIRST / SECOND 표시를 색상에만 의존하지 않는 형태·선 스타일 표현으로 개선', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'HISTORY HTML / PDF 내보내기 기능을 추가하고 라이트 배색으로 고정 출력하도록 개선', manualChangelogV110B:'HISTORY의 FIRST 표시, LP 정렬, 증감값 표시를 개선', manualChangelogV110C:'FIRST / SECOND 버튼 조작성과 전체 자간을 조정', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'GAME 기록과 RESET 시 게임 진행·초기화 동작 개선', manualChangelogV102B:'UTILITY·SETTINGS 해치 열림 상태를 새로고침 전까지 유지하도록 변경', manualChangelogV102C:'코인·주사위 결과 표시와 토큰 수치 표시 조정', manualChangelogV102D:'헤더의 타이머·TURN·조작 버튼 배치 조정', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'업데이트 내역', manualChangelogV101A:'iPhone 노치／Dynamic Island 대응 여백과 화면 회전 시 LP 재렌더링 추가', manualChangelogV101D:'LIFE와 HISTORY에 FIRST / SECOND 표시 추가', manualChangelogV100:'릴리스', manualLife:'선공 / 후공 표시가 ON일 때 FIRST / SECOND를 탭하면 선공·후공을 바꿀 수 있습니다. LP를 탭해 계산합니다. 1~2자리 입력은 뒤에 00을 보조하며 +, −, ×2, ÷2, LP 지정이 가능합니다. LP는 0 아래로 내려가지 않습니다. LP 아래 DOMINUS 영역을 탭하면 빛·어둠·땅·물·불·바람 6속성의 발동 불가 상태를 한 번에 편집할 수 있으며, LIFE 화면에는 발동 불가 속성만 원형 아이콘으로 표시됩니다. 표시 기능은 설정에서 끌 수 있습니다.', manualTimer:'TURN을 탭해 턴을 진행합니다. 듀얼 타이머는 재생/일시정지 아이콘으로 조작하고 목표 A의 B분 전부터 강조됩니다. 왼쪽 시계는 형식과 표시 여부를 변경할 수 있습니다.', manualHeader:'헤더는 항상 표시되며 아이콘으로 P1/P2 교체, UNDO, RESET을 조작합니다. 푸터는 HIDE / SHOW로 접고 펼칩니다. 배경 애니메이션은 설정의 드롭다운에서 OFF 또는 반복 패턴을 선택합니다.', manualHistory:'HISTORY는 GAME→TURN 순서로 구분되며 선공 / 후공 표시가 ON이면 각 GAME의 초기 행에서 선공 플레이어에만 FIRST와 8000 / 8000을 표시합니다. LP 변동은 증감값을 위쪽 줄에, 변경 후 LP를 아래쪽 줄에 표시합니다. 타이머를 유지한 채 RESET하면 다음 GAME으로 진행하고 시작 시간·TURN 1·초기 LP를 기록합니다. 타이머도 리셋하면 GAME 1로 돌아갑니다. EXPORT에서 현재 표시를 HTML로 저장하거나 인쇄 화면을 통해 PDF로 저장할 수 있습니다.', manualUtility:'UTILITY에서 코인/주사위, 여러 토큰, 카드 카운터를 사용할 수 있으며 MEMO는 독립 탭입니다.', manualWake:'화면 절전 방지와 화면 방향 고정은 지원 브라우저에서만 작동합니다. iPhone Safari에서는 방향 고정을 사용할 수 없을 수 있습니다.', creator:'제작자: GYONIC', clearAllSettings:'모든 설정 삭제', clearSettingsTitle:'설정 초기화', clearSettingsBody:'플레이어 이름을 포함한 저장된 모든 설정을 초기값으로 되돌립니다. 현재 LP, 타이머, 기록, 토큰, 카운터의 듀얼 정보는 변경하지 않습니다.', clearSettingsDone:'저장된 설정을 초기화했습니다',
       resetTitle:'RESET LIFE', resetBody:'양쪽 LP를 8000으로 되돌리고 TURN 1로 초기화합니다. 타이머를 유지하면 다음 GAME으로 진행하며 HISTORY를 계속 유지합니다. 타이머도 리셋하면 GAME 1로 돌아가 새 매치 기록으로 초기화합니다. 토큰/카운터는 이름을 남기고 수치만 초기화합니다.', resetTimerToo:'타이머도 리셋', cancel:'취소', reset:'리셋', resetBoth:'LP와 타이머를 리셋했습니다', resetLP:'LP를 리셋했습니다'
     }
   };
