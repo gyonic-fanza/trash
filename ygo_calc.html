@@ -707,10 +707,10 @@ html[data-turn-order="off"] .player-head { right: 7px; }
   opacity: .58;
 }
 .dominus-icons {
-  display: grid;
-  grid-template-columns: repeat(3, max-content);
-  grid-auto-rows: max-content;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  align-content: center;
   justify-content: center;
   gap: 4px 5px;
   min-width: 0;
@@ -852,17 +852,22 @@ html[data-turn-order="off"] .player-head { right: 7px; }
   width: 100%; height: 100%; min-height: 0;
   background: transparent; color: var(--text);
   display: flex; align-items: center; justify-content: center;
-  padding: 13px 0 10px;
+  /* Keep a visible safety gutter around the LP itself without changing
+     the existing outer LIFE-screen margins. */
+  padding: clamp(34px, 7.5vh, 70px) 12% clamp(38px, 8.5vh, 78px);
+  overflow: hidden;
   cursor: pointer;
   border-radius: 14px;
 }
 .player-card.dominus-enabled .lp-button {
-  padding-bottom: clamp(66px, 16vw, 82px);
+  padding-bottom: clamp(108px, 24vw, 136px);
 }
 .lp-button:active { background: var(--tap); }
 .lp-number {
   display: block;
-  max-width: 100%;
+  flex: 0 0 auto;
+  max-width: none;
+  white-space: nowrap;
   font-size: 200px;
   line-height: .82;
   font-weight: 850;
@@ -1740,6 +1745,117 @@ select, .text-input {
   .topbar .timer-wrap { gap: 4px; }
   .topbar .top-actions { gap: 3px; }
 }
+
+
+/* ===== Responsive overlap hardening =====
+   Avoid element collisions caused by device width, safe areas, font metrics,
+   browser zoom, and long clock formats. */
+.topbar {
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  gap: clamp(3px, 0.8vw, 8px) !important;
+  min-width: 0;
+  overflow: hidden;
+}
+.topbar > * { min-width: 0; }
+.header-clock {
+  flex: 0 1 auto;
+  max-width: 28%;
+  overflow: hidden;
+  text-overflow: clip;
+}
+.header-clock.clock-off {
+  display: none !important;
+}
+.header-center {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  justify-content: center;
+  gap: clamp(2px, 0.7vw, 6px);
+  overflow: hidden;
+}
+.timer-wrap {
+  flex: 1 1 auto;
+  min-width: 0;
+  justify-content: center;
+  gap: clamp(3px, 0.8vw, 7px) !important;
+  overflow: hidden;
+}
+.topbar .timer {
+  flex: 1 1 auto;
+  min-width: 0 !important;
+  max-width: 132px;
+  font-size: var(--responsive-timer-size, 40px) !important;
+  overflow: hidden;
+}
+.turn-control,
+.turn-display,
+.header-separator { flex: 0 0 auto; }
+.turn-display { min-width: clamp(40px, 10vw, 52px); }
+.top-actions {
+  flex: 0 0 auto;
+  min-width: 0;
+  gap: clamp(2px, 0.65vw, 5px) !important;
+}
+.topbar .header-action-btn {
+  flex: 0 0 auto;
+  width: clamp(38px, 9.6vw, 50px) !important;
+  margin-inline: 0 !important;
+}
+.header-action-icon { font-size: clamp(18px, 5vw, 22px); }
+.header-separator { margin-left: clamp(4px, 1.2vw, 8px); margin-right: clamp(4px, 1.2vw, 8px); }
+
+/* Keep player chrome from colliding with FIRST / SECOND. */
+.player-head {
+  right: calc(clamp(68px, 17vw, 92px) + 16px);
+  min-width: 0;
+}
+.player-name { min-width: 0; max-width: 100%; }
+
+/* General shrink-safe rules for grid/flex children. */
+.screen, .panel, .setting-row, .utility-card, .history-item,
+.token-card, .counter-card, .modal, .calc-status, .calc-display,
+.utility-grid, .token-grid, .counter-grid {
+  min-width: 0;
+}
+button, input, select, textarea { max-width: 100%; }
+
+/* Footer labels stay inside their own columns on narrow devices. */
+.nav-btn, .footer-toggle-btn {
+  min-width: 0;
+  overflow: hidden;
+  font-size: clamp(7.5px, 2.15vw, 10px);
+  letter-spacing: .025em;
+}
+.nav-btn > span:last-child, .footer-toggle-btn > span:last-child {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+/* Narrow phone fallback: preserve tap targets while reducing only what must shrink. */
+@media (max-width: 430px) {
+  .topbar { gap: 3px !important; }
+  .header-clock { max-width: 21%; font-size: clamp(12px, 3.4vw, 18px); }
+  .header-center { gap: 2px; }
+  .topbar .header-action-btn { width: clamp(38px, 9.2vw, 42px) !important; }
+  .turn-display { min-width: 40px; }
+  .turn-display .turn-number { font-size: 23px; }
+  .header-separator { margin-left: 3px; margin-right: 3px; }
+  .timer-wrap { gap: 3px !important; }
+}
+@media (max-width: 370px) {
+  .topbar .header-action-btn { width: 36px !important; }
+  .header-action-icon { font-size: 18px; }
+  .turn-display { min-width: 37px; }
+  .turn-display .turn-number { font-size: 21px; }
+  .turn-display .turn-label { font-size: 6px; }
+  .header-separator { margin-left: 2px; margin-right: 2px; }
+}
+
 </style>
 </head>
 <body>
@@ -2086,6 +2202,12 @@ select, .text-input {
           <div class="manual-chapter"><h3 data-i18n="manualStorageShortTitle">保存</h3><p data-i18n="manualStorageShort">永続保存されるのはプレイヤー名と設定のみです。LPや履歴、UTILITYの対戦情報は再読み込みで初期化されます。</p></div>
           <div class="manual-chapter manual-version manual-changelog">
             <h3 data-i18n="manualVersionTitle">VERSION / 更新履歴</h3>
+            <p><strong>v1.1.1</strong> <span class="manual-version-date" data-i18n="manualVersionDateV111">2026/08/21</span></p>
+            <ul>
+              <li data-i18n="manualChangelogV111A">端末・ブラウザ差による要素重なりを抑えるレスポンシブレイアウト補正を追加</li>
+              <li data-i18n="manualChangelogV111B">LP表示の自動フィット処理を強化し、プレビュー環境を含めて枠内へ収まるよう改善</li>
+              <li data-i18n="manualChangelogV111C">DOMINUS制約アイコンを基本1行表示とし、必要時のみ自動折り返しするよう変更</li>
+            </ul>
             <p><strong>v1.1.0</strong> <span class="manual-version-date" data-i18n="manualVersionDateV110">2026/08/21</span></p>
             <ul>
               <li data-i18n="manualChangelogV110A">HISTORYのHTML／PDFエクスポート機能を追加し、ライト配色固定で出力するよう対応</li>
@@ -2249,7 +2371,7 @@ select, .text-input {
       manualStorageTitle:'10. 保存される情報', manualStorageBody:'ブラウザへ永続保存するのはプレイヤー名と各種設定だけです。現在LP、タイマー、履歴、トークン、カードカウンターなどの対戦データはページ再読み込み後には保持されません。「全ての設定を削除」は保存済み設定だけを初期値へ戻し、現在進行中の対戦データには影響しません。',
       manualWakeTitle:'11. 画面スリープ防止', manualWakeBody:'ON時はScreen Wake Lock APIに対応するブラウザで画面点灯を維持します。ブラウザやOSが非対応の場合は利用できず、タブを離れた後に戻った場合は可能な範囲で再取得します。',
       manualNote:'大会・イベントのルールや端末利用可否は主催者の案内を優先してください。端末の省電力設定やブラウザ仕様により、一部機能の動作が異なる場合があります。',
-      manualTitle:'操作マニュアル', manualLifeShortTitle:'LP', manualTimerShortTitle:'タイマー', manualControlsShortTitle:'基本操作', manualStorageShortTitle:'保存', manualUtilityTitle:'UTILITY', manualStorageShort:'保存されるのはプレイヤー名と設定のみ。LP・ターン・タイマー・履歴・UTILITY・MEMOは再読み込みで初期化されます。', manualNoteShort:'大会・イベントでは主催者の端末利用ルールを優先してください。', manualVersionTitle:'VERSION / 更新履歴', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'HISTORYのHTML／PDFエクスポート機能を追加し、ライト配色固定で出力するよう対応', manualChangelogV110B:'HISTORYの先攻表示、LP配置、増減値表示を改善', manualChangelogV110C:'先攻／後攻ボタンの操作性と全体の文字間隔を調整', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'GAME履歴とRESET時のゲーム進行・初期化処理を改善', manualChangelogV102B:'UTILITY・SETTINGSのハッチ開閉状態をリロードまで保持するよう変更', manualChangelogV102C:'コイン・ダイス結果表示とトークン数値表示を調整', manualChangelogV102D:'ヘッダー内のタイマー・TURN・操作ボタン配置を調整', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'更新履歴', manualChangelogV101A:'iPhone等のノッチ／Dynamic Islandを考慮した余白と画面回転時のLP再描画を追加', manualChangelogV101D:'FIRST / SECOND表示をLIFE・HISTORYへ追加', manualChangelogV100:'リリース', manualLife:'先攻・後攻表示がONの時はFIRST / SECONDをタップして入れ替えられます。LPをタップして計算します。1〜2桁は末尾00を補助し、＋／－／×2／÷2／指定LPに対応。LP下部のDOMINUS欄をタップすると6属性（光・闇・地・水・炎・風）の発動不可状態を一括編集でき、基本画面には発動不可属性だけを丸型アイコンで表示します。表示自体は設定からOFFにできます。', manualTimer:'TURNをタップしてターン進行。対戦タイマーは右側の再生／一時停止アイコンで操作し、設定AのB分前以降は強調表示されます。左の時計は表示形式とON/OFFを変更できます。', manualHeader:'ヘッダーは常時表示。右側の各アイコンからP1/P2入れ替え、UNDO、RESETを操作できます。フッターはHIDE／SHOWで開閉できます。背景アニメーションは設定のプルダウンからOFFまたはパターンを選択します。', manualHistory:'HISTORYはGAME→TURNの順に区切り、先攻・後攻表示がONの場合は各GAMEの初期行で先攻側にのみFIRSTと8000/8000を表示します。LP変動は増減値を上段、変更後LPを下段に表示します。タイマーを維持してRESETすると次のGAMEへ進み、開始時刻・TURN 1・初期LPを記録します。タイマーもリセットするとGAME 1へ戻り、履歴も新しいマッチとして初期化されます。', manualUtility:'UTILITYではコイン／ダイス、複数トークン、カードカウンターを利用できます。MEMOは独立タブです。', manualWake:'画面スリープ防止と画面向き固定は対応ブラウザでのみ動作します。iPhone Safariなどでは向き固定を利用できない場合があります。', creator:'制作者：GYONIC', clearAllSettings:'全ての設定を削除', clearSettingsTitle:'設定を初期化', clearSettingsBody:'プレイヤーネームを含む、ブラウザに保存されている全ての設定を初期値へ戻します。現在のLP・タイマー・履歴・トークン・カウンターの対戦情報は変更しません。', clearSettingsDone:'保存済み設定を初期化しました',
+      manualTitle:'操作マニュアル', manualLifeShortTitle:'LP', manualTimerShortTitle:'タイマー', manualControlsShortTitle:'基本操作', manualStorageShortTitle:'保存', manualUtilityTitle:'UTILITY', manualStorageShort:'保存されるのはプレイヤー名と設定のみ。LP・ターン・タイマー・履歴・UTILITY・MEMOは再読み込みで初期化されます。', manualNoteShort:'大会・イベントでは主催者の端末利用ルールを優先してください。', manualVersionTitle:'VERSION / 更新履歴', manualVersionDateV111:'2026/08/21', manualChangelogV111A:'端末・ブラウザ差による要素重なりを抑えるレスポンシブレイアウト補正を追加', manualChangelogV111B:'LP表示の自動フィット処理を強化し、プレビュー環境を含めて枠内へ収まるよう改善', manualChangelogV111C:'DOMINUS制約アイコンを基本1行表示とし、必要時のみ自動折り返しするよう変更', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'HISTORYのHTML／PDFエクスポート機能を追加し、ライト配色固定で出力するよう対応', manualChangelogV110B:'HISTORYの先攻表示、LP配置、増減値表示を改善', manualChangelogV110C:'先攻／後攻ボタンの操作性と全体の文字間隔を調整', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'GAME履歴とRESET時のゲーム進行・初期化処理を改善', manualChangelogV102B:'UTILITY・SETTINGSのハッチ開閉状態をリロードまで保持するよう変更', manualChangelogV102C:'コイン・ダイス結果表示とトークン数値表示を調整', manualChangelogV102D:'ヘッダー内のタイマー・TURN・操作ボタン配置を調整', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'更新履歴', manualChangelogV101A:'iPhone等のノッチ／Dynamic Islandを考慮した余白と画面回転時のLP再描画を追加', manualChangelogV101D:'FIRST / SECOND表示をLIFE・HISTORYへ追加', manualChangelogV100:'リリース', manualLife:'先攻・後攻表示がONの時はFIRST / SECONDをタップして入れ替えられます。LPをタップして計算します。1〜2桁は末尾00を補助し、＋／－／×2／÷2／指定LPに対応。LP下部のDOMINUS欄をタップすると6属性（光・闇・地・水・炎・風）の発動不可状態を一括編集でき、基本画面には発動不可属性だけを丸型アイコンで表示します。表示自体は設定からOFFにできます。', manualTimer:'TURNをタップしてターン進行。対戦タイマーは右側の再生／一時停止アイコンで操作し、設定AのB分前以降は強調表示されます。左の時計は表示形式とON/OFFを変更できます。', manualHeader:'ヘッダーは常時表示。右側の各アイコンからP1/P2入れ替え、UNDO、RESETを操作できます。フッターはHIDE／SHOWで開閉できます。背景アニメーションは設定のプルダウンからOFFまたはパターンを選択します。', manualHistory:'HISTORYはGAME→TURNの順に区切り、先攻・後攻表示がONの場合は各GAMEの初期行で先攻側にのみFIRSTと8000/8000を表示します。LP変動は増減値を上段、変更後LPを下段に表示します。タイマーを維持してRESETすると次のGAMEへ進み、開始時刻・TURN 1・初期LPを記録します。タイマーもリセットするとGAME 1へ戻り、履歴も新しいマッチとして初期化されます。', manualUtility:'UTILITYではコイン／ダイス、複数トークン、カードカウンターを利用できます。MEMOは独立タブです。', manualWake:'画面スリープ防止と画面向き固定は対応ブラウザでのみ動作します。iPhone Safariなどでは向き固定を利用できない場合があります。', creator:'制作者：GYONIC', clearAllSettings:'全ての設定を削除', clearSettingsTitle:'設定を初期化', clearSettingsBody:'プレイヤーネームを含む、ブラウザに保存されている全ての設定を初期値へ戻します。現在のLP・タイマー・履歴・トークン・カウンターの対戦情報は変更しません。', clearSettingsDone:'保存済み設定を初期化しました',
       resetTitle:'RESET LIFE', resetBody:'PLAYER 1 / PLAYER 2 のLPを8000へ戻し、TURN 1へ戻します。タイマーを維持する場合は次のGAMEへ進み、履歴を継続します。タイマーもリセットする場合はGAME 1へ戻り、履歴を新しいマッチとして初期化します。トークン／カウンターは名称を残して数値のみ初期化します。', resetTimerToo:'タイマーもリセットする', cancel:'キャンセル', reset:'リセット', resetBoth:'LPとタイマーをリセットしました', resetLP:'LPをリセットしました'
     },
     en: {
@@ -2276,7 +2398,7 @@ select, .text-input {
       manualStorageTitle:'10. What is saved', manualStorageBody:'Only player names and settings are stored persistently in the browser. Duel data such as current LP, timer, history, tokens, and card counters is not retained after a page reload. DELETE ALL SETTINGS resets saved preferences only and does not alter the duel currently in progress.',
       manualWakeTitle:'11. Prevent sleep', manualWakeBody:'When enabled, the app requests Screen Wake Lock on supported browsers to keep the display awake. It cannot work when the browser or OS does not support the API. After returning to the tab, the app attempts to reacquire the lock when possible.',
       manualNote:'Always follow the organizer’s rules on device use at tournaments or events. Power-saving settings and browser behavior can affect some features.',
-      manualTitle:'USER MANUAL', manualLifeShortTitle:'LP', manualTimerShortTitle:'Timer', manualControlsShortTitle:'Controls', manualStorageShortTitle:'Storage', manualUtilityTitle:'UTILITY', manualStorageShort:'Only player names and settings are saved. LP, turn, timer, history, UTILITY, and MEMO reset when the page reloads.', manualNoteShort:'Follow the organizer’s rules on device use at tournaments and events.', manualVersionTitle:'VERSION / CHANGELOG', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'Added HTML / PDF export for HISTORY with fixed light-mode output', manualChangelogV110B:'Improved FIRST indication, LP alignment, and delta presentation in HISTORY', manualChangelogV110C:'Improved FIRST / SECOND button usability and adjusted global letter spacing', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'Improved GAME history and game progression / initialization behavior on RESET', manualChangelogV102B:'UTILITY and SETTINGS hatch states now persist until page reload', manualChangelogV102C:'Refined coin / dice result layout and token value sizing', manualChangelogV102D:'Adjusted timer, TURN, and header control layout', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'CHANGELOG', manualChangelogV101A:'Added safer spacing for iPhone notches / Dynamic Island and LP redraw on orientation changes', manualChangelogV101D:'Added FIRST / SECOND indicators to LIFE and HISTORY', manualChangelogV100:'Release', manualLife:'When FIRST / SECOND display is enabled, tap it to swap who goes first. Tap an LP value to calculate. One- or two-digit input appends 00. +, −, ×2, ÷2, and SET LP are supported. Tap the DOMINUS area below LP to edit blocked attributes together. Six attributes are supported (LIGHT, DARK, EARTH, WATER, FIRE, and WIND), and only blocked attributes appear as round icons on the LIFE screen. The display can be disabled in Settings.', manualTimer:'Tap TURN to advance the turn. Use the play/pause icon to control the duel timer; it is highlighted from B minutes before target A. The left clock supports multiple formats and can be hidden.', manualHeader:'The header is always shown. Use its icons to swap P1/P2, undo, or reset. Use HIDE / SHOW for the footer. Choose OFF or a looping background animation from the Settings dropdown.', manualHistory:'HISTORY is grouped by GAME and TURN. When FIRST / SECOND display is enabled, each GAME shows FIRST only on the player going first, together with 8000 / 8000. LP changes show the delta on the upper line and the resulting LP below it. Reset while keeping the timer running to advance to the next GAME and record its start time, TURN 1, and initial LP. Resetting the timer returns to GAME 1. EXPORT saves the current view as HTML or opens a print-ready view for PDF saving.', manualUtility:'UTILITY provides coin/dice, multiple token tools, and card counters. MEMO has its own tab.', manualWake:'Prevent Sleep and orientation lock work only in supported browsers. Orientation lock may be unavailable in iPhone Safari.', creator:'Creator: GYONIC', clearAllSettings:'DELETE ALL SETTINGS', clearSettingsTitle:'RESET SETTINGS', clearSettingsBody:'Reset every saved preference, including player names, to its default. Current LP, timer, history, token, and counter duel data are not changed.', clearSettingsDone:'Saved settings were reset',
+      manualTitle:'USER MANUAL', manualLifeShortTitle:'LP', manualTimerShortTitle:'Timer', manualControlsShortTitle:'Controls', manualStorageShortTitle:'Storage', manualUtilityTitle:'UTILITY', manualStorageShort:'Only player names and settings are saved. LP, turn, timer, history, UTILITY, and MEMO reset when the page reloads.', manualNoteShort:'Follow the organizer’s rules on device use at tournaments and events.', manualVersionTitle:'VERSION / CHANGELOG', manualVersionDateV111:'2026/08/21', manualChangelogV111A:'Added responsive layout corrections to reduce element overlap across devices and browsers', manualChangelogV111B:'Improved LP auto-fit so values stay inside their panels, including preview environments', manualChangelogV111C:'Changed DOMINUS restriction icons to a single-line layout with wrapping only when needed', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'Added HTML / PDF export for HISTORY with fixed light-mode output', manualChangelogV110B:'Improved FIRST indication, LP alignment, and delta presentation in HISTORY', manualChangelogV110C:'Improved FIRST / SECOND button usability and adjusted global letter spacing', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'Improved GAME history and game progression / initialization behavior on RESET', manualChangelogV102B:'UTILITY and SETTINGS hatch states now persist until page reload', manualChangelogV102C:'Refined coin / dice result layout and token value sizing', manualChangelogV102D:'Adjusted timer, TURN, and header control layout', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'CHANGELOG', manualChangelogV101A:'Added safer spacing for iPhone notches / Dynamic Island and LP redraw on orientation changes', manualChangelogV101D:'Added FIRST / SECOND indicators to LIFE and HISTORY', manualChangelogV100:'Release', manualLife:'When FIRST / SECOND display is enabled, tap it to swap who goes first. Tap an LP value to calculate. One- or two-digit input appends 00. +, −, ×2, ÷2, and SET LP are supported. Tap the DOMINUS area below LP to edit blocked attributes together. Six attributes are supported (LIGHT, DARK, EARTH, WATER, FIRE, and WIND), and only blocked attributes appear as round icons on the LIFE screen. The display can be disabled in Settings.', manualTimer:'Tap TURN to advance the turn. Use the play/pause icon to control the duel timer; it is highlighted from B minutes before target A. The left clock supports multiple formats and can be hidden.', manualHeader:'The header is always shown. Use its icons to swap P1/P2, undo, or reset. Use HIDE / SHOW for the footer. Choose OFF or a looping background animation from the Settings dropdown.', manualHistory:'HISTORY is grouped by GAME and TURN. When FIRST / SECOND display is enabled, each GAME shows FIRST only on the player going first, together with 8000 / 8000. LP changes show the delta on the upper line and the resulting LP below it. Reset while keeping the timer running to advance to the next GAME and record its start time, TURN 1, and initial LP. Resetting the timer returns to GAME 1. EXPORT saves the current view as HTML or opens a print-ready view for PDF saving.', manualUtility:'UTILITY provides coin/dice, multiple token tools, and card counters. MEMO has its own tab.', manualWake:'Prevent Sleep and orientation lock work only in supported browsers. Orientation lock may be unavailable in iPhone Safari.', creator:'Creator: GYONIC', clearAllSettings:'DELETE ALL SETTINGS', clearSettingsTitle:'RESET SETTINGS', clearSettingsBody:'Reset every saved preference, including player names, to its default. Current LP, timer, history, token, and counter duel data are not changed.', clearSettingsDone:'Saved settings were reset',
       resetTitle:'RESET LIFE', resetBody:'Return both players to 8000 LP and TURN 1. If the timer is kept, advance to the next GAME and keep the match history. If the timer is also reset, return to GAME 1 and start a fresh match history. Token and counter names are kept while their values are cleared.', resetTimerToo:'Reset timer too', cancel:'CANCEL', reset:'RESET', resetBoth:'LP and timer reset', resetLP:'LP reset'
     },
     ko: {
@@ -2303,7 +2425,7 @@ select, .text-input {
       manualStorageTitle:'10. 저장되는 정보', manualStorageBody:'브라우저에 계속 저장되는 것은 플레이어 이름과 각종 설정뿐입니다. 현재 LP, 타이머, 기록, 토큰, 카드 카운터 등의 듀얼 데이터는 페이지를 새로고침하면 유지되지 않습니다. 모든 설정 삭제는 저장된 설정만 초기화하며 현재 진행 중인 듀얼 데이터에는 영향을 주지 않습니다.',
       manualWakeTitle:'11. 화면 절전 방지', manualWakeBody:'ON이면 지원 브라우저에서 Screen Wake Lock을 요청해 화면을 켜 둡니다. 브라우저나 OS가 지원하지 않으면 사용할 수 없습니다. 다른 탭에서 돌아오면 가능한 경우 다시 잠금을 요청합니다.',
       manualNote:'대회나 이벤트에서의 단말기 사용 가능 여부는 반드시 주최 측 규정을 우선해 주세요. 절전 설정이나 브라우저 사양에 따라 일부 기능의 동작이 달라질 수 있습니다.',
-      manualTitle:'사용 설명서', manualLifeShortTitle:'LP', manualTimerShortTitle:'타이머', manualControlsShortTitle:'기본 조작', manualStorageShortTitle:'저장', manualUtilityTitle:'UTILITY', manualStorageShort:'저장되는 것은 플레이어 이름과 설정뿐입니다. LP, 턴, 타이머, 기록, UTILITY, MEMO는 새로고침하면 초기화됩니다.', manualNoteShort:'대회·이벤트에서는 주최 측의 단말기 사용 규정을 우선해 주세요.', manualVersionTitle:'VERSION / 업데이트 내역', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'HISTORY HTML / PDF 내보내기 기능을 추가하고 라이트 배색으로 고정 출력하도록 개선', manualChangelogV110B:'HISTORY의 FIRST 표시, LP 정렬, 증감값 표시를 개선', manualChangelogV110C:'FIRST / SECOND 버튼 조작성과 전체 자간을 조정', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'GAME 기록과 RESET 시 게임 진행·초기화 동작 개선', manualChangelogV102B:'UTILITY·SETTINGS 해치 열림 상태를 새로고침 전까지 유지하도록 변경', manualChangelogV102C:'코인·주사위 결과 표시와 토큰 수치 표시 조정', manualChangelogV102D:'헤더의 타이머·TURN·조작 버튼 배치 조정', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'업데이트 내역', manualChangelogV101A:'iPhone 노치／Dynamic Island 대응 여백과 화면 회전 시 LP 재렌더링 추가', manualChangelogV101D:'LIFE와 HISTORY에 FIRST / SECOND 표시 추가', manualChangelogV100:'릴리스', manualLife:'선공 / 후공 표시가 ON일 때 FIRST / SECOND를 탭하면 선공·후공을 바꿀 수 있습니다. LP를 탭해 계산합니다. 1~2자리 입력은 뒤에 00을 보조하며 +, −, ×2, ÷2, LP 지정이 가능합니다. LP는 0 아래로 내려가지 않습니다. LP 아래 DOMINUS 영역을 탭하면 빛·어둠·땅·물·불·바람 6속성의 발동 불가 상태를 한 번에 편집할 수 있으며, LIFE 화면에는 발동 불가 속성만 원형 아이콘으로 표시됩니다. 표시 기능은 설정에서 끌 수 있습니다.', manualTimer:'TURN을 탭해 턴을 진행합니다. 듀얼 타이머는 재생/일시정지 아이콘으로 조작하고 목표 A의 B분 전부터 강조됩니다. 왼쪽 시계는 형식과 표시 여부를 변경할 수 있습니다.', manualHeader:'헤더는 항상 표시되며 아이콘으로 P1/P2 교체, UNDO, RESET을 조작합니다. 푸터는 HIDE / SHOW로 접고 펼칩니다. 배경 애니메이션은 설정의 드롭다운에서 OFF 또는 반복 패턴을 선택합니다.', manualHistory:'HISTORY는 GAME→TURN 순서로 구분되며 선공 / 후공 표시가 ON이면 각 GAME의 초기 행에서 선공 플레이어에만 FIRST와 8000 / 8000을 표시합니다. LP 변동은 증감값을 위쪽 줄에, 변경 후 LP를 아래쪽 줄에 표시합니다. 타이머를 유지한 채 RESET하면 다음 GAME으로 진행하고 시작 시간·TURN 1·초기 LP를 기록합니다. 타이머도 리셋하면 GAME 1로 돌아갑니다. EXPORT에서 현재 표시를 HTML로 저장하거나 인쇄 화면을 통해 PDF로 저장할 수 있습니다.', manualUtility:'UTILITY에서 코인/주사위, 여러 토큰, 카드 카운터를 사용할 수 있으며 MEMO는 독립 탭입니다.', manualWake:'화면 절전 방지와 화면 방향 고정은 지원 브라우저에서만 작동합니다. iPhone Safari에서는 방향 고정을 사용할 수 없을 수 있습니다.', creator:'제작자: GYONIC', clearAllSettings:'모든 설정 삭제', clearSettingsTitle:'설정 초기화', clearSettingsBody:'플레이어 이름을 포함한 저장된 모든 설정을 초기값으로 되돌립니다. 현재 LP, 타이머, 기록, 토큰, 카운터의 듀얼 정보는 변경하지 않습니다.', clearSettingsDone:'저장된 설정을 초기화했습니다',
+      manualTitle:'사용 설명서', manualLifeShortTitle:'LP', manualTimerShortTitle:'타이머', manualControlsShortTitle:'기본 조작', manualStorageShortTitle:'저장', manualUtilityTitle:'UTILITY', manualStorageShort:'저장되는 것은 플레이어 이름과 설정뿐입니다. LP, 턴, 타이머, 기록, UTILITY, MEMO는 새로고침하면 초기화됩니다.', manualNoteShort:'대회·이벤트에서는 주최 측의 단말기 사용 규정을 우선해 주세요.', manualVersionTitle:'VERSION / 업데이트 내역', manualVersionDateV111:'2026/08/21', manualChangelogV111A:'기기·브라우저 차이로 인한 요소 겹침을 줄이는 반응형 레이아웃 보정 추가', manualChangelogV111B:'미리보기 환경을 포함해 LP 값이 패널 안에 들어오도록 자동 맞춤 처리 개선', manualChangelogV111C:'DOMINUS 제약 아이콘을 기본 1줄 표시로 변경하고 필요할 때만 자동 줄바꿈', manualVersionDateV110:'2026/08/21', manualChangelogV110A:'HISTORY HTML / PDF 내보내기 기능을 추가하고 라이트 배색으로 고정 출력하도록 개선', manualChangelogV110B:'HISTORY의 FIRST 표시, LP 정렬, 증감값 표시를 개선', manualChangelogV110C:'FIRST / SECOND 버튼 조작성과 전체 자간을 조정', manualVersionDateV102:'2026/08/21', manualChangelogV102A:'GAME 기록과 RESET 시 게임 진행·초기화 동작 개선', manualChangelogV102B:'UTILITY·SETTINGS 해치 열림 상태를 새로고침 전까지 유지하도록 변경', manualChangelogV102C:'코인·주사위 결과 표시와 토큰 수치 표시 조정', manualChangelogV102D:'헤더의 타이머·TURN·조작 버튼 배치 조정', manualVersionDateV101:'2026/08/21', manualVersionDate:'2026/08/21', manualChangelogTitle:'업데이트 내역', manualChangelogV101A:'iPhone 노치／Dynamic Island 대응 여백과 화면 회전 시 LP 재렌더링 추가', manualChangelogV101D:'LIFE와 HISTORY에 FIRST / SECOND 표시 추가', manualChangelogV100:'릴리스', manualLife:'선공 / 후공 표시가 ON일 때 FIRST / SECOND를 탭하면 선공·후공을 바꿀 수 있습니다. LP를 탭해 계산합니다. 1~2자리 입력은 뒤에 00을 보조하며 +, −, ×2, ÷2, LP 지정이 가능합니다. LP는 0 아래로 내려가지 않습니다. LP 아래 DOMINUS 영역을 탭하면 빛·어둠·땅·물·불·바람 6속성의 발동 불가 상태를 한 번에 편집할 수 있으며, LIFE 화면에는 발동 불가 속성만 원형 아이콘으로 표시됩니다. 표시 기능은 설정에서 끌 수 있습니다.', manualTimer:'TURN을 탭해 턴을 진행합니다. 듀얼 타이머는 재생/일시정지 아이콘으로 조작하고 목표 A의 B분 전부터 강조됩니다. 왼쪽 시계는 형식과 표시 여부를 변경할 수 있습니다.', manualHeader:'헤더는 항상 표시되며 아이콘으로 P1/P2 교체, UNDO, RESET을 조작합니다. 푸터는 HIDE / SHOW로 접고 펼칩니다. 배경 애니메이션은 설정의 드롭다운에서 OFF 또는 반복 패턴을 선택합니다.', manualHistory:'HISTORY는 GAME→TURN 순서로 구분되며 선공 / 후공 표시가 ON이면 각 GAME의 초기 행에서 선공 플레이어에만 FIRST와 8000 / 8000을 표시합니다. LP 변동은 증감값을 위쪽 줄에, 변경 후 LP를 아래쪽 줄에 표시합니다. 타이머를 유지한 채 RESET하면 다음 GAME으로 진행하고 시작 시간·TURN 1·초기 LP를 기록합니다. 타이머도 리셋하면 GAME 1로 돌아갑니다. EXPORT에서 현재 표시를 HTML로 저장하거나 인쇄 화면을 통해 PDF로 저장할 수 있습니다.', manualUtility:'UTILITY에서 코인/주사위, 여러 토큰, 카드 카운터를 사용할 수 있으며 MEMO는 독립 탭입니다.', manualWake:'화면 절전 방지와 화면 방향 고정은 지원 브라우저에서만 작동합니다. iPhone Safari에서는 방향 고정을 사용할 수 없을 수 있습니다.', creator:'제작자: GYONIC', clearAllSettings:'모든 설정 삭제', clearSettingsTitle:'설정 초기화', clearSettingsBody:'플레이어 이름을 포함한 저장된 모든 설정을 초기값으로 되돌립니다. 현재 LP, 타이머, 기록, 토큰, 카운터의 듀얼 정보는 변경하지 않습니다.', clearSettingsDone:'저장된 설정을 초기화했습니다',
       resetTitle:'RESET LIFE', resetBody:'양쪽 LP를 8000으로 되돌리고 TURN 1로 초기화합니다. 타이머를 유지하면 다음 GAME으로 진행하며 HISTORY를 계속 유지합니다. 타이머도 리셋하면 GAME 1로 돌아가 새 매치 기록으로 초기화합니다. 토큰/카운터는 이름을 남기고 수치만 초기화합니다.', resetTimerToo:'타이머도 리셋', cancel:'취소', reset:'리셋', resetBoth:'LP와 타이머를 리셋했습니다', resetLP:'LP를 리셋했습니다'
     }
   };
@@ -2837,6 +2959,29 @@ body{margin:0;padding:24px;font-family:var(--font);-webkit-print-color-adjust:ex
   .export-history-title{font-size:18px;margin-bottom:10px;}
   .export-history-meta{font-size:9px;margin-bottom:10px;}
   .history-table th,.history-table td{padding:8px 6px;}
+}
+
+/* LIFE card outer breathing room: preserve existing screen-edge gutters. */
+.screen.life-screen {
+  column-gap: clamp(8px, 1.6vw, 16px);
+  padding-top: clamp(8px, 1.2vh, 14px);
+  padding-bottom: clamp(8px, 1.2vh, 14px);
+}
+
+@media (max-width: 380px), (max-height: 650px) {
+  .screen.life-screen {
+    column-gap: 8px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+}
+
+@media (orientation: landscape) {
+  .screen.life-screen {
+    column-gap: clamp(10px, 1.4vw, 18px);
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
 }
 </style>
 </head>
@@ -3648,7 +3793,7 @@ ${printScript}
         footerBtn.setAttribute('aria-label', this.footerCollapsed ? 'Expand footer' : 'Collapse footer');
         footerBtn.title = this.footerCollapsed ? 'Expand footer' : 'Collapse footer';
       }
-      requestAnimationFrame(() => this.fitAllLP());
+      requestAnimationFrame(() => { this.fitAllLP(); this.adaptHeaderLayout(); });
     },
     toggleFooter() {
       this.footerCollapsed = !this.footerCollapsed;
@@ -3779,6 +3924,36 @@ ${printScript}
       this.lpCountAnimations[player] = requestAnimationFrame(step);
     },
     lpBaseFontSizes: { p1: null, p2: null },
+    adaptHeaderLayout() {
+      const topbar = document.querySelector('.topbar');
+      const timer = document.querySelector('#timerDisplay');
+      const center = document.querySelector('.header-center');
+      if (!topbar || !timer || !center) return;
+
+      // Start from the preferred maximum and shrink only when real rendered
+      // geometry says the header would overflow. This accounts for font and
+      // browser differences rather than relying only on viewport breakpoints.
+      let size = 40;
+      topbar.style.setProperty('--responsive-timer-size', `${size}px`);
+      const fits = () => {
+        const r = topbar.getBoundingClientRect();
+        const children = [...topbar.children].filter(el => getComputedStyle(el).display !== 'none');
+        if (!children.length) return true;
+        const left = Math.min(...children.map(el => el.getBoundingClientRect().left));
+        const right = Math.max(...children.map(el => el.getBoundingClientRect().right));
+        const noPairOverlap = children.every((el, i) => {
+          if (!i) return true;
+          const prev = children[i-1].getBoundingClientRect();
+          const cur = el.getBoundingClientRect();
+          return cur.left >= prev.right - 0.5;
+        });
+        return left >= r.left - 0.5 && right <= r.right + 0.5 && noPairOverlap && center.scrollWidth <= center.clientWidth + 1;
+      };
+      while (size > 24 && !fits()) {
+        size -= 1;
+        topbar.style.setProperty('--responsive-timer-size', `${size}px`);
+      }
+    },
     measureLPFontSize(player, value) {
       const button = $(`#${player}LPButton`);
       const text = $(`#${player}LP`);
@@ -3788,9 +3963,23 @@ ${printScript}
       const originalSize = text.style.fontSize;
       text.textContent = String(value);
 
-      const maxWidth = Math.max(40, button.clientWidth - 4);
-      const maxHeight = Math.max(40, button.clientHeight - 42);
-      let low = 28, high = 280, best = low;
+      const buttonStyle = getComputedStyle(button);
+      const horizontalPadding =
+        (parseFloat(buttonStyle.paddingLeft) || 0) +
+        (parseFloat(buttonStyle.paddingRight) || 0);
+      const verticalPadding =
+        (parseFloat(buttonStyle.paddingTop) || 0) +
+        (parseFloat(buttonStyle.paddingBottom) || 0);
+
+      // Keep a deliberate safety margin. Some iOS/WebView/preview environments
+      // report fractional glyph widths slightly differently after paint.
+      // Using 90% of the real inner width prevents the LP from touching or
+      // crossing the player-card edge even when fonts/renderers differ.
+      const innerWidth = Math.max(40, button.clientWidth - horizontalPadding);
+      const innerHeight = Math.max(40, button.clientHeight - verticalPadding);
+      const maxWidth = Math.max(40, innerWidth * 0.88);
+      const maxHeight = Math.max(40, innerHeight * 0.84);
+      let low = 24, high = 280, best = low;
 
       while (low <= high) {
         const mid = Math.floor((low + high) / 2);
@@ -3817,7 +4006,31 @@ ${printScript}
       if (baseSize === null || currentSize === null) return;
 
       this.lpBaseFontSizes[player] = baseSize;
-      text.style.fontSize = `${Math.min(baseSize, currentSize)}px`;
+      let finalSize = Math.min(baseSize, currentSize);
+      text.style.fontSize = `${finalSize}px`;
+
+      // Final painted-geometry guard: shrink until the rendered glyph box
+      // is comfortably inside the button. This catches preview/WebView
+      // rounding differences that scrollWidth alone can miss.
+      const button = $(`#${player}LPButton`);
+      if (button) {
+        const buttonRect = button.getBoundingClientRect();
+        const buttonStyle = getComputedStyle(button);
+        const innerWidth = Math.max(40, buttonRect.width
+          - (parseFloat(buttonStyle.paddingLeft) || 0)
+          - (parseFloat(buttonStyle.paddingRight) || 0));
+        const innerHeight = Math.max(40, buttonRect.height
+          - (parseFloat(buttonStyle.paddingTop) || 0)
+          - (parseFloat(buttonStyle.paddingBottom) || 0));
+        const safeWidth = innerWidth * 0.88;
+        const safeHeight = innerHeight * 0.84;
+        let guard = 0;
+        while ((text.getBoundingClientRect().width > safeWidth || text.getBoundingClientRect().height > safeHeight) && finalSize > 24 && guard < 80) {
+          finalSize -= 1;
+          text.style.fontSize = `${finalSize}px`;
+          guard += 1;
+        }
+      }
     },
     fitAllLP() {
       this.fitLP('p1');
@@ -3842,6 +4055,7 @@ ${printScript}
       clearTimeout(this.viewportReflowTimer);
       const refit = () => requestAnimationFrame(() => requestAnimationFrame(() => {
         this.fitAllLP();
+        this.adaptHeaderLayout();
         TokenTool.fitValueNumbers();
       }));
       refit();
@@ -4153,7 +4367,20 @@ ${printScript}
       if (window.visualViewport) {
         window.visualViewport.addEventListener('resize', () => this.reflowLPAfterOrientationChange());
       }
-      requestAnimationFrame(() => this.fitAllLP());
+      if (typeof ResizeObserver !== 'undefined') {
+        this.layoutObserver = new ResizeObserver(() => {
+          requestAnimationFrame(() => {
+            this.adaptHeaderLayout();
+            this.fitAllLP();
+            TokenTool.fitValueNumbers();
+          });
+        });
+        const topbar = document.querySelector('.topbar');
+        const life = document.querySelector('.life-screen');
+        if (topbar) this.layoutObserver.observe(topbar);
+        if (life) this.layoutObserver.observe(life);
+      }
+      requestAnimationFrame(() => { this.fitAllLP(); this.adaptHeaderLayout(); });
     }
   };
 
@@ -4163,7 +4390,7 @@ ${printScript}
   OrientationLock.init();
   Theme.init();
   if (document.fonts?.ready) {
-    document.fonts.ready.then(() => requestAnimationFrame(() => UI.fitAllLP()));
+    document.fonts.ready.then(() => requestAnimationFrame(() => { UI.fitAllLP(); UI.adaptHeaderLayout(); }));
   }
   UI.init();
   Settings.bind();
@@ -4173,3 +4400,110 @@ ${printScript}
 </script>
 </body>
 </html>
+
+<!-- Landscape calculator fit patch -->
+<style>
+/* Keep calculators fully visible on short landscape phone viewports. */
+@media (orientation: landscape) and (max-height: 600px) {
+  .modal-backdrop {
+    align-items: center;
+    padding-top: max(4px, env(safe-area-inset-top));
+    padding-bottom: max(4px, env(safe-area-inset-bottom));
+    padding-left: max(6px, env(safe-area-inset-left));
+    padding-right: max(6px, env(safe-area-inset-right));
+  }
+
+  #calculatorModal {
+    width: min(720px, 94vw);
+    max-height: calc(100dvh - max(8px, env(safe-area-inset-top)) - max(8px, env(safe-area-inset-bottom)));
+    overflow: hidden;
+    padding: 6px 9px 7px;
+    border-radius: 16px;
+  }
+
+  #calculatorModal .modal-head {
+    min-height: 28px;
+    margin-bottom: 3px;
+    gap: 6px;
+  }
+  #calculatorModal .modal-title { font-size: 13px; line-height: 1.05; }
+  #calculatorModal .close-btn {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    font-size: 17px;
+  }
+
+  #calculatorModal .calc-status {
+    margin-bottom: 3px;
+    gap: 2px;
+  }
+  #calculatorModal .calc-player { font-size: 9px; line-height: 1.05; }
+  #calculatorModal .calc-current { font-size: 15px; line-height: 1.05; }
+
+  #calculatorModal .calc-display {
+    padding: 4px 8px;
+    margin-bottom: 4px;
+    border-radius: 10px;
+  }
+  #calculatorModal .calc-expression {
+    min-height: 22px;
+    font-size: 20px;
+    line-height: 1.05;
+  }
+  #calculatorModal .calc-preview {
+    min-height: 13px;
+    margin-top: 1px;
+    font-size: 9px;
+    line-height: 1.05;
+  }
+  #calculatorModal .calc-result-preview {
+    min-height: 12px;
+    margin-top: 1px;
+    font-size: 9px;
+    line-height: 1.05;
+  }
+
+  #calculatorModal .calc-quick {
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+  #calculatorModal .calc-grid { gap: 4px; }
+  #calculatorModal .calc-key,
+  #calculatorModal .calc-quick .calc-key {
+    min-height: 34px;
+    height: 34px;
+    border-radius: 9px;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0 6px;
+  }
+  #calculatorModal .calc-quick .calc-key { font-size: 12px; }
+  #calculatorModal .calc-key.raw100 { font-size: 11px; }
+  #calculatorModal .calc-key.enter { font-size: 12px; }
+}
+
+/* Extra compression for very short landscape browser/WebView areas. */
+@media (orientation: landscape) and (max-height: 430px) {
+  #calculatorModal {
+    width: min(760px, 96vw);
+    padding: 4px 8px 5px;
+  }
+  #calculatorModal .modal-head { min-height: 24px; margin-bottom: 2px; }
+  #calculatorModal .close-btn { width: 26px; height: 26px; min-width: 26px; }
+  #calculatorModal .calc-status { margin-bottom: 2px; }
+  #calculatorModal .calc-current { font-size: 14px; }
+  #calculatorModal .calc-display { padding: 3px 7px; margin-bottom: 3px; }
+  #calculatorModal .calc-expression { min-height: 19px; font-size: 18px; }
+  #calculatorModal .calc-preview { min-height: 11px; font-size: 8px; }
+  #calculatorModal .calc-result-preview { min-height: 10px; font-size: 8px; }
+  #calculatorModal .calc-quick { gap: 3px; margin-bottom: 3px; }
+  #calculatorModal .calc-grid { gap: 3px; }
+  #calculatorModal .calc-key,
+  #calculatorModal .calc-quick .calc-key {
+    min-height: 30px;
+    height: 30px;
+    border-radius: 8px;
+  }
+}
+</style>
