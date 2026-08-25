@@ -658,9 +658,6 @@ html[data-clock-format="datetime12s"] .header-clock { font-size: clamp(9px, 1.95
   border: 1px solid color-mix(in srgb, var(--accent-contrast) 28%, transparent);
   cursor: pointer;
 }
-.top-actions { justify-self: end; display: flex; gap: 3px; min-width:0; }
-.brand-wrap, .brand { display:none; }
-
 .chrome-toggle {
   width: 30px;
   height: 30px;
@@ -2446,7 +2443,7 @@ html[data-player-names="off"] .lp-button {
           <span class="lp-number" id="p1LP">8000</span>
         </button>
         <div class="player-status-row">
-          <button type="button" class="turn-order-btn first" id="p1TurnOrder" data-turn-order-player="p1" aria-label="Set first or second player">FIRST</button>
+          <button type="button" class="turn-order-btn first" id="p1TurnOrder" data-turn-order-player="p1">先攻</button>
           <button type="button" class="dominus-zone" data-dominus-player="p1" aria-label="P1 Dominus restrictions">
             <span class="dominus-placeholder">DOMINUS</span>
             <span class="dominus-icons" data-dominus-icons="p1"></span>
@@ -2467,7 +2464,7 @@ html[data-player-names="off"] .lp-button {
           <span class="lp-number" id="p2LP">8000</span>
         </button>
         <div class="player-status-row">
-          <button type="button" class="turn-order-btn second" id="p2TurnOrder" data-turn-order-player="p2" aria-label="Set first or second player">SECOND</button>
+          <button type="button" class="turn-order-btn second" id="p2TurnOrder" data-turn-order-player="p2">後攻</button>
           <button type="button" class="dominus-zone" data-dominus-player="p2" aria-label="P2 Dominus restrictions">
             <span class="dominus-placeholder">DOMINUS</span>
             <span class="dominus-icons" data-dominus-icons="p2"></span>
@@ -2485,7 +2482,7 @@ html[data-player-names="off"] .lp-button {
     <section class="screen hidden" data-screen="history">
       <div class="history-title-row">
         <div class="section-title" data-i18n="history">履歴</div>
-        <button type="button" class="history-export-trigger" id="openHistoryExport">⇩ EXPORT</button>
+        <button type="button" class="history-export-trigger" id="openHistoryExport"><span aria-hidden="true">⇩</span> <span data-i18n="exportLabel">書き出し</span></button>
       </div>
       <div id="historyContainer"></div>
     </section>
@@ -2629,7 +2626,7 @@ html[data-player-names="off"] .lp-button {
 <div class="setting-desc" data-i18n="themeDesc">配色テーマを選択</div>
 </div>
 <select id="themeSelect">
-<option value="standard">STANDARD</option><option value="ritual">RITUAL</option><option value="fusion">FUSION</option><option value="synchro">SYNCHRO</option><option value="xyz">XYZ</option><option value="pendulum">PENDULUM</option><option value="link">LINK</option><option value="high-contrast">HIGH CONTRAST</option>
+<option data-i18n="themeStandard" value="standard">標準</option><option data-i18n="themeRitual" value="ritual">儀式</option><option data-i18n="themeFusion" value="fusion">融合</option><option data-i18n="themeSynchro" value="synchro">シンクロ</option><option data-i18n="themeXyz" value="xyz">エクシーズ</option><option data-i18n="themePendulum" value="pendulum">ペンデュラム</option><option data-i18n="themeLink" value="link">リンク</option><option data-i18n="themeHighContrast" value="high-contrast">高コントラスト</option>
 </select>
 </div><div class="setting-row">
 <div>
@@ -2645,7 +2642,7 @@ html[data-player-names="off"] .lp-button {
 <div class="setting-desc" data-i18n="dynamicBackgroundPatternDesc">OFFまたは動き方を選択</div>
 </div>
 <select id="dynamicBackgroundPatternSelect">
-<option value="off">OFF</option><option value="drift">DRIFT</option><option value="aurora">AURORA</option><option value="waves">WAVES</option><option value="pulse">PULSE</option><option value="nebula">NEBULA</option><option value="beams">BEAMS</option><option value="orbit">ORBIT</option><option value="duel">DUEL</option>
+<option data-i18n="bgOff" value="off">オフ</option><option data-i18n="bgDrift" value="drift">漂流</option><option data-i18n="bgAurora" value="aurora">オーロラ</option><option data-i18n="bgWaves" value="waves">波動</option><option data-i18n="bgPulse" value="pulse">脈動</option><option data-i18n="bgNebula" value="nebula">星雲</option><option data-i18n="bgBeams" value="beams">光線</option><option data-i18n="bgOrbit" value="orbit">軌道</option><option data-i18n="bgDuel" value="duel">デュエル</option>
 </select>
 </div>
           
@@ -2737,6 +2734,7 @@ html[data-player-names="off"] .lp-button {
           <div class="manual-chapter"><h3 data-i18n="manualUtilityTitle">UTILITY</h3><p data-i18n="manualUtility">UTILITYではコイン／ダイス、トークン、カードカウンターを利用できます。各ツールは共通デザインで表示し、コイン／ダイス結果は実行時のみ表示され、UTILITY以外へ移動すると非表示になります。トークンのATK／DEFは専用電卓で編集できます。</p></div>
           <div class="manual-chapter"><h3 data-i18n="manualStorageShortTitle">保存</h3><p data-i18n="manualStorageShort">永続保存されるのはプレイヤー名とSETTINGSの内容のみです。LP、TURN、タイマー、LOG、GAME／MATCH戦績、UTILITY、MEMOなどの対戦データはページ再読み込み時に初期化されます。</p></div>
           <div class="manual-chapter"><h3 data-i18n="manualHomeTitle">ホーム画面から使う</h3><p data-i18n="manualHome">iPhone / iPadではSafariの共有メニューから「ホーム画面に追加」を選ぶと、ホーム画面からアプリのように起動できます。AndroidではChrome等でメニューから「ホーム画面に追加」または「アプリをインストール」を選択します。端末やブラウザによって項目名・表示方法・対応機能が異なる場合があります。</p></div>
+          <div class="manual-chapter"><h3 data-i18n="rightsTitle">権利・利用</h3><p data-i18n="rightsNotice">本ツールのソースコードおよび独自制作部分について、制作者は著作権その他の権利を主張しません。必要に応じて自由にダウンロード・改変・再配布してください。遊戯王OCGを含む第三者の名称・商標等の権利は各権利者に帰属します。</p></div>
 
           <div class="manual-note" data-i18n="manualNoteShort">大会・イベントでは主催者の端末利用ルールを優先してください。</div>
           <div class="creator-line">
@@ -2748,57 +2746,44 @@ html[data-player-names="off"] .lp-button {
         <summary data-i18n="settingsChangelog">CHANGELOG / 更新履歴</summary>
         <div class="settings-section-body changelog-section-body">
                     <div class="manual-version manual-changelog changelog-standalone">
-            <p><strong>v1.3.0</strong> <span class="manual-version-date" data-i18n="manualVersionDateV130">2026/08/24</span></p>
+            <p><strong>v1.3.0</strong> <span class="manual-version-date" data-i18n="manualVersionDateV130">2026/08/25</span></p>
             <ul>
-              <li data-i18n="manualChangelogV130A">マッチ（BO3）記録モードを追加し、2ゲーム先取によるMATCH進行とMATCH更新時のGAME 1リセットに対応</li>
-              <li data-i18n="manualChangelogV130B">LOGをページ再読み込みまで保持するセッション方式へ変更し、GAME・MATCH・勝敗記録もRESETでは消去しない仕様へ変更</li>
-              <li data-i18n="manualChangelogV130C">BO3時のLOGへMATCH戦績とGAME戦績を統合し、GAME WINをG1 FIRST／G1 SECOND／G2+ FIRST／G2+ SECONDの4区分で集計</li>
-              <li data-i18n="manualChangelogV130D">iPhone等の縦画面でLP電卓をLIFE画面下部へ常設し、P1／P2タップで計算対象を切り替える方式へ変更</li>
-              <li data-i18n="manualChangelogV130E">LP電卓とトークンステータス電卓のデザインを統一し、横画面を含むレスポンシブ操作性を改善</li>
-              <li data-i18n="manualChangelogV130F">UTILITY内の各ツールのUIを統一し、コイントス／ダイス結果表示・横画面表示・見切れ対策を改善</li>
-              <li data-i18n="manualChangelogV130G">LIFE以外の画面にもSafe Areaを考慮した左右余白を追加し、iPhone縦画面では時計・GAME・MATCH表示を省略するよう調整</li>
-              <li data-i18n="manualChangelogV130H">SETTINGSを用途別カテゴリへ再編し、全端末で1カラム表示・縦スクロール・ラベル全表示に最適化</li>
-              <li data-i18n="manualChangelogV130I">操作マニュアルを現行仕様へ更新し、BO3・LOG保持・RESET・縦画面常設LP電卓などの説明を統一</li>
-              <li data-i18n="manualChangelogV130J">対応言語を10言語へ拡張し、日本語・英語・韓国語・簡体字中国語・繁体字中国語・フランス語・ドイツ語・イタリア語・スペイン語・ポルトガル語に対応</li>
+              <li data-i18n="manualChangelogV130A">BO3・LOG保持・MATCH／GAME進行と戦績を追加</li>
+              <li data-i18n="manualChangelogV130B">縦画面LP電卓と電卓／UTILITY UIを改善</li>
+              <li data-i18n="manualChangelogV130C">Safe Area・縦横表示・SETTINGSを改善</li>
+              <li data-i18n="manualChangelogV130D">10言語対応・UI言語連動・WIN／M／G表記を追加</li>
+              <li data-i18n="manualChangelogV130E">テーマ配色を再調整。SYNCHROは白、XYZは黒</li>
+              <li data-i18n="manualChangelogV130F">マニュアル・権利表記・コード処理を更新</li>
             </ul>
             <p><strong>v1.2.0</strong> <span class="manual-version-date" data-i18n="manualVersionDateV120">2026/08/22</span></p>
             <ul>
-              <li data-i18n="manualChangelogV120A">FIRST / SECONDをDOMINUSと同じステータス行へ移動し、LP表示を常に中央配置するよう改善</li>
-              <li data-i18n="manualChangelogV120B">WINカウントとGAME表示を追加し、RESET時の勝者記録・ゲーム進行と連動</li>
-              <li data-i18n="manualChangelogV120C">LOGに勝率・先攻／後攻別戦績を追加し、各GAMEの勝者側セル全体を強調表示</li>
-              <li data-i18n="manualChangelogV120D">DOMINUS編集ポップアップを画面サイズに応じた大型レイアウトへ調整</li>
-              <li data-i18n="manualChangelogV120E">LP表示部のヘッダー行を再設計し、プレイヤー名・WINカウントの視認性を改善</li>
+              <li data-i18n="manualChangelogV120A">FIRST／SECOND・DOMINUS・LP上部表示を再配置</li>
+              <li data-i18n="manualChangelogV120B">WIN／GAME表示とRESET連動を追加</li>
+              <li data-i18n="manualChangelogV120C">LOGへ勝率・先後別戦績・勝者強調を追加</li>
             </ul>
             <p><strong>v1.1.1</strong> <span class="manual-version-date" data-i18n="manualVersionDateV111">2026/08/21</span></p>
             <ul>
-              <li data-i18n="manualChangelogV111A">端末・ブラウザ差による要素重なりを抑えるレスポンシブレイアウト補正を追加</li>
-              <li data-i18n="manualChangelogV111B">LP表示の自動フィット処理を強化し、プレビュー環境を含めて枠内へ収まるよう改善</li>
-              <li data-i18n="manualChangelogV111C">DOMINUS制約アイコンを基本1行表示とし、必要時のみ自動折り返しするよう変更</li>
-              <li data-i18n="manualChangelogV111D">デザインテーマを儀式・融合・シンクロ・エクシーズ・ペンデュラム・リンクの召喚法モチーフへ再編</li>
-              <li data-i18n="manualChangelogV111E">召喚法テーマごとの専用背景演出を追加し、HIGH CONTRASTテーマを復活</li>
-              <li data-i18n="manualChangelogV111F">DOMINUS制約とFIRST / SECOND表示を色だけに依存しない形状・線種表現へ改善</li>
+              <li data-i18n="manualChangelogV111A">端末差の重なりを修正し、LP自動フィットを強化</li>
+              <li data-i18n="manualChangelogV111B">召喚法別テーマ・背景・HIGH CONTRASTを追加</li>
+              <li data-i18n="manualChangelogV111C">DOMINUS表示と色以外の識別を改善</li>
             </ul>
             <p><strong>v1.1.0</strong> <span class="manual-version-date" data-i18n="manualVersionDateV110">2026/08/21</span></p>
             <ul>
-              <li data-i18n="manualChangelogV110A">HISTORYのHTML／PDFエクスポート機能を追加し、ライト配色固定で出力するよう対応</li>
-              <li data-i18n="manualChangelogV110B">HISTORYの先攻表示、LP配置、増減値表示を改善</li>
-              <li data-i18n="manualChangelogV110C">先攻／後攻ボタンの操作性と全体の文字間隔を調整</li>
+              <li data-i18n="manualChangelogV110A">LOGのHTML／PDF書き出しを追加</li>
+              <li data-i18n="manualChangelogV110B">LOG表示とFIRST／SECOND操作を改善</li>
             </ul>
             <p><strong>v1.0.2</strong> <span class="manual-version-date" data-i18n="manualVersionDateV102">2026/08/21</span></p>
             <ul>
-              <li data-i18n="manualChangelogV102A">GAME履歴とRESET時のゲーム進行・初期化処理を改善</li>
-              <li data-i18n="manualChangelogV102B">UTILITY・SETTINGSのハッチ開閉状態をリロードまで保持するよう変更</li>
-              <li data-i18n="manualChangelogV102C">コイン・ダイス結果表示とトークン数値表示を調整</li>
-              <li data-i18n="manualChangelogV102D">ヘッダー内のタイマー・TURN・操作ボタン配置を調整</li>
+              <li data-i18n="manualChangelogV102A">GAME履歴・RESET進行・ハッチ保持を改善</li>
+              <li data-i18n="manualChangelogV102B">コイン・ダイス・トークン・ヘッダー表示を調整</li>
             </ul>
             <p><strong>v1.0.1</strong> <span class="manual-version-date" data-i18n="manualVersionDateV101">2026/08/21</span></p>
             <ul>
-              <li data-i18n="manualChangelogV101A">iPhone等のノッチ／Dynamic Islandを考慮した余白と画面回転時のLP再描画を追加</li>
-              <li data-i18n="manualChangelogV101D">FIRST / SECOND表示をLIFE・HISTORYへ追加</li>
+              <li data-i18n="manualChangelogV101A">Safe Area・回転再描画・FIRST／SECONDを追加</li>
             </ul>
             <p><strong>v1.0.0</strong> <span class="manual-version-date" data-i18n="manualVersionDate">2026/08/21</span></p>
             <ul>
-              <li data-i18n="manualChangelogV100">リリース</li>
+              <li data-i18n="manualChangelogV100">初版公開</li>
             </ul>
           </div>
         </div>
@@ -2806,13 +2791,13 @@ html[data-player-names="off"] .lp-button {
     </section>
   </main>
 
-  <nav class="bottom-nav" aria-label="Main menu">
-    <button class="nav-btn active" data-nav="life"><span class="nav-icon">♥</span><span>LIFE</span></button>
-    <button class="nav-btn" data-nav="history"><span class="nav-icon">≡</span><span>LOG</span></button>
-    <button class="nav-btn" data-nav="utility"><span class="nav-icon">⚄</span><span>UTILITY</span></button>
-    <button class="nav-btn" data-nav="memo"><span class="nav-icon">✎</span><span>MEMO</span></button>
-    <button class="nav-btn" data-nav="settings"><span class="nav-icon">⚙</span><span>SETTINGS</span></button>
-    <button type="button" class="footer-toggle-btn" id="footerToggle" aria-label="Collapse footer" title="FOOTER"><span class="nav-icon">⌄</span><span class="footer-toggle-label">HIDE</span></button>
+  <nav class="bottom-nav" aria-label="メインメニュー">
+    <button class="nav-btn active" data-nav="life"><span class="nav-icon">♥</span><span data-i18n="life">ライフ</span></button>
+    <button class="nav-btn" data-nav="history"><span class="nav-icon">≡</span><span data-i18n="history">ログ</span></button>
+    <button class="nav-btn" data-nav="utility"><span class="nav-icon">⚄</span><span data-i18n="utility">ユーティリティ</span></button>
+    <button class="nav-btn" data-nav="memo"><span class="nav-icon">✎</span><span data-i18n="duelMemo">メモ</span></button>
+    <button class="nav-btn" data-nav="settings"><span class="nav-icon">⚙</span><span data-i18n="settings">設定</span></button>
+    <button type="button" class="footer-toggle-btn" id="footerToggle" title="FOOTER"><span class="nav-icon">⌄</span><span class="footer-toggle-label">隠す</span></button>
   </nav>
 </div>
 
@@ -2824,8 +2809,8 @@ html[data-player-names="off"] .lp-button {
   'use strict';
 
   const STORAGE_KEY = 'ocg-life-counter-v1';
-  const MAX_HISTORY = 20;
   const MAX_UTILITY_COUNT = 20;
+  const PLAYERS = Object.freeze(['p1', 'p2']);
 
   const defaults = {
     lp: { p1: 8000, p2: 8000 },
@@ -2858,6 +2843,23 @@ html[data-player-names="off"] .lp-button {
     lastChange: { p1: null, p2: null }
   };
 
+  const DOMINUS_META = Object.freeze({
+    light:  { short: '光', label: 'LIGHT' },
+    dark:   { short: '闇', label: 'DARK' },
+    earth:  { short: '地', label: 'EARTH' },
+    water:  { short: '水', label: 'WATER' },
+    fire:   { short: '炎', label: 'FIRE' },
+    wind:   { short: '風', label: 'WIND' }
+  });
+  const DOMINUS_PRESETS = Object.freeze({
+    purge: { jp: '聖王の粉砕', en: 'Dominus Purge', attrs: ['dark', 'water', 'fire'] },
+    impulse: { jp: '霊王の波動', en: 'Dominus Impulse', attrs: ['light', 'earth', 'wind'] },
+    spiral: { jp: '命王の螺旋', en: 'Dominus Spiral', attrs: ['light', 'dark'] },
+    spark: { jp: '霆王の閃光', en: 'Dominus Spark', attrs: ['earth', 'water', 'fire', 'wind'] }
+  });
+  const DOMINUS_ATTRS = Object.freeze(Object.keys(DOMINUS_META));
+  const DOMINUS_PRESET_ENTRIES = Object.freeze(Object.entries(DOMINUS_PRESETS));
+
   const clone = obj => JSON.parse(JSON.stringify(obj));
 
   const Store = {
@@ -2874,6 +2876,7 @@ html[data-player-names="off"] .lp-button {
         }
         delete this.state.settings.dynamicBackground;
         delete this.state.settings.backgroundAnimation;
+        delete this.state.settings.persistentCalculatorEnabled;
         const validThemes = new Set(['standard', 'ritual', 'fusion', 'synchro', 'xyz', 'pendulum', 'link', 'high-contrast']);
         if (!validThemes.has(this.state.settings.theme)) this.state.settings.theme = 'standard';
         // 対戦情報は保持せず、旧バージョンで保存された値も読み戻さない。
@@ -3065,6 +3068,650 @@ html[data-player-names="off"] .lp-button {
     winRecorded:name=>`Vitória de ${name} registrada`
   });
 
+  /* Compact copy for portrait layouts */
+  Object.assign(I18N["ja"], {"utilityPrompt": "コイン／ダイスを実行", "addToken": "+ トークン", "addCard": "+ カード", "deleteToken": "削除", "deleteCard": "削除", "counterCount": "カウンター", "counterEmpty": "カードを追加", "memoPlaceholder": "対戦メモ", "clearMemo": "消去", "savedBrowser": "端末に保存", "appearanceDesc": "表示モードを選択", "themeDesc": "テーマを選択", "fontFamilyDesc": "フォントを選択", "playerNameDisplayDesc": "名前を表示", "turnOrderDisplayDesc": "FIRST / SECONDを表示", "dominusDisplayDesc": "属性制限を表示", "winCountDisplayDesc": "GAME勝利数を記録", "dynamicBackgroundPatternDesc": "背景アニメを選択", "clockDisplayDesc": "現在時刻を表示", "clockFormatDesc": "時計形式を選択", "languageDesc": "表示言語を選択", "wakeLockDesc": "画面の消灯を防止", "orientationLockDesc": "画面向きを固定", "historyExportHtmlDesc": "単体HTML", "historyExportPdfDesc": "印刷用", "historyExportPdfHint": "印刷画面からPDF保存", "calculator": "LP電卓", "currentLP": "現在LP", "applyLP": "LPへ反映", "resultAfter": "結果", "dominusHint": "発動不可属性を選択", "keepOneToken": "トークンは1個以上必要", "tapToCalculate": "タップで計算", "matchModeDisplayDesc": "2本先取でMATCH記録", "timerTargetDesc": "目標時間（分）", "timerWarningLeadDesc": "目標前の強調時間（分）", "settingsHeaderTimer": "HEADER / TIMER", "settingsData": "DATA / 言語", "settingsHelp": "HELP / マニュアル", "manualHeader": "SWAP・UNDO・RESETを操作。TURNで進行。縦画面は時計・GAME・MATCHを省略。", "manualHome": "iPhone/iPadはSafariの共有→ホーム画面に追加。Androidは追加／インストールを使用。", "manualLife": "縦画面はLIFE下部にLP電卓を常設。P1/P2で対象切替。1〜2桁は00補助。＋／－／×2／÷2／SET対応。", "manualNoteShort": "大会では主催者ルールを優先。", "manualStorageShort": "名前と設定のみ保存。対戦データは再読込で初期化。", "manualTimer": "0:00から計測。Aは目標、Bは事前強調。タイマーRESETでもLOG等は保持。", "manualUtility": "コイン／ダイス、トークン、カウンターを使用。結果はUTILITY内のみ表示。", "clearSettingsBody": "保存設定を初期化。対戦データは保持。", "resetBody": "LPを8000、TURNを1へ。勝者を記録して次のGAMEへ。BO3は2本先取。タイマーRESETでもLOG・GAME・MATCHは保持。", "chooseWinnerBody": "このGAMEの勝者を選択"});
+  Object.assign(I18N["en"], {"utilityPrompt": "Run coin / dice", "addToken": "+ TOKEN", "addCard": "+ CARD", "deleteToken": "Delete", "deleteCard": "Delete", "counterCount": "Counters", "counterEmpty": "Add a card", "memoPlaceholder": "Duel memo", "clearMemo": "CLEAR", "savedBrowser": "Saved on device", "appearanceDesc": "Choose mode", "themeDesc": "Choose theme", "fontFamilyDesc": "Choose font", "playerNameDisplayDesc": "Show names", "turnOrderDisplayDesc": "Show FIRST / SECOND", "dominusDisplayDesc": "Show attribute locks", "winCountDisplayDesc": "Track GAME wins", "dynamicBackgroundPatternDesc": "Choose animation", "clockDisplayDesc": "Show current time", "clockFormatDesc": "Choose clock format", "languageDesc": "Choose language", "wakeLockDesc": "Keep screen awake", "orientationLockDesc": "Lock orientation", "historyExportHtmlDesc": "Standalone HTML", "historyExportPdfDesc": "Print view", "historyExportPdfHint": "Save PDF from print view", "calculator": "LP CALCULATOR", "currentLP": "CURRENT LP", "applyLP": "APPLY LP", "resultAfter": "RESULT", "dominusHint": "Select blocked attributes", "keepOneToken": "Keep at least 1 token", "tapToCalculate": "Tap to calculate", "matchModeDisplayDesc": "Track first-to-2 MATCH", "timerTargetDesc": "Target minutes", "timerWarningLeadDesc": "Minutes before A", "settingsHeaderTimer": "HEADER / TIMER", "settingsData": "DATA / LANGUAGE", "settingsHelp": "HELP / MANUAL", "manualHeader": "SWAP, UNDO and RESET. Tap TURN. Portrait hides clock, GAME and MATCH.", "manualHome": "iPhone/iPad: Safari Share → Home Screen. Android: Add / Install.", "manualLife": "Portrait keeps LP calculator under LIFE. Tap P1/P2 to switch target. 1–2 digits add 00. +, −, ×2, ÷2, SET.", "manualNoteShort": "Follow event device rules.", "manualStorageShort": "Only names and settings persist. Duel data resets on reload.", "manualTimer": "Starts at 0:00. A = target, B = warning. Timer reset keeps LOG/GAME/MATCH.", "manualUtility": "Coin/dice, tokens and counters. Results stay in UTILITY only.", "clearSettingsBody": "Reset saved settings. Duel data stays.", "resetBody": "LP to 8000, TURN to 1. Record winner and advance GAME. BO3 is first to 2. Timer reset keeps LOG/GAME/MATCH.", "chooseWinnerBody": "Select this GAME's winner"});
+  Object.assign(I18N["ko"], {"utilityPrompt": "코인／주사위 실행", "addToken": "+ 토큰", "addCard": "+ 카드", "deleteToken": "삭제", "deleteCard": "삭제", "counterCount": "카운터", "counterEmpty": "카드 추가", "memoPlaceholder": "대전 메모", "clearMemo": "삭제", "savedBrowser": "기기에 저장", "appearanceDesc": "표시 모드 선택", "themeDesc": "테마 선택", "fontFamilyDesc": "폰트 선택", "playerNameDisplayDesc": "이름 표시", "turnOrderDisplayDesc": "FIRST / SECOND 표시", "dominusDisplayDesc": "속성 제한 표시", "winCountDisplayDesc": "GAME 승수 기록", "dynamicBackgroundPatternDesc": "배경 애니메이션 선택", "clockDisplayDesc": "현재 시각 표시", "clockFormatDesc": "시계 형식 선택", "languageDesc": "언어 선택", "wakeLockDesc": "화면 꺼짐 방지", "orientationLockDesc": "화면 방향 고정", "historyExportHtmlDesc": "단독 HTML", "historyExportPdfDesc": "인쇄용", "historyExportPdfHint": "인쇄 화면에서 PDF 저장", "calculator": "LP 계산기", "currentLP": "현재 LP", "applyLP": "LP 적용", "resultAfter": "결과", "dominusHint": "발동 불가 속성 선택", "keepOneToken": "토큰 1개 이상 필요", "tapToCalculate": "탭하여 계산", "matchModeDisplayDesc": "2승제로 MATCH 기록", "timerTargetDesc": "목표 시간(분)", "timerWarningLeadDesc": "목표 전 강조 시간(분)", "settingsHeaderTimer": "HEADER / TIMER", "settingsData": "DATA / 언어", "settingsHelp": "HELP / 설명서", "manualHeader": "SWAP·UNDO·RESET. TURN으로 진행. 세로 화면은 시계·GAME·MATCH 생략.", "manualHome": "iPhone/iPad: Safari 공유→홈 화면 추가. Android: 추가／설치.", "manualLife": "세로 화면은 LIFE 아래 LP 계산기 상시 표시. P1/P2로 대상 전환. 1~2자리 00 보조. +, −, ×2, ÷2, SET.", "manualNoteShort": "대회에서는 주최 규칙 우선.", "manualStorageShort": "이름과 설정만 저장. 대전 데이터는 새로고침 시 초기화.", "manualTimer": "0:00부터 측정. A=목표, B=사전 강조. 타이머 RESET에도 LOG 등 유지.", "manualUtility": "코인／주사위, 토큰, 카운터 사용. 결과는 UTILITY에서만 표시.", "clearSettingsBody": "저장 설정 초기화. 대전 데이터 유지.", "resetBody": "LP 8000, TURN 1로 복귀. 승자 기록 후 다음 GAME. BO3는 2승제. 타이머 RESET에도 LOG/GAME/MATCH 유지.", "chooseWinnerBody": "이 GAME의 승자 선택"});
+  Object.assign(I18N["zh-CN"], {"utilityPrompt": "执行硬币／骰子", "addToken": "+ 衍生物", "addCard": "+ 卡片", "deleteToken": "删除", "deleteCard": "删除", "counterCount": "指示物", "counterEmpty": "添加卡片", "memoPlaceholder": "对局备忘", "clearMemo": "清除", "savedBrowser": "保存在本设备", "appearanceDesc": "选择显示模式", "themeDesc": "选择主题", "fontFamilyDesc": "选择字体", "playerNameDisplayDesc": "显示名称", "turnOrderDisplayDesc": "显示FIRST / SECOND", "dominusDisplayDesc": "显示属性限制", "winCountDisplayDesc": "记录GAME胜场", "dynamicBackgroundPatternDesc": "选择背景动画", "clockDisplayDesc": "显示当前时间", "clockFormatDesc": "选择时钟格式", "languageDesc": "选择语言", "wakeLockDesc": "防止屏幕休眠", "orientationLockDesc": "锁定屏幕方向", "historyExportHtmlDesc": "独立HTML", "historyExportPdfDesc": "打印用", "historyExportPdfHint": "从打印画面保存PDF", "calculator": "LP计算器", "currentLP": "当前LP", "applyLP": "应用LP", "resultAfter": "结果", "dominusHint": "选择受限属性", "keepOneToken": "至少保留1个衍生物", "tapToCalculate": "点击计算", "matchModeDisplayDesc": "2局先胜记录MATCH", "timerTargetDesc": "目标分钟", "timerWarningLeadDesc": "目标前强调分钟", "settingsHeaderTimer": "HEADER / TIMER", "settingsData": "DATA / 语言", "settingsHelp": "HELP / 手册", "manualHeader": "SWAP、UNDO、RESET。点击TURN推进。纵屏隐藏时钟、GAME和MATCH。", "manualHome": "iPhone/iPad：Safari分享→主屏幕。Android：添加／安装。", "manualLife": "纵屏常驻LP计算器。P1/P2切换对象。1～2位自动补00。支持＋／－／×2／÷2／SET。", "manualNoteShort": "赛事中优先遵守主办方规则。", "manualStorageShort": "仅名称和设置保存。对局数据刷新后初始化。", "manualTimer": "从0:00计时。A=目标，B=提前强调。重置计时器仍保留LOG等。", "manualUtility": "支持硬币／骰子、衍生物、指示物。结果仅在UTILITY显示。", "clearSettingsBody": "重置保存设置。对局数据保留。", "resetBody": "LP回8000，TURN回1。记录胜者后进入下一GAME。BO3为2局先胜。重置计时器仍保留LOG/GAME/MATCH。", "chooseWinnerBody": "选择本GAME胜者"});
+  Object.assign(I18N["zh-TW"], {"utilityPrompt": "執行硬幣／骰子", "addToken": "+ 衍生物", "addCard": "+ 卡片", "deleteToken": "刪除", "deleteCard": "刪除", "counterCount": "計數器", "counterEmpty": "新增卡片", "memoPlaceholder": "決鬥備忘", "clearMemo": "清除", "savedBrowser": "儲存在本裝置", "appearanceDesc": "選擇顯示模式", "themeDesc": "選擇主題", "fontFamilyDesc": "選擇字型", "playerNameDisplayDesc": "顯示名稱", "turnOrderDisplayDesc": "顯示FIRST / SECOND", "dominusDisplayDesc": "顯示屬性限制", "winCountDisplayDesc": "記錄GAME勝場", "dynamicBackgroundPatternDesc": "選擇背景動畫", "clockDisplayDesc": "顯示目前時間", "clockFormatDesc": "選擇時鐘格式", "languageDesc": "選擇語言", "wakeLockDesc": "防止螢幕休眠", "orientationLockDesc": "鎖定畫面方向", "historyExportHtmlDesc": "獨立HTML", "historyExportPdfDesc": "列印用", "historyExportPdfHint": "從列印畫面儲存PDF", "calculator": "LP計算機", "currentLP": "目前LP", "applyLP": "套用LP", "resultAfter": "結果", "dominusHint": "選擇受限屬性", "keepOneToken": "至少保留1個衍生物", "tapToCalculate": "點擊計算", "matchModeDisplayDesc": "2局先勝記錄MATCH", "timerTargetDesc": "目標分鐘", "timerWarningLeadDesc": "目標前強調分鐘", "settingsHeaderTimer": "HEADER / TIMER", "settingsData": "DATA / 語言", "settingsHelp": "HELP / 手冊", "manualHeader": "SWAP、UNDO、RESET。點擊TURN推進。直向隱藏時鐘、GAME與MATCH。", "manualHome": "iPhone/iPad：Safari分享→主畫面。Android：新增／安裝。", "manualLife": "直向常駐LP計算機。P1/P2切換對象。1～2位自動補00。支援＋／－／×2／÷2／SET。", "manualNoteShort": "賽事中優先遵守主辦方規則。", "manualStorageShort": "僅名稱與設定儲存。決鬥資料重載後初始化。", "manualTimer": "從0:00計時。A=目標，B=提前強調。重設計時器仍保留LOG等。", "manualUtility": "支援硬幣／骰子、衍生物、計數器。結果僅在UTILITY顯示。", "clearSettingsBody": "重設已儲存設定。決鬥資料保留。", "resetBody": "LP回8000，TURN回1。記錄勝者後進入下一GAME。BO3為2局先勝。重設計時器仍保留LOG/GAME/MATCH。", "chooseWinnerBody": "選擇本GAME勝者"});
+  Object.assign(I18N["fr"], {"utilityPrompt": "Pièce ou dé", "addToken": "+ TOKEN", "addCard": "+ CARD", "deleteToken": "Suppr.", "deleteCard": "Suppr.", "counterEmpty": "Ajouter une carte", "appearanceDesc": "Choisir mode", "themeDesc": "Choisir thème", "fontFamilyDesc": "Choisir font", "playerNameDisplayDesc": "Afficher noms", "turnOrderDisplayDesc": "Afficher FIRST / SECOND", "dominusDisplayDesc": "Afficher DOMINUS", "winCountDisplayDesc": "Suivre victoires GAME", "dynamicBackgroundPatternDesc": "Choisir animation", "clockDisplayDesc": "Afficher heure", "clockFormatDesc": "Choisir format", "languageDesc": "Choisir langue", "wakeLockDesc": "Garder l'écran actif", "orientationLockDesc": "Verrouiller orientation", "historyExportHtmlDesc": "HTML", "historyExportPdfDesc": "PDF", "calculator": "LP CALC", "currentLP": "LP", "applyLP": "APPLY", "resultAfter": "RESULT", "dominusHint": "Choisir Attributs bloqués", "matchModeDisplayDesc": "MATCH : 2 GAME gagnés", "timerTargetDesc": "Minutes cible", "timerWarningLeadDesc": "Minutes avant A", "settingsHeaderTimer": "HEADER / TIMER", "settingsData": "DATA / LANG", "settingsHelp": "HELP / MANUAL", "manualHeader": "SWAP, UNDO, RESET. Touchez TURN. Portrait : horloge, GAME, MATCH masqués.", "manualHome": "iPhone/iPad : Safari Partager → Accueil. Android : Ajouter / Installer.", "manualLife": "Portrait : calculateur LP sous LIFE. P1/P2 change la cible. 1–2 chiffres ajoutent 00. +, −, ×2, ÷2, SET.", "manualStorageShort": "Seuls noms/réglages persistent. Duel reset au rechargement.", "manualTimer": "0:00. A = cible, B = alerte. Reset timer conserve LOG/GAME/MATCH.", "manualUtility": "Pièce/dé, jetons, compteurs. Résultats seulement dans UTILITY.", "clearSettingsBody": "Réinitialise les réglages. Duel conservé.", "resetBody": "LP 8000, TURN 1. Vainqueur puis GAME suivant. BO3 : 2 GAME. Timer reset conserve LOG/GAME/MATCH.", "chooseWinnerBody": "Choisir le vainqueur"});
+  Object.assign(I18N["de"], {"utilityPrompt": "Münze oder Würfel", "addToken": "+ TOKEN", "addCard": "+ CARD", "deleteToken": "Löschen", "deleteCard": "Löschen", "counterEmpty": "Karte hinzufügen", "appearanceDesc": "Wählen mode", "themeDesc": "Wählen Thema", "fontFamilyDesc": "Schrift wählen", "playerNameDisplayDesc": "Anzeigen Namen", "turnOrderDisplayDesc": "Anzeigen FIRST / SECOND", "dominusDisplayDesc": "Anzeigen DOMINUS", "winCountDisplayDesc": "GAME-Siege erfassen", "dynamicBackgroundPatternDesc": "Animation wählen", "clockDisplayDesc": "Anzeigen Uhr", "clockFormatDesc": "Wählen format", "languageDesc": "Wählen Sprache", "wakeLockDesc": "Bildschirm aktiv halten", "orientationLockDesc": "Ausrichtung sperren", "historyExportHtmlDesc": "HTML", "historyExportPdfDesc": "PDF", "calculator": "LP CALC", "currentLP": "LP", "applyLP": "APPLY", "resultAfter": "RESULT", "dominusHint": "Gesperrte Attribute wählen", "matchModeDisplayDesc": "MATCH: 2 GAME-Siege", "timerTargetDesc": "Zielminuten", "timerWarningLeadDesc": "Minuten vor A", "settingsHeaderTimer": "HEADER / TIMER", "settingsData": "DATA / LANG", "settingsHelp": "HELP / MANUAL", "manualHeader": "SWAP, UNDO, RESET. TURN tippen. Hochformat: Uhr, GAME, MATCH aus.", "manualHome": "iPhone/iPad: Safari Teilen → Home. Android: Hinzufügen / Installieren.", "manualLife": "Hochformat: LP-Rechner unter LIFE. P1/P2 wechselt Ziel. 1–2 Stellen +00. +, −, ×2, ÷2, SET.", "manualStorageShort": "Nur Namen/Einstellungen bleiben. Duel-Daten resetten beim Neuladen.", "manualTimer": "0:00. A = Ziel, B = Warnung. Timer-Reset behält LOG/GAME/MATCH.", "manualUtility": "Münze/Würfel, Spielmarken, Zähler. Ergebnisse nur in UTILITY.", "clearSettingsBody": "Einstellungen resetten. Duel bleibt.", "resetBody": "LP 8000, TURN 1. Sieger, nächstes GAME. BO3: 2 GAME. Timer-Reset behält LOG/GAME/MATCH.", "chooseWinnerBody": "Sieger wählen"});
+  Object.assign(I18N["it"], {"utilityPrompt": "Moneta o dado", "addToken": "+ TOKEN", "addCard": "+ CARD", "deleteToken": "Elimina", "deleteCard": "Elimina", "counterEmpty": "Aggiungi carta", "appearanceDesc": "Scegli mode", "themeDesc": "Scegli tema", "fontFamilyDesc": "Scegli font", "playerNameDisplayDesc": "Mostra nomi", "turnOrderDisplayDesc": "Mostra FIRST / SECOND", "dominusDisplayDesc": "Mostra DOMINUS", "winCountDisplayDesc": "Registra vittorie GAME", "dynamicBackgroundPatternDesc": "Scegli animation", "clockDisplayDesc": "Mostra ora", "clockFormatDesc": "Scegli format", "languageDesc": "Scegli lingua", "wakeLockDesc": "Schermo sempre attivo", "orientationLockDesc": "Blocca orientamento", "historyExportHtmlDesc": "HTML", "historyExportPdfDesc": "PDF", "calculator": "LP CALC", "currentLP": "LP", "applyLP": "APPLY", "resultAfter": "RESULT", "dominusHint": "Scegli Attributi bloccati", "matchModeDisplayDesc": "MATCH: 2 GAME vinti", "timerTargetDesc": "Minuti obiettivo", "timerWarningLeadDesc": "Minuti prima di A", "settingsHeaderTimer": "HEADER / TIMER", "settingsData": "DATA / LANG", "settingsHelp": "HELP / MANUAL", "manualHeader": "SWAP, UNDO, RESET. Tocca TURN. Verticale: orologio, GAME, MATCH nascosti.", "manualHome": "iPhone/iPad: Safari Condividi → Home. Android: Aggiungi / Installa.", "manualLife": "Verticale: calcolatore LP sotto LIFE. P1/P2 cambia target. 1–2 cifre +00. +, −, ×2, ÷2, SET.", "manualStorageShort": "Solo nomi/impostazioni restano. Dati Duello al reload.", "manualTimer": "0:00. A = obiettivo, B = avviso. Reset timer conserva LOG/GAME/MATCH.", "manualUtility": "Moneta/dado, segnalini, contatori. Risultati solo in UTILITY.", "clearSettingsBody": "Reimposta impostazioni. Duello invariato.", "resetBody": "LP 8000, TURN 1. Vincitore, poi GAME. BO3: 2 GAME. Reset timer conserva LOG/GAME/MATCH.", "chooseWinnerBody": "Scegli vincitore"});
+  Object.assign(I18N["es"], {"utilityPrompt": "Moneda o dado", "addToken": "+ TOKEN", "addCard": "+ CARD", "deleteToken": "Eliminar", "deleteCard": "Eliminar", "counterEmpty": "Añadir carta", "appearanceDesc": "Elige mode", "themeDesc": "Elige tema", "fontFamilyDesc": "Elige font", "playerNameDisplayDesc": "Mostrar nombres", "turnOrderDisplayDesc": "Mostrar FIRST / SECOND", "dominusDisplayDesc": "Mostrar DOMINUS", "winCountDisplayDesc": "Registrar victorias GAME", "dynamicBackgroundPatternDesc": "Elige animation", "clockDisplayDesc": "Mostrar hora", "clockFormatDesc": "Elige format", "languageDesc": "Elige idioma", "wakeLockDesc": "Mantener pantalla activa", "orientationLockDesc": "Bloquear orientación", "historyExportHtmlDesc": "HTML", "historyExportPdfDesc": "PDF", "calculator": "LP CALC", "currentLP": "LP", "applyLP": "APPLY", "resultAfter": "RESULT", "dominusHint": "Elige Atributos bloqueados", "matchModeDisplayDesc": "MATCH: 2 GAME ganados", "timerTargetDesc": "Minutos objetivo", "timerWarningLeadDesc": "Minutos antes de A", "settingsHeaderTimer": "HEADER / TIMER", "settingsData": "DATA / LANG", "settingsHelp": "HELP / MANUAL", "manualHeader": "SWAP, UNDO, RESET. Toca TURN. Vertical: reloj, GAME, MATCH ocultos.", "manualHome": "iPhone/iPad: Safari Compartir → Inicio. Android: Añadir / Instalar.", "manualLife": "Vertical: calculadora LP bajo LIFE. P1/P2 cambia objetivo. 1–2 dígitos +00. +, −, ×2, ÷2, SET.", "manualStorageShort": "Solo nombres/ajustes persisten. Datos Duelo al recargar.", "manualTimer": "0:00. A = objetivo, B = aviso. Reset timer conserva LOG/GAME/MATCH.", "manualUtility": "Moneda/dado, fichas, contadores. Resultados solo en UTILITY.", "clearSettingsBody": "Reinicia ajustes. Duelo intacto.", "resetBody": "LP 8000, TURN 1. Ganador y siguiente GAME. BO3: 2 GAME. Reset timer conserva LOG/GAME/MATCH.", "chooseWinnerBody": "Elige ganador"});
+  Object.assign(I18N["pt"], {"utilityPrompt": "Moeda ou dado", "addToken": "+ TOKEN", "addCard": "+ CARD", "deleteToken": "Excluir", "deleteCard": "Excluir", "counterEmpty": "Adicionar carta", "appearanceDesc": "Escolha mode", "themeDesc": "Escolha tema", "fontFamilyDesc": "Escolha font", "playerNameDisplayDesc": "Mostrar nomes", "turnOrderDisplayDesc": "Mostrar FIRST / SECOND", "dominusDisplayDesc": "Mostrar DOMINUS", "winCountDisplayDesc": "Registrar vitórias GAME", "dynamicBackgroundPatternDesc": "Escolha animation", "clockDisplayDesc": "Mostrar hora", "clockFormatDesc": "Escolha format", "languageDesc": "Escolha idioma", "wakeLockDesc": "Manter tela ativa", "orientationLockDesc": "Travar orientação", "historyExportHtmlDesc": "HTML", "historyExportPdfDesc": "PDF", "calculator": "LP CALC", "currentLP": "LP", "applyLP": "APPLY", "resultAfter": "RESULT", "dominusHint": "Escolha Atributos bloqueados", "matchModeDisplayDesc": "MATCH: 2 GAME vencidos", "timerTargetDesc": "Minutos meta", "timerWarningLeadDesc": "Minutos antes de A", "settingsHeaderTimer": "HEADER / TIMER", "settingsData": "DATA / LANG", "settingsHelp": "HELP / MANUAL", "manualHeader": "SWAP, UNDO, RESET. Toque TURN. Retrato: relógio, GAME, MATCH ocultos.", "manualHome": "iPhone/iPad: Safari Compartilhar → Início. Android: Adicionar / Instalar.", "manualLife": "Retrato: calculadora LP sob LIFE. P1/P2 troca alvo. 1–2 dígitos +00. +, −, ×2, ÷2, SET.", "manualStorageShort": "Só nomes/configurações persistem. Dados do Duelo ao recarregar.", "manualTimer": "0:00. A = meta, B = aviso. Reset timer mantém LOG/GAME/MATCH.", "manualUtility": "Moeda/dado, fichas, marcadores. Resultados só em UTILITY.", "clearSettingsBody": "Reinicia configurações. Duelo mantido.", "resetBody": "LP 8000, TURN 1. Vencedor e próximo GAME. BO3: 2 GAME. Reset timer mantém LOG/GAME/MATCH.", "chooseWinnerBody": "Escolha vencedor"});
+  /* Current automatic LP calculator behavior. */
+  Object.assign(I18N["ja"], {manualLife:"LP枠の高さが幅の2倍を超える場合はLP電卓を自動で常設します。常設時はP1/P2で対象切替、それ以外はLPタップで全画面電卓を開きます。"});
+  Object.assign(I18N["en"], {manualLife:"LP CALC appears automatically if an LP card would be over twice as tall as wide. Tap P1/P2 to switch target; otherwise tap LP to open the full-screen calculator."});
+  Object.assign(I18N["ko"], {manualLife:"LP 영역 높이가 너비의 2배를 넘으면 LP 계산기가 자동으로 상시 표시됩니다. P1/P2로 대상을 바꾸며, 그 외에는 LP를 눌러 전체 화면 계산기를 엽니다."});
+  Object.assign(I18N["zh-CN"], {manualLife:"LP区高度超过宽度2倍时，LP计算器会自动常驻。常驻时点P1/P2切换对象；否则点LP打开全屏计算器。"});
+  Object.assign(I18N["zh-TW"], {manualLife:"LP區高度超過寬度2倍時，LP計算機會自動常駐。常駐時點P1/P2切換對象；否則點LP開啟全螢幕計算機。"});
+  Object.assign(I18N["fr"], {manualLife:"LP CALC apparaît automatiquement si une zone LP serait plus de deux fois plus haute que large. Touchez P1/P2 pour changer de cible, sinon touchez les LP pour le plein écran."});
+  Object.assign(I18N["de"], {manualLife:"Der LP-Rechner erscheint automatisch, wenn ein LP-Bereich mehr als doppelt so hoch wie breit wäre. P1/P2 wechselt das Ziel; sonst öffnet LP den Vollbildrechner."});
+  Object.assign(I18N["it"], {manualLife:"LP CALC appare automaticamente se l'area LP sarebbe alta oltre il doppio della larghezza. Tocca P1/P2 per cambiare bersaglio; altrimenti tocca LP per il calcolatore a schermo intero."});
+  Object.assign(I18N["es"], {manualLife:"LP CALC aparece automáticamente si el área LP sería más del doble de alta que ancha. Toca P1/P2 para cambiar objetivo; de lo contrario toca LP para abrir la calculadora completa."});
+  Object.assign(I18N["pt"], {manualLife:"LP CALC aparece automaticamente se a área de LP tiver mais que o dobro da altura em relação à largura. Toque P1/P2 para trocar o alvo; caso contrário, toque nos LP para tela cheia."});
+
+  /* All visible UI outside the header and DOMINUS icon system follows the
+     selected language. Header labels and DOMINUS icon glyphs/English captions
+     intentionally remain fixed. */
+  const UI_LOCALE = {
+    ja: {life:'ライフ', history:'ログ', utility:'ユーティリティ', settings:'設定', exportLabel:'書き出し', mainMenu:'メインメニュー', footerHide:'隠す', footerShow:'表示', winShort:'WIN', winAdd:'WIN +1', firstLabel:'先攻', secondLabel:'後攻', firstShort:'先', secondShort:'後', matchLabel:'マッチ', gameLabel:'ゲーム', turnHistoryLabel:'ターン', statLabel:'戦績', matchShort:'M', gameShort:'G', versus:'対', attackLabel:'攻撃', defenseLabel:'守備', themeStandard:'標準', themeRitual:'儀式', themeFusion:'融合', themeSynchro:'シンクロ', themeXyz:'エクシーズ', themePendulum:'ペンデュラム', themeLink:'リンク', themeHighContrast:'高コントラスト', bgOff:'オフ', bgDrift:'漂流', bgAurora:'オーロラ', bgWaves:'波動', bgPulse:'脈動', bgNebula:'星雲', bgBeams:'光線', bgOrbit:'軌道', bgDuel:'デュエル'},
+    en: {life:'LIFE', history:'LOG', utility:'UTILITY', settings:'SETTINGS', exportLabel:'EXPORT', mainMenu:'Main menu', footerHide:'HIDE', footerShow:'SHOW', winShort:'WIN', winAdd:'WIN +1', firstLabel:'FIRST', secondLabel:'SECOND', firstShort:'1st', secondShort:'2nd', matchLabel:'MATCH', gameLabel:'GAME', turnHistoryLabel:'TURN', statLabel:'STAT', matchShort:'M', gameShort:'G', versus:'vs', attackLabel:'ATK', defenseLabel:'DEF', themeStandard:'STANDARD', themeRitual:'RITUAL', themeFusion:'FUSION', themeSynchro:'SYNCHRO', themeXyz:'XYZ', themePendulum:'PENDULUM', themeLink:'LINK', themeHighContrast:'HIGH CONTRAST', bgOff:'OFF', bgDrift:'DRIFT', bgAurora:'AURORA', bgWaves:'WAVES', bgPulse:'PULSE', bgNebula:'NEBULA', bgBeams:'BEAMS', bgOrbit:'ORBIT', bgDuel:'DUEL'},
+    ko: {life:'라이프', history:'로그', utility:'유틸리티', settings:'설정', exportLabel:'내보내기', mainMenu:'메인 메뉴', footerHide:'숨기기', footerShow:'표시', winShort:'승', winAdd:'승리 +1', firstLabel:'선공', secondLabel:'후공', firstShort:'선', secondShort:'후', matchLabel:'매치', gameLabel:'게임', turnHistoryLabel:'턴', statLabel:'전적', matchShort:'매', gameShort:'겜', versus:'대', attackLabel:'공격력', defenseLabel:'수비력', themeStandard:'표준', themeRitual:'의식', themeFusion:'융합', themeSynchro:'싱크로', themeXyz:'엑시즈', themePendulum:'펜듈럼', themeLink:'링크', themeHighContrast:'고대비', bgOff:'끄기', bgDrift:'드리프트', bgAurora:'오로라', bgWaves:'파동', bgPulse:'펄스', bgNebula:'성운', bgBeams:'광선', bgOrbit:'궤도', bgDuel:'듀얼'},
+    'zh-CN': {life:'生命值', history:'记录', utility:'工具', settings:'设置', exportLabel:'导出', mainMenu:'主菜单', footerHide:'隐藏', footerShow:'显示', winShort:'胜', winAdd:'胜利 +1', firstLabel:'先攻', secondLabel:'后攻', firstShort:'先', secondShort:'后', matchLabel:'比赛', gameLabel:'对局', turnHistoryLabel:'回合', statLabel:'战绩', matchShort:'赛', gameShort:'局', versus:'对', attackLabel:'攻击', defenseLabel:'防御', themeStandard:'标准', themeRitual:'仪式', themeFusion:'融合', themeSynchro:'同调', themeXyz:'超量', themePendulum:'灵摆', themeLink:'连接', themeHighContrast:'高对比度', bgOff:'关闭', bgDrift:'漂移', bgAurora:'极光', bgWaves:'波浪', bgPulse:'脉冲', bgNebula:'星云', bgBeams:'光束', bgOrbit:'轨道', bgDuel:'决斗'},
+    'zh-TW': {life:'生命值', history:'記錄', utility:'工具', settings:'設定', exportLabel:'匯出', mainMenu:'主選單', footerHide:'隱藏', footerShow:'顯示', winShort:'勝', winAdd:'勝利 +1', firstLabel:'先攻', secondLabel:'後攻', firstShort:'先', secondShort:'後', matchLabel:'比賽', gameLabel:'對局', turnHistoryLabel:'回合', statLabel:'戰績', matchShort:'賽', gameShort:'局', versus:'對', attackLabel:'攻擊', defenseLabel:'防禦', themeStandard:'標準', themeRitual:'儀式', themeFusion:'融合', themeSynchro:'同步', themeXyz:'超量', themePendulum:'擺盪', themeLink:'連結', themeHighContrast:'高對比度', bgOff:'關閉', bgDrift:'漂移', bgAurora:'極光', bgWaves:'波浪', bgPulse:'脈衝', bgNebula:'星雲', bgBeams:'光束', bgOrbit:'軌道', bgDuel:'決鬥'},
+    fr: {life:'PV', history:'JOURNAL', utility:'OUTILS', settings:'RÉGLAGES', exportLabel:'EXPORTER', mainMenu:'Menu principal', footerHide:'MASQUER', footerShow:'AFFICHER', winShort:'V', winAdd:'VICTOIRE +1', firstLabel:'1ER', secondLabel:'2E', firstShort:'1er', secondShort:'2e', matchLabel:'MATCH', gameLabel:'PARTIE', turnHistoryLabel:'TOUR', statLabel:'STATS', matchShort:'M', gameShort:'P', versus:'contre', attackLabel:'ATK', defenseLabel:'DEF', themeStandard:'STANDARD', themeRitual:'RITUEL', themeFusion:'FUSION', themeSynchro:'SYNCHRO', themeXyz:'XYZ', themePendulum:'PENDULE', themeLink:'LIEN', themeHighContrast:'CONTRASTE ÉLEVÉ', bgOff:'ARRÊT', bgDrift:'DÉRIVE', bgAurora:'AURORE', bgWaves:'VAGUES', bgPulse:'PULSATION', bgNebula:'NÉBULEUSE', bgBeams:'RAYONS', bgOrbit:'ORBITE', bgDuel:'DUEL'},
+    de: {life:'LP', history:'PROTOKOLL', utility:'WERKZEUGE', settings:'EINSTELLUNGEN', exportLabel:'EXPORTIEREN', mainMenu:'Hauptmenü', footerHide:'AUSBLENDEN', footerShow:'ANZEIGEN', winShort:'S', winAdd:'SIEG +1', firstLabel:'1.', secondLabel:'2.', firstShort:'1.', secondShort:'2.', matchLabel:'MATCH', gameLabel:'SPIEL', turnHistoryLabel:'ZUG', statLabel:'STATISTIK', matchShort:'M', gameShort:'S', versus:'gegen', attackLabel:'ATK', defenseLabel:'DEF', themeStandard:'STANDARD', themeRitual:'RITUAL', themeFusion:'FUSION', themeSynchro:'SYNCHRO', themeXyz:'XYZ', themePendulum:'PENDEL', themeLink:'LINK', themeHighContrast:'HOHER KONTRAST', bgOff:'AUS', bgDrift:'DRIFT', bgAurora:'AURORA', bgWaves:'WELLEN', bgPulse:'PULS', bgNebula:'NEBEL', bgBeams:'STRAHLEN', bgOrbit:'ORBIT', bgDuel:'DUELL'},
+    it: {life:'LP', history:'REGISTRO', utility:'STRUMENTI', settings:'IMPOSTAZIONI', exportLabel:'ESPORTA', mainMenu:'Menu principale', footerHide:'NASCONDI', footerShow:'MOSTRA', winShort:'V', winAdd:'VITTORIA +1', firstLabel:'1°', secondLabel:'2°', firstShort:'1°', secondShort:'2°', matchLabel:'MATCH', gameLabel:'PARTITA', turnHistoryLabel:'TURNO', statLabel:'STAT.', matchShort:'M', gameShort:'P', versus:'contro', attackLabel:'ATK', defenseLabel:'DEF', themeStandard:'STANDARD', themeRitual:'RITUALE', themeFusion:'FUSIONE', themeSynchro:'SYNCHRO', themeXyz:'XYZ', themePendulum:'PENDOLO', themeLink:'LINK', themeHighContrast:'ALTO CONTRASTO', bgOff:'OFF', bgDrift:'DERIVA', bgAurora:'AURORA', bgWaves:'ONDE', bgPulse:'IMPULSO', bgNebula:'NEBULOSA', bgBeams:'RAGGI', bgOrbit:'ORBITA', bgDuel:'DUELLO'},
+    es: {life:'LP', history:'REGISTRO', utility:'HERRAMIENTAS', settings:'AJUSTES', exportLabel:'EXPORTAR', mainMenu:'Menú principal', footerHide:'OCULTAR', footerShow:'MOSTRAR', winShort:'V', winAdd:'VICTORIA +1', firstLabel:'1.º', secondLabel:'2.º', firstShort:'1.º', secondShort:'2.º', matchLabel:'MATCH', gameLabel:'DUELO', turnHistoryLabel:'TURNO', statLabel:'ESTAD.', matchShort:'M', gameShort:'D', versus:'contra', attackLabel:'ATK', defenseLabel:'DEF', themeStandard:'ESTÁNDAR', themeRitual:'RITUAL', themeFusion:'FUSIÓN', themeSynchro:'SINCRONÍA', themeXyz:'XYZ', themePendulum:'PÉNDULO', themeLink:'ENLACE', themeHighContrast:'ALTO CONTRASTE', bgOff:'APAGADO', bgDrift:'DERIVA', bgAurora:'AURORA', bgWaves:'ONDAS', bgPulse:'PULSO', bgNebula:'NEBULOSA', bgBeams:'RAYOS', bgOrbit:'ÓRBITA', bgDuel:'DUELO'},
+    pt: {life:'LP', history:'REGISTRO', utility:'FERRAMENTAS', settings:'CONFIGURAÇÕES', exportLabel:'EXPORTAR', mainMenu:'Menu principal', footerHide:'OCULTAR', footerShow:'MOSTRAR', winShort:'V', winAdd:'VITÓRIA +1', firstLabel:'1.º', secondLabel:'2.º', firstShort:'1.º', secondShort:'2.º', matchLabel:'MATCH', gameLabel:'DUELO', turnHistoryLabel:'TURNO', statLabel:'ESTAT.', matchShort:'M', gameShort:'D', versus:'contra', attackLabel:'ATK', defenseLabel:'DEF', themeStandard:'PADRÃO', themeRitual:'RITUAL', themeFusion:'FUSÃO', themeSynchro:'SINCRO', themeXyz:'XYZ', themePendulum:'PÊNDULO', themeLink:'LINK', themeHighContrast:'ALTO CONTRASTE', bgOff:'DESLIGADO', bgDrift:'DERIVA', bgAurora:'AURORA', bgWaves:'ONDAS', bgPulse:'PULSO', bgNebula:'NEBULOSA', bgBeams:'RAIOS', bgOrbit:'ÓRBITA', bgDuel:'DUELO'}
+  };
+  Object.entries(UI_LOCALE).forEach(([lang, values]) => Object.assign(I18N[lang], values));
+
+  const RIGHTS_LOCALE = {
+    ja: {rightsTitle:'権利・利用', rightsNotice:'本ツールのソースコードおよび独自制作部分について、制作者は著作権その他の権利を主張しません。必要に応じて自由にダウンロード・改変・再配布してください。遊戯王OCGを含む第三者の名称・商標等の権利は各権利者に帰属します。'},
+    en: {rightsTitle:'RIGHTS & USE', rightsNotice:"The creator claims no copyright or other rights over this tool’s source code or original components. You may freely download, modify, and redistribute them. Third-party names and trademarks, including Yu-Gi-Oh! OCG, belong to their respective owners."},
+    ko: {rightsTitle:'권리 및 이용', rightsNotice:'이 도구의 소스 코드와 독자 제작 부분에 대해 제작자는 저작권 등의 권리를 주장하지 않습니다. 자유롭게 다운로드·수정·재배포할 수 있습니다. Yu-Gi-Oh! OCG를 포함한 제3자의 명칭과 상표 권리는 각 권리자에게 있습니다.'},
+    'zh-CN': {rightsTitle:'权利与使用', rightsNotice:'制作者不对本工具的源代码及原创部分主张著作权等权利，可自由下载、修改和再发布。包括 Yu-Gi-Oh! OCG 在内的第三方名称及商标权利归各权利人所有。'},
+    'zh-TW': {rightsTitle:'權利與使用', rightsNotice:'製作者不對本工具的原始碼及原創部分主張著作權等權利，可自由下載、修改及再散布。包括 Yu-Gi-Oh! OCG 在內的第三方名稱及商標權利歸各權利人所有。'},
+    fr: {rightsTitle:'DROITS ET UTILISATION', rightsNotice:'Le créateur ne revendique aucun droit d’auteur ni autre droit sur le code source et les éléments originaux de cet outil. Leur téléchargement, modification et redistribution sont libres. Les noms et marques de tiers, dont Yu-Gi-Oh! OCG, appartiennent à leurs titulaires respectifs.'},
+    de: {rightsTitle:'RECHTE & NUTZUNG', rightsNotice:'Der Ersteller erhebt keine Urheber- oder sonstigen Rechte am Quellcode und an den eigenen Bestandteilen dieses Tools. Download, Änderung und Weitergabe sind frei gestattet. Namen und Marken Dritter, einschließlich Yu-Gi-Oh! OCG, gehören den jeweiligen Rechteinhabern.'},
+    it: {rightsTitle:'DIRITTI E UTILIZZO', rightsNotice:'L’autore non rivendica diritti d’autore o altri diritti sul codice sorgente e sulle parti originali di questo strumento. Download, modifica e ridistribuzione sono liberi. Nomi e marchi di terzi, incluso Yu-Gi-Oh! OCG, appartengono ai rispettivi titolari.'},
+    es: {rightsTitle:'DERECHOS Y USO', rightsNotice:'El creador no reclama derechos de autor ni otros derechos sobre el código fuente y las partes originales de esta herramienta. Se permite descargarlos, modificarlos y redistribuirlos libremente. Los nombres y marcas de terceros, incluido Yu-Gi-Oh! OCG, pertenecen a sus respectivos titulares.'},
+    pt: {rightsTitle:'DIREITOS E USO', rightsNotice:'O criador não reivindica direitos autorais nem outros direitos sobre o código-fonte e as partes originais desta ferramenta. É permitido baixar, modificar e redistribuir livremente. Nomes e marcas de terceiros, incluindo Yu-Gi-Oh! OCG, pertencem aos respectivos titulares.'}
+  };
+  Object.entries(RIGHTS_LOCALE).forEach(([lang, values]) => Object.assign(I18N[lang], values));
+
+  const CHANGELOG_V130_COMPACT = {
+    ja: [
+      'BO3記録とMATCH／GAME自動進行を追加',
+      'LOGをリロードまで保持し、MATCH／GAME戦績を統合',
+      '縦画面LP電卓をカード比率で自動表示',
+      'LP／トークン電卓とUTILITY UIを統一',
+      'Safe Area・縦横表示・SETTINGSを改善',
+      '10言語対応とUI表記の言語連動を追加',
+      'テーマの可読性を改善。SYNCHROは白、XYZは黒を基調化',
+      '文言を短縮し、戦績をWIN／M／G表記へ統一',
+      'マニュアル・更新履歴・権利表記を更新',
+      '描画・LOG集計・共通定義を最適化'
+    ],
+    en: [
+      'Added BO3 tracking and automatic MATCH/GAME flow',
+      'Keep LOG until reload; combine MATCH/GAME stats',
+      'Auto-show portrait LP calculator by card ratio',
+      'Unified LP/token calculators and UTILITY UI',
+      'Improved Safe Area, portrait/landscape, and SETTINGS',
+      'Added 10 languages and language-linked UI',
+      'Improved contrast; white SYNCHRO and black XYZ',
+      'Shortened copy; standardized WIN/M/G stats',
+      'Updated manual, changelog, and rights notice',
+      'Optimized rendering, LOG aggregation, and shared definitions'
+    ],
+    ko: [
+      'BO3 기록과 MATCH/GAME 자동 진행 추가',
+      '새로고침 전까지 LOG 유지 및 MATCH/GAME 전적 통합',
+      '카드 비율에 따라 세로 LP 계산기 자동 표시',
+      'LP/토큰 계산기와 UTILITY UI 통일',
+      'Safe Area·가로세로 표시·SETTINGS 개선',
+      '10개 언어 및 UI 언어 연동 추가',
+      '테마 대비 개선: SYNCHRO 흰색, XYZ 검은색',
+      '문구 단축 및 WIN/M/G 전적 표기 통일',
+      '매뉴얼·변경 내역·권리 표기 갱신',
+      '렌더링·LOG 집계·공통 정의 최적화'
+    ],
+    'zh-CN': [
+      '新增 BO3 记录及 MATCH/GAME 自动推进',
+      'LOG 保留至刷新，并整合 MATCH/GAME 战绩',
+      '按卡片比例自动显示竖屏 LP 计算器',
+      '统一 LP/衍生物计算器与工具 UI',
+      '改进安全区域、横竖屏及设置',
+      '新增 10 种语言及 UI 语言联动',
+      '改进主题对比度：SYNCHRO 白色、XYZ 黑色',
+      '精简文案，战绩统一为 WIN/M/G',
+      '更新手册、更新记录及权利声明',
+      '优化渲染、LOG 统计及共用定义'
+    ],
+    'zh-TW': [
+      '新增 BO3 記錄及 MATCH/GAME 自動推進',
+      'LOG 保留至重新整理，並整合 MATCH/GAME 戰績',
+      '依卡片比例自動顯示直向 LP 計算器',
+      '統一 LP/衍生物計算器與工具 UI',
+      '改善安全區域、橫直向及設定',
+      '新增 10 種語言及 UI 語言連動',
+      '改善主題對比：SYNCHRO 白色、XYZ 黑色',
+      '精簡文案，戰績統一為 WIN/M/G',
+      '更新手冊、更新記錄及權利聲明',
+      '最佳化渲染、LOG 統計及共用定義'
+    ],
+    fr: [
+      'Ajout du BO3 et de la progression MATCH/PARTIE',
+      'JOURNAL conservé jusqu’au rechargement; stats combinées',
+      'Calculatrice LP verticale affichée selon le ratio des cartes',
+      'Calculatrices LP/jeton et interface OUTILS unifiées',
+      'Safe Area, orientations et RÉGLAGES améliorés',
+      'Ajout de 10 langues et de l’interface localisée',
+      'Contraste amélioré : SYNCHRO blanc, XYZ noir',
+      'Textes abrégés; statistiques WIN/M/G uniformisées',
+      'Manuel, historique et avis de droits mis à jour',
+      'Rendu, agrégation du JOURNAL et définitions optimisés'
+    ],
+    de: [
+      'BO3-Erfassung und automatischer MATCH/SPIEL-Ablauf',
+      'PROTOKOLL bis Neuladen behalten; Statistiken vereint',
+      'LP-Rechner im Hochformat nach Kartenverhältnis anzeigen',
+      'LP/Token-Rechner und WERKZEUGE vereinheitlicht',
+      'Safe Area, Ausrichtungen und EINSTELLUNGEN verbessert',
+      '10 Sprachen und lokalisierte UI hinzugefügt',
+      'Kontrast verbessert: SYNCHRO weiß, XYZ schwarz',
+      'Texte gekürzt; WIN/M/G-Statistik vereinheitlicht',
+      'Handbuch, Verlauf und Rechtehinweis aktualisiert',
+      'Rendering, PROTOKOLL-Auswertung und Definitionen optimiert'
+    ],
+    it: [
+      'Aggiunti BO3 e avanzamento automatico MATCH/PARTITA',
+      'REGISTRO fino al ricaricamento; statistiche integrate',
+      'Calcolatrice LP verticale mostrata in base alle schede',
+      'Calcolatrici LP/gettone e UI STRUMENTI unificate',
+      'Migliorati Safe Area, orientamenti e IMPOSTAZIONI',
+      'Aggiunte 10 lingue e UI localizzata',
+      'Contrasto migliorato: SYNCHRO bianco, XYZ nero',
+      'Testi ridotti; statistiche WIN/M/G uniformate',
+      'Manuale, cronologia e diritti aggiornati',
+      'Rendering, calcolo REGISTRO e definizioni ottimizzati'
+    ],
+    es: [
+      'Añadidos BO3 y avance automático MATCH/DUELO',
+      'REGISTRO hasta recargar; estadísticas integradas',
+      'Calculadora LP vertical según la proporción de tarjetas',
+      'Calculadoras LP/ficha e interfaz HERRAMIENTAS unificadas',
+      'Mejoras en Safe Area, orientación y AJUSTES',
+      'Añadidos 10 idiomas e interfaz localizada',
+      'Mejor contraste: SYNCHRO blanco, XYZ negro',
+      'Textos reducidos; estadísticas WIN/M/G unificadas',
+      'Manual, historial y aviso de derechos actualizados',
+      'Renderizado, cálculo del REGISTRO y definiciones optimizados'
+    ],
+    pt: [
+      'Adicionados BO3 e avanço automático MATCH/DUELO',
+      'REGISTRO até recarregar; estatísticas integradas',
+      'Calculadora LP vertical conforme a proporção dos cartões',
+      'Calculadoras LP/ficha e UI FERRAMENTAS unificadas',
+      'Melhorias em Safe Area, orientação e CONFIGURAÇÕES',
+      'Adicionados 10 idiomas e UI localizada',
+      'Melhor contraste: SYNCHRO branco, XYZ preto',
+      'Textos reduzidos; estatísticas WIN/M/G unificadas',
+      'Manual, histórico e aviso de direitos atualizados',
+      'Renderização, cálculo do REGISTRO e definições otimizados'
+    ]
+  };
+  Object.entries(CHANGELOG_V130_COMPACT).forEach(([lang, entries]) => {
+    entries.forEach((entry, index) => {
+      I18N[lang][`manualChangelogV130${String.fromCharCode(65 + index)}`] = entry;
+    });
+    I18N[lang].manualVersionDateV130 = '2026/08/25';
+  });
+
+  const CHANGELOG_LEGACY_KEYS = [
+    'manualChangelogV120A', 'manualChangelogV120B', 'manualChangelogV120C', 'manualChangelogV120D', 'manualChangelogV120E',
+    'manualChangelogV111A', 'manualChangelogV111B', 'manualChangelogV111C', 'manualChangelogV111D', 'manualChangelogV111E', 'manualChangelogV111F',
+    'manualChangelogV110A', 'manualChangelogV110B', 'manualChangelogV110C',
+    'manualChangelogV102A', 'manualChangelogV102B', 'manualChangelogV102C', 'manualChangelogV102D',
+    'manualChangelogV101A', 'manualChangelogV101D', 'manualChangelogV100'
+  ];
+  const CHANGELOG_LEGACY_COMPACT = {
+    ja: [
+      'FIRST／SECONDをDOMINUS行へ移動',
+      'WIN／GAME表示とRESET連動を追加',
+      'LOGへ勝率・先後別戦績・勝者強調を追加',
+      'DOMINUS編集画面をレスポンシブ化',
+      'LP上部の名前・WIN表示を改善',
+      '端末差による要素重なりを修正',
+      'LP自動フィットを強化',
+      'DOMINUSアイコンの折返しを最適化',
+      '召喚法別テーマへ再編',
+      'テーマ別背景とHIGH CONTRASTを追加',
+      '色以外の識別表現を追加',
+      'LOGのHTML／PDF書き出しを追加',
+      'LOGの先攻・LP・増減表示を改善',
+      'FIRST／SECOND操作と文字間隔を調整',
+      'GAME履歴とRESET進行を改善',
+      'ハッチ開閉をリロードまで保持',
+      'コイン・ダイス・トークン表示を調整',
+      'ヘッダー配置を調整',
+      'Safe Area・回転時再描画に対応',
+      'LIFE／LOGへFIRST／SECONDを追加',
+      '初版公開'
+    ],
+    en: [
+      'Moved FIRST/SECOND to the DOMINUS row',
+      'Added WIN/GAME display and RESET linkage',
+      'Added win rate, order stats, and winner highlight to LOG',
+      'Made the DOMINUS editor responsive',
+      'Improved name/WIN display above LP',
+      'Fixed overlap across devices',
+      'Improved LP auto-fit',
+      'Optimized DOMINUS icon wrapping',
+      'Rebuilt themes by Summoning method',
+      'Added themed backgrounds and HIGH CONTRAST',
+      'Added non-color visual cues',
+      'Added LOG export to HTML/PDF',
+      'Improved order, LP, and delta display in LOG',
+      'Adjusted FIRST/SECOND controls and spacing',
+      'Improved GAME history and RESET flow',
+      'Keep section state until reload',
+      'Adjusted coin, dice, and token display',
+      'Adjusted header layout',
+      'Added Safe Area and redraw on rotation',
+      'Added FIRST/SECOND to LIFE/LOG',
+      'Initial release'
+    ],
+    ko: [
+      'FIRST/SECOND를 DOMINUS 행으로 이동',
+      'WIN/GAME 표시와 RESET 연동 추가',
+      'LOG에 승률·선후공 전적·승자 강조 추가',
+      'DOMINUS 편집 화면 반응형 적용',
+      'LP 상단 이름/WIN 표시 개선',
+      '기기별 요소 겹침 수정',
+      'LP 자동 맞춤 강화',
+      'DOMINUS 아이콘 줄바꿈 최적화',
+      '소환법별 테마로 재구성',
+      '테마 배경과 HIGH CONTRAST 추가',
+      '색상 외 구분 표현 추가',
+      'LOG HTML/PDF 내보내기 추가',
+      'LOG 선공·LP·증감 표시 개선',
+      'FIRST/SECOND 조작과 간격 조정',
+      'GAME 기록과 RESET 진행 개선',
+      '새로고침 전까지 섹션 상태 유지',
+      '코인·주사위·토큰 표시 조정',
+      '헤더 배치 조정',
+      'Safe Area 및 회전 시 재표시 지원',
+      'LIFE/LOG에 FIRST/SECOND 추가',
+      '최초 공개'
+    ],
+    'zh-CN': [
+      '将 FIRST/SECOND 移至 DOMINUS 行',
+      '新增 WIN/GAME 显示及 RESET 联动',
+      'LOG 新增胜率、先后攻战绩及胜者强调',
+      'DOMINUS 编辑器适配响应式布局',
+      '改进 LP 上方名称与 WIN 显示',
+      '修复不同设备的元素重叠',
+      '增强 LP 自动适配',
+      '优化 DOMINUS 图标换行',
+      '按召唤方式重组主题',
+      '新增主题背景及 HIGH CONTRAST',
+      '新增非颜色识别方式',
+      '新增 LOG HTML/PDF 导出',
+      '改进 LOG 的先攻、LP 与增减显示',
+      '调整 FIRST/SECOND 操作及间距',
+      '改进 GAME 记录及 RESET 流程',
+      '分区状态保留至刷新',
+      '调整硬币、骰子及衍生物显示',
+      '调整页眉布局',
+      '支持安全区域及旋转重绘',
+      'LIFE/LOG 新增 FIRST/SECOND',
+      '首次发布'
+    ],
+    'zh-TW': [
+      '將 FIRST/SECOND 移至 DOMINUS 行',
+      '新增 WIN/GAME 顯示及 RESET 連動',
+      'LOG 新增勝率、先後攻戰績及勝者強調',
+      'DOMINUS 編輯器支援響應式版面',
+      '改善 LP 上方名稱與 WIN 顯示',
+      '修正不同裝置的元素重疊',
+      '強化 LP 自動適配',
+      '最佳化 DOMINUS 圖示換行',
+      '依召喚方式重整主題',
+      '新增主題背景及 HIGH CONTRAST',
+      '新增非顏色識別方式',
+      '新增 LOG HTML/PDF 匯出',
+      '改善 LOG 的先攻、LP 與增減顯示',
+      '調整 FIRST/SECOND 操作及間距',
+      '改善 GAME 記錄及 RESET 流程',
+      '區段狀態保留至重新整理',
+      '調整硬幣、骰子及衍生物顯示',
+      '調整頁首版面',
+      '支援安全區域及旋轉重繪',
+      'LIFE/LOG 新增 FIRST/SECOND',
+      '首次發布'
+    ],
+    fr: [
+      'FIRST/SECOND déplacés sur la ligne DOMINUS',
+      'Affichage WIN/PARTIE lié au RESET',
+      'Taux, ordre et gagnant ajoutés au JOURNAL',
+      'Éditeur DOMINUS rendu adaptatif',
+      'Affichage du nom/WIN au-dessus des PV amélioré',
+      'Chevauchements corrigés selon l’appareil',
+      'Ajustement automatique des PV renforcé',
+      'Retour des icônes DOMINUS optimisé',
+      'Thèmes réorganisés par type d’Invocation',
+      'Fonds thématiques et HIGH CONTRAST ajoutés',
+      'Repères autres que la couleur ajoutés',
+      'Export HTML/PDF du JOURNAL ajouté',
+      'Ordre, PV et variations du JOURNAL améliorés',
+      'Commandes FIRST/SECOND et espacement ajustés',
+      'Historique PARTIE et RESET améliorés',
+      'État des sections conservé jusqu’au rechargement',
+      'Affichage pièce, dé et jeton ajusté',
+      'Disposition de l’en-tête ajustée',
+      'Safe Area et redessin après rotation ajoutés',
+      'FIRST/SECOND ajoutés à PV/JOURNAL',
+      'Première version'
+    ],
+    de: [
+      'FIRST/SECOND in die DOMINUS-Zeile verschoben',
+      'WIN/SPIEL-Anzeige mit RESET verknüpft',
+      'Siegquote, Reihenfolge und Sieger im PROTOKOLL ergänzt',
+      'DOMINUS-Editor responsiv gestaltet',
+      'Name/WIN über den LP verbessert',
+      'Überlappungen auf Geräten behoben',
+      'Automatische LP-Anpassung verbessert',
+      'Umbruch der DOMINUS-Symbole optimiert',
+      'Themen nach Beschwörungsart neu geordnet',
+      'Themenhintergründe und HIGH CONTRAST ergänzt',
+      'Erkennung ohne reine Farbcodierung ergänzt',
+      'HTML/PDF-Export des PROTOKOLLS ergänzt',
+      'Reihenfolge, LP und Änderungen im PROTOKOLL verbessert',
+      'FIRST/SECOND-Steuerung und Abstände angepasst',
+      'SPIEL-Verlauf und RESET-Ablauf verbessert',
+      'Bereichsstatus bis zum Neuladen behalten',
+      'Münz-, Würfel- und Token-Anzeige angepasst',
+      'Header-Layout angepasst',
+      'Safe Area und Neuzeichnen bei Drehung ergänzt',
+      'FIRST/SECOND zu LP/PROTOKOLL hinzugefügt',
+      'Erstveröffentlichung'
+    ],
+    it: [
+      'FIRST/SECOND spostati sulla riga DOMINUS',
+      'Display WIN/PARTITA collegato al RESET',
+      'Percentuale, ordine e vincitore aggiunti al REGISTRO',
+      'Editor DOMINUS reso responsivo',
+      'Migliorata la visualizzazione nome/WIN sopra i LP',
+      'Corrette sovrapposizioni tra dispositivi',
+      'Migliorato adattamento automatico LP',
+      'Ottimizzato ritorno a capo delle icone DOMINUS',
+      'Temi riorganizzati per tipo di Evocazione',
+      'Aggiunti sfondi tematici e HIGH CONTRAST',
+      'Aggiunti indicatori non basati solo sul colore',
+      'Aggiunta esportazione HTML/PDF del REGISTRO',
+      'Migliorati ordine, LP e variazioni nel REGISTRO',
+      'Regolati comandi FIRST/SECOND e spaziatura',
+      'Migliorati storico PARTITA e flusso RESET',
+      'Stato delle sezioni mantenuto fino al ricaricamento',
+      'Regolata visualizzazione moneta, dado e gettone',
+      'Regolato layout dell’intestazione',
+      'Aggiunti Safe Area e ridisegno alla rotazione',
+      'FIRST/SECOND aggiunti a LP/REGISTRO',
+      'Prima versione'
+    ],
+    es: [
+      'FIRST/SECOND movidos a la fila DOMINUS',
+      'Pantalla WIN/DUELO vinculada a RESET',
+      'Porcentaje, orden y ganador añadidos al REGISTRO',
+      'Editor DOMINUS adaptado a la pantalla',
+      'Mejorada la pantalla de nombre/WIN sobre LP',
+      'Corregidas superposiciones entre dispositivos',
+      'Mejorado el ajuste automático de LP',
+      'Optimizado el salto de iconos DOMINUS',
+      'Temas reorganizados por tipo de Invocación',
+      'Añadidos fondos temáticos y HIGH CONTRAST',
+      'Añadidas señales no basadas solo en color',
+      'Añadida exportación HTML/PDF del REGISTRO',
+      'Mejorados orden, LP y cambios del REGISTRO',
+      'Ajustados controles FIRST/SECOND y espaciado',
+      'Mejorados historial DUELO y flujo RESET',
+      'Estado de secciones mantenido hasta recargar',
+      'Ajustada visualización de moneda, dado y ficha',
+      'Ajustado diseño del encabezado',
+      'Añadidos Safe Area y redibujado al girar',
+      'FIRST/SECOND añadidos a LP/REGISTRO',
+      'Primera versión'
+    ],
+    pt: [
+      'FIRST/SECOND movidos para a linha DOMINUS',
+      'Exibição WIN/DUELO ligada ao RESET',
+      'Taxa, ordem e vencedor adicionados ao REGISTRO',
+      'Editor DOMINUS adaptado à tela',
+      'Exibição de nome/WIN acima dos LP melhorada',
+      'Sobreposições entre dispositivos corrigidas',
+      'Ajuste automático de LP melhorado',
+      'Quebra dos ícones DOMINUS otimizada',
+      'Temas reorganizados por tipo de Invocação',
+      'Fundos temáticos e HIGH CONTRAST adicionados',
+      'Sinais não baseados apenas em cor adicionados',
+      'Exportação HTML/PDF do REGISTRO adicionada',
+      'Ordem, LP e alterações do REGISTRO melhorados',
+      'Controles FIRST/SECOND e espaçamento ajustados',
+      'Histórico DUELO e fluxo RESET melhorados',
+      'Estado das seções mantido até recarregar',
+      'Exibição de moeda, dado e ficha ajustada',
+      'Layout do cabeçalho ajustado',
+      'Safe Area e redesenho ao girar adicionados',
+      'FIRST/SECOND adicionados a LP/REGISTRO',
+      'Primeira versão'
+    ]
+  };
+  Object.entries(CHANGELOG_LEGACY_COMPACT).forEach(([lang, entries]) => {
+    entries.forEach((entry, index) => {
+      I18N[lang][CHANGELOG_LEGACY_KEYS[index]] = entry;
+    });
+  });
+
+  const CHANGELOG_REBUILT_KEYS = [
+    'manualChangelogV130A', 'manualChangelogV130B', 'manualChangelogV130C', 'manualChangelogV130D', 'manualChangelogV130E', 'manualChangelogV130F',
+    'manualChangelogV120A', 'manualChangelogV120B', 'manualChangelogV120C',
+    'manualChangelogV111A', 'manualChangelogV111B', 'manualChangelogV111C',
+    'manualChangelogV110A', 'manualChangelogV110B',
+    'manualChangelogV102A', 'manualChangelogV102B',
+    'manualChangelogV101A', 'manualChangelogV100'
+  ];
+  const CHANGELOG_REBUILT_COMPACT = {
+    ja: [
+      'BO3・LOG保持・MATCH／GAME進行と戦績を追加',
+      '縦画面LP電卓と電卓／UTILITY UIを改善',
+      'Safe Area・縦横表示・SETTINGSを改善',
+      '10言語対応・UI言語連動・WIN／M／G表記を追加',
+      'テーマ配色を再調整。SYNCHROは白、XYZは黒',
+      'マニュアル・権利表記・コード処理を更新',
+      'FIRST／SECOND・DOMINUS・LP上部表示を再配置',
+      'WIN／GAME表示とRESET連動を追加',
+      'LOGへ勝率・先後別戦績・勝者強調を追加',
+      '端末差の重なりを修正し、LP自動フィットを強化',
+      '召喚法別テーマ・背景・HIGH CONTRASTを追加',
+      'DOMINUS表示と色以外の識別を改善',
+      'LOGのHTML／PDF書き出しを追加',
+      'LOG表示とFIRST／SECOND操作を改善',
+      'GAME履歴・RESET進行・ハッチ保持を改善',
+      'コイン・ダイス・トークン・ヘッダー表示を調整',
+      'Safe Area・回転再描画・FIRST／SECONDを追加',
+      '初版公開'
+    ],
+    en: [
+      'Added BO3, session LOG, MATCH/GAME flow, and stats',
+      'Improved portrait LP calculator and calculator/UTILITY UI',
+      'Improved Safe Area, orientations, and SETTINGS',
+      'Added 10 languages, localized UI, and WIN/M/G labels',
+      'Retuned themes: white SYNCHRO and black XYZ',
+      'Updated manual, rights notice, and code processing',
+      'Rearranged FIRST/SECOND, DOMINUS, and LP header',
+      'Added WIN/GAME display and RESET linkage',
+      'Added win rate, order stats, and winner highlight to LOG',
+      'Fixed device overlap and improved LP auto-fit',
+      'Added Summoning themes, backgrounds, and HIGH CONTRAST',
+      'Improved DOMINUS and non-color cues',
+      'Added LOG export to HTML/PDF',
+      'Improved LOG display and FIRST/SECOND controls',
+      'Improved GAME history, RESET flow, and section state',
+      'Adjusted coin, dice, token, and header display',
+      'Added Safe Area, rotation redraw, and FIRST/SECOND',
+      'Initial release'
+    ],
+    ko: [
+      'BO3·LOG 유지·MATCH/GAME 진행과 전적 추가',
+      '세로 LP 계산기와 계산기/UTILITY UI 개선',
+      'Safe Area·가로세로 표시·SETTINGS 개선',
+      '10개 언어·UI 언어 연동·WIN/M/G 표기 추가',
+      '테마 재조정: SYNCHRO 흰색, XYZ 검은색',
+      '매뉴얼·권리 표기·코드 처리 갱신',
+      'FIRST/SECOND·DOMINUS·LP 상단 재배치',
+      'WIN/GAME 표시와 RESET 연동 추가',
+      'LOG에 승률·선후공 전적·승자 강조 추가',
+      '기기별 겹침 수정 및 LP 자동 맞춤 강화',
+      '소환법별 테마·배경·HIGH CONTRAST 추가',
+      'DOMINUS 및 색상 외 구분 표현 개선',
+      'LOG HTML/PDF 내보내기 추가',
+      'LOG 표시와 FIRST/SECOND 조작 개선',
+      'GAME 기록·RESET 진행·섹션 상태 개선',
+      '코인·주사위·토큰·헤더 표시 조정',
+      'Safe Area·회전 재표시·FIRST/SECOND 추가',
+      '최초 공개'
+    ],
+    'zh-CN': [
+      '新增 BO3、LOG 保留、MATCH/GAME 流程及战绩',
+      '改进竖屏 LP 计算器及计算器/工具 UI',
+      '改进安全区域、横竖屏及设置',
+      '新增 10 种语言、UI 联动及 WIN/M/G 标记',
+      '重调主题：SYNCHRO 白色、XYZ 黑色',
+      '更新手册、权利声明及代码处理',
+      '重排 FIRST/SECOND、DOMINUS 及 LP 顶部',
+      '新增 WIN/GAME 显示及 RESET 联动',
+      'LOG 新增胜率、先后攻战绩及胜者强调',
+      '修复设备重叠并增强 LP 自动适配',
+      '新增召唤主题、背景及 HIGH CONTRAST',
+      '改进 DOMINUS 及非颜色识别',
+      '新增 LOG HTML/PDF 导出',
+      '改进 LOG 显示及 FIRST/SECOND 操作',
+      '改进 GAME 记录、RESET 流程及分区状态',
+      '调整硬币、骰子、衍生物及页眉显示',
+      '新增安全区域、旋转重绘及 FIRST/SECOND',
+      '首次发布'
+    ],
+    'zh-TW': [
+      '新增 BO3、LOG 保留、MATCH/GAME 流程及戰績',
+      '改善直向 LP 計算器及計算器/工具 UI',
+      '改善安全區域、橫直向及設定',
+      '新增 10 種語言、UI 連動及 WIN/M/G 標記',
+      '重調主題：SYNCHRO 白色、XYZ 黑色',
+      '更新手冊、權利聲明及程式處理',
+      '重排 FIRST/SECOND、DOMINUS 及 LP 上方',
+      '新增 WIN/GAME 顯示及 RESET 連動',
+      'LOG 新增勝率、先後攻戰績及勝者強調',
+      '修正裝置重疊並強化 LP 自動適配',
+      '新增召喚主題、背景及 HIGH CONTRAST',
+      '改善 DOMINUS 及非顏色識別',
+      '新增 LOG HTML/PDF 匯出',
+      '改善 LOG 顯示及 FIRST/SECOND 操作',
+      '改善 GAME 記錄、RESET 流程及區段狀態',
+      '調整硬幣、骰子、衍生物及頁首顯示',
+      '新增安全區域、旋轉重繪及 FIRST/SECOND',
+      '首次發布'
+    ],
+    fr: [
+      'BO3, JOURNAL de session, progression et statistiques ajoutés',
+      'Calculatrice LP verticale et interface OUTILS améliorées',
+      'Safe Area, orientations et RÉGLAGES améliorés',
+      '10 langues, interface localisée et libellés WIN/M/G ajoutés',
+      'Thèmes réajustés : SYNCHRO blanc, XYZ noir',
+      'Manuel, droits et traitement du code mis à jour',
+      'FIRST/SECOND, DOMINUS et en-tête LP réorganisés',
+      'Affichage WIN/PARTIE lié au RESET',
+      'Taux, ordre et gagnant ajoutés au JOURNAL',
+      'Chevauchements corrigés et ajustement LP renforcé',
+      'Thèmes, fonds d’Invocation et HIGH CONTRAST ajoutés',
+      'DOMINUS et repères non colorés améliorés',
+      'Export HTML/PDF du JOURNAL ajouté',
+      'Affichage JOURNAL et commandes FIRST/SECOND améliorés',
+      'Historique PARTIE, RESET et état des sections améliorés',
+      'Affichage pièce, dé, jeton et en-tête ajusté',
+      'Safe Area, rotation et FIRST/SECOND ajoutés',
+      'Première version'
+    ],
+    de: [
+      'BO3, Sitzungs-PROTOKOLL, Ablauf und Statistiken ergänzt',
+      'LP-Rechner im Hochformat und WERKZEUGE verbessert',
+      'Safe Area, Ausrichtungen und EINSTELLUNGEN verbessert',
+      '10 Sprachen, lokalisierte UI und WIN/M/G ergänzt',
+      'Themen neu abgestimmt: SYNCHRO weiß, XYZ schwarz',
+      'Handbuch, Rechtehinweis und Codeverarbeitung aktualisiert',
+      'FIRST/SECOND, DOMINUS und LP-Kopf neu angeordnet',
+      'WIN/SPIEL-Anzeige mit RESET verknüpft',
+      'Siegquote, Reihenfolge und Sieger im PROTOKOLL ergänzt',
+      'Überlappungen behoben und LP-Anpassung verbessert',
+      'Beschwörungsthemen, Hintergründe und HIGH CONTRAST ergänzt',
+      'DOMINUS und nichtfarbliche Hinweise verbessert',
+      'HTML/PDF-Export des PROTOKOLLS ergänzt',
+      'PROTOKOLL-Anzeige und FIRST/SECOND-Steuerung verbessert',
+      'SPIEL-Verlauf, RESET und Bereichsstatus verbessert',
+      'Münz-, Würfel-, Token- und Header-Anzeige angepasst',
+      'Safe Area, Rotation und FIRST/SECOND ergänzt',
+      'Erstveröffentlichung'
+    ],
+    it: [
+      'Aggiunti BO3, REGISTRO di sessione, flusso e statistiche',
+      'Migliorati calcolatrice LP verticale e UI STRUMENTI',
+      'Migliorati Safe Area, orientamenti e IMPOSTAZIONI',
+      'Aggiunte 10 lingue, UI localizzata e sigle WIN/M/G',
+      'Temi ricalibrati: SYNCHRO bianco, XYZ nero',
+      'Aggiornati manuale, diritti e gestione del codice',
+      'Riordinati FIRST/SECOND, DOMINUS e intestazione LP',
+      'Display WIN/PARTITA collegato al RESET',
+      'Percentuale, ordine e vincitore aggiunti al REGISTRO',
+      'Corrette sovrapposizioni e migliorato adattamento LP',
+      'Aggiunti temi, sfondi di Evocazione e HIGH CONTRAST',
+      'Migliorati DOMINUS e indicatori non cromatici',
+      'Aggiunta esportazione HTML/PDF del REGISTRO',
+      'Migliorati REGISTRO e comandi FIRST/SECOND',
+      'Migliorati storico PARTITA, RESET e stato sezioni',
+      'Regolati moneta, dado, gettone e intestazione',
+      'Aggiunti Safe Area, rotazione e FIRST/SECOND',
+      'Prima versione'
+    ],
+    es: [
+      'Añadidos BO3, REGISTRO de sesión, flujo y estadísticas',
+      'Mejoradas calculadora LP vertical e interfaz HERRAMIENTAS',
+      'Mejorados Safe Area, orientación y AJUSTES',
+      'Añadidos 10 idiomas, interfaz localizada y WIN/M/G',
+      'Temas reajustados: SYNCHRO blanco, XYZ negro',
+      'Actualizados manual, derechos y procesamiento del código',
+      'Reordenados FIRST/SECOND, DOMINUS y cabecera LP',
+      'Pantalla WIN/DUELO vinculada a RESET',
+      'Porcentaje, orden y ganador añadidos al REGISTRO',
+      'Corregidas superposiciones y mejorado ajuste LP',
+      'Añadidos temas, fondos de Invocación y HIGH CONTRAST',
+      'Mejorados DOMINUS e indicadores no cromáticos',
+      'Añadida exportación HTML/PDF del REGISTRO',
+      'Mejorados REGISTRO y controles FIRST/SECOND',
+      'Mejorados historial DUELO, RESET y estado de secciones',
+      'Ajustados moneda, dado, ficha y encabezado',
+      'Añadidos Safe Area, rotación y FIRST/SECOND',
+      'Primera versión'
+    ],
+    pt: [
+      'Adicionados BO3, REGISTRO da sessão, fluxo e estatísticas',
+      'Melhoradas calculadora LP vertical e UI FERRAMENTAS',
+      'Melhorados Safe Area, orientação e CONFIGURAÇÕES',
+      'Adicionados 10 idiomas, UI localizada e WIN/M/G',
+      'Temas reajustados: SYNCHRO branco, XYZ preto',
+      'Atualizados manual, direitos e processamento do código',
+      'Reordenados FIRST/SECOND, DOMINUS e cabeçalho LP',
+      'Exibição WIN/DUELO ligada ao RESET',
+      'Taxa, ordem e vencedor adicionados ao REGISTRO',
+      'Sobreposições corrigidas e ajuste LP melhorado',
+      'Adicionados temas, fundos de Invocação e HIGH CONTRAST',
+      'Melhorados DOMINUS e indicadores não cromáticos',
+      'Exportação HTML/PDF do REGISTRO adicionada',
+      'Melhorados REGISTRO e controles FIRST/SECOND',
+      'Melhorados histórico DUELO, RESET e estado das seções',
+      'Ajustados moeda, dado, ficha e cabeçalho',
+      'Adicionados Safe Area, rotação e FIRST/SECOND',
+      'Primeira versão'
+    ]
+  };
+  Object.entries(CHANGELOG_REBUILT_COMPACT).forEach(([lang, entries]) => {
+    entries.forEach((entry, index) => {
+      I18N[lang][CHANGELOG_REBUILT_KEYS[index]] = entry;
+    });
+  });
+
   const t = (key, ...args) => {
     const lang = Store.state.settings.language || 'ja';
     const value = I18N[lang]?.[key] ?? I18N.ja[key] ?? key;
@@ -3074,6 +3721,7 @@ html[data-player-names="off"] .lp-button {
     apply() {
       const lang = Store.state.settings.language || 'ja';
       document.documentElement.lang = lang;
+      document.title = `${t('life')} - OCG`;
       const initialToken = Store.state.tokenMemos?.find(token => token.id === 'token-initial');
       const knownInitialTokenNames = new Set(["原始生命態トークン", "Primal Being Token", "원시생명체 토큰", "原始生命态衍生物", "原始生命態衍生物", "Jeton Être Primitif", "Urwesen-Spielmarke", "Segna-Primordiale", "Ficha Ser Primitivo", "Ficha Ser Primitivo"]);
       if (initialToken && knownInitialTokenNames.has(initialToken.name)) initialToken.name = t('initialTokenName');
@@ -3096,6 +3744,14 @@ html[data-player-names="off"] .lp-button {
       if (targetInput) targetInput.setAttribute('aria-label', t('timerTarget'));
       const leadInput = $('#timerWarningLeadInput');
       if (leadInput) leadInput.setAttribute('aria-label', t('timerWarningLead'));
+      const persistentCalculator = $('#persistentCalculator');
+      if (persistentCalculator) persistentCalculator.setAttribute('aria-label', t('lpCalculator'));
+      const mainMenu = $('.bottom-nav');
+      if (mainMenu) mainMenu.setAttribute('aria-label', t('mainMenu'));
+      PLAYERS.forEach(player => {
+        const button = $(`#${player}LPButton`);
+        if (button) button.setAttribute('aria-label', `${Store.state.names[player]}: ${t('tapToCalculate')}`);
+      });
       Timer.render();
       History.render();
       if (typeof UI !== 'undefined') UI.updateChrome();
@@ -3103,10 +3759,10 @@ html[data-player-names="off"] .lp-button {
       CounterTool.render();
       Utility.renderLast();
       UI.renderNames();
+      UI.renderWins();
+      UI.renderTurnOrder();
       UI.renderLP();
       UI.renderDominusRestrictions();
-      Calculator.syncPersistent();
-      requestAnimationFrame(() => UI.fitAllLP());
     }
   };
 
@@ -3527,29 +4183,46 @@ html[data-player-names="off"] .lp-button {
       }
 
       const pushMatchRow = match => {
-        rows.push(`<tr class="history-match-row"><td colspan="3">MATCH ${match}</td></tr>`);
+        rows.push(`<tr class="history-match-row"><td colspan="3">${escapeHTML(t('matchLabel'))} ${match}</td></tr>`);
       };
       const pushGameRow = game => {
-        rows.push(`<tr class="history-game-row"><td colspan="3">GAME ${game}</td></tr>`);
+        rows.push(`<tr class="history-game-row"><td colspan="3">${escapeHTML(t('gameLabel'))} ${game}</td></tr>`);
       };
       const pushTurnRow = turn => {
-        rows.push(`<tr class="history-turn-row"><td colspan="3">TURN ${turn}</td></tr>`);
+        rows.push(`<tr class="history-turn-row"><td colspan="3">${escapeHTML(t('turnHistoryLabel'))} ${turn}</td></tr>`);
       };
-      const orderBadge = role => role === 'first' ? '<div class="history-order first">FIRST</div>' : '';
+      const orderBadge = role => role === 'first' ? `<div class="history-order first">${escapeHTML(t('firstLabel'))}</div>` : '';
 
       const completedGames = starts.filter(start => start.gameSeq < currentSeq || !!start.winner);
 
+      const entriesByGameSeq = new Map();
+      entries.forEach(entry => {
+        const gameSeq = Math.max(1, Math.trunc(entry.gameSeq || entry.game || 1));
+        if (!entriesByGameSeq.has(gameSeq)) entriesByGameSeq.set(gameSeq, []);
+        entriesByGameSeq.get(gameSeq).push(entry);
+      });
+
+      const gameStats = Object.fromEntries(PLAYERS.map(player => [player, {
+        games: completedGames.length,
+        wins: 0,
+        first: { games: 0, wins: 0 },
+        second: { games: 0, wins: 0 }
+      }]));
+      completedGames.forEach(start => {
+        PLAYERS.forEach(player => {
+          const stat = gameStats[player];
+          const role = start?.turnOrder?.[player] || (player === 'p1' ? 'first' : 'second');
+          const isWin = start?.winner === player;
+          if (isWin) stat.wins += 1;
+          if (role === 'first' || role === 'second') {
+            stat[role].games += 1;
+            if (isWin) stat[role].wins += 1;
+          }
+        });
+      });
+
       const gameStatFor = player => {
-        const byRole = role => {
-          const games = completedGames.filter(start =>
-            (start?.turnOrder?.[player] || (player === 'p1' ? 'first' : 'second')) === role
-          );
-          return { games: games.length, wins: games.filter(start => start?.winner === player).length };
-        };
-        const first = byRole('first');
-        const second = byRole('second');
-        const games = completedGames.length;
-        const wins = completedGames.filter(start => start?.winner === player).length;
+        const { games, wins, first, second } = gameStats[player];
         const rate = games > 0 ? (wins / games) * 100 : 0;
         const rateText = Number.isInteger(rate) ? `${rate.toFixed(0)}%` : `${rate.toFixed(1)}%`;
         return { games, wins, rateText, first, second };
@@ -3558,63 +4231,57 @@ html[data-player-names="off"] .lp-button {
       const gameStatCell = player => {
         const stat = gameStatFor(player);
         return `<div class="history-match-stat">
-          <div class="history-match-stat-main">GAME WIN ${stat.wins}/${stat.games} · ${stat.rateText}</div>
-          <div class="history-match-stat-split">FIRST ${stat.first.wins}/${stat.first.games} · SECOND ${stat.second.wins}/${stat.second.games}</div>
+          <div class="history-match-stat-main">${escapeHTML(t('gameShort'))} ${stat.wins}/${stat.games} · ${stat.rateText}</div>
+          <div class="history-match-stat-split">${escapeHTML(t('firstShort'))} ${stat.first.wins}/${stat.first.games} · ${escapeHTML(t('secondShort'))} ${stat.second.wins}/${stat.second.games}</div>
         </div>`;
       };
 
       if (!matchModeEnabled && Store.state.settings.winCountVisible !== false) {
-        rows.push(`<tr class="history-win-row"><td>${gameStatCell('p1')}</td><td class="time-col">STATS</td><td>${gameStatCell('p2')}</td></tr>`);
+        rows.push(`<tr class="history-win-row"><td>${gameStatCell('p1')}</td><td class="time-col">${escapeHTML(t('statLabel'))}</td><td>${gameStatCell('p2')}</td></tr>`);
       }
 
       if (matchModeEnabled) {
         const matchResults = Store.state.matchResults || [];
+        const bo3GameSplitByPlayer = Object.fromEntries(PLAYERS.map(player => [player, {
+          g1First: { games: 0, wins: 0 },
+          g1Second: { games: 0, wins: 0 },
+          laterFirst: { games: 0, wins: 0 },
+          laterSecond: { games: 0, wins: 0 }
+        }]));
+        completedGames.forEach(start => {
+          const gameNo = Math.max(1, Math.trunc(start?.game || 1));
+          PLAYERS.forEach(player => {
+            const role = start?.turnOrder?.[player] === 'second' ? 'second' : 'first';
+            const key = gameNo === 1
+              ? (role === 'first' ? 'g1First' : 'g1Second')
+              : (role === 'first' ? 'laterFirst' : 'laterSecond');
+            const bucket = bo3GameSplitByPlayer[player][key];
+            bucket.games += 1;
+            if (start?.winner === player) bucket.wins += 1;
+          });
+        });
         const matchStatCell = player => {
           const played = matchResults.length;
           const wins = matchResults.filter(result => result?.winner === player).length;
-          const losses = Math.max(0, played - wins);
           const rate = played ? (wins / played) * 100 : 0;
           const rateText = Number.isInteger(rate) ? `${rate.toFixed(0)}%` : `${rate.toFixed(1)}%`;
           const game = gameStatFor(player);
-
-          const bo3GameSplit = (() => {
-            const buckets = {
-              g1First: { games: 0, wins: 0 },
-              g1Second: { games: 0, wins: 0 },
-              laterFirst: { games: 0, wins: 0 },
-              laterSecond: { games: 0, wins: 0 }
-            };
-
-            completedGames.forEach(start => {
-              const gameNo = Math.max(1, Math.trunc(start?.game || 1));
-              const role = start?.turnOrder?.[player] === 'second' ? 'second' : 'first';
-              const isWin = start?.winner === player;
-
-              let key;
-              if (gameNo === 1) key = role === 'first' ? 'g1First' : 'g1Second';
-              else key = role === 'first' ? 'laterFirst' : 'laterSecond';
-
-              buckets[key].games += 1;
-              if (isWin) buckets[key].wins += 1;
-            });
-
-            return buckets;
-          })();
+          const bo3GameSplit = bo3GameSplitByPlayer[player];
 
           const splitText = bucket => `${bucket.wins}/${bucket.games}`;
 
           return `<div class="history-match-stat history-match-stat-combined">
-            <div class="history-match-stat-main">MATCH WIN ${wins}/${played} · ${rateText}</div>
-            <div class="history-match-stat-game">GAME WIN ${game.wins}/${game.games} · ${game.rateText}</div>
+            <div class="history-match-stat-main">${escapeHTML(t('matchShort'))} ${wins}/${played} · ${rateText}</div>
+            <div class="history-match-stat-game">${escapeHTML(t('gameShort'))} ${game.wins}/${game.games} · ${game.rateText}</div>
             <div class="history-match-stat-split history-match-stat-bo3split">
-              <span>G1 · FIRST ${splitText(bo3GameSplit.g1First)}</span>
-              <span>G1 · SECOND ${splitText(bo3GameSplit.g1Second)}</span>
-              <span>G2+ · FIRST ${splitText(bo3GameSplit.laterFirst)}</span>
-              <span>G2+ · SECOND ${splitText(bo3GameSplit.laterSecond)}</span>
+              <span>G1 ${escapeHTML(t('firstShort'))} ${splitText(bo3GameSplit.g1First)}</span>
+              <span>G1 ${escapeHTML(t('secondShort'))} ${splitText(bo3GameSplit.g1Second)}</span>
+              <span>G2+ ${escapeHTML(t('firstShort'))} ${splitText(bo3GameSplit.laterFirst)}</span>
+              <span>G2+ ${escapeHTML(t('secondShort'))} ${splitText(bo3GameSplit.laterSecond)}</span>
             </div>
           </div>`;
         };
-        rows.push(`<tr class="history-win-row history-bo3-row"><td>${matchStatCell('p1')}</td><td class="time-col">BO3 STATS</td><td>${matchStatCell('p2')}</td></tr>`);
+        rows.push(`<tr class="history-win-row history-bo3-row"><td>${matchStatCell('p1')}</td><td class="time-col">BO3</td><td>${matchStatCell('p2')}</td></tr>`);
       }
 
       let shownMatch = null;
@@ -3641,9 +4308,7 @@ html[data-player-names="off"] .lp-button {
           </tr>`);
 
         let shownTurn = 1;
-        entries
-          .filter(h => Math.max(1, Math.trunc(h.gameSeq || h.game || 1)) === start.gameSeq)
-          .forEach(h => {
+        (entriesByGameSeq.get(start.gameSeq) || []).forEach(h => {
             const turn = Math.max(1, Math.trunc(h.turn || 1));
             if (shownTurn !== turn) {
               pushTurnRow(turn);
@@ -3669,7 +4334,7 @@ html[data-player-names="off"] .lp-button {
             <thead>
               <tr>
                 <th class="p1-col">${escapeHTML(Store.state.names.p1)}</th>
-                <th class="time-col">TIME</th>
+                <th class="time-col">${escapeHTML(t('time'))}</th>
                 <th class="p2-col">${escapeHTML(Store.state.names.p2)}</th>
               </tr>
             </thead>
@@ -3690,7 +4355,8 @@ html[data-player-names="off"] .lp-button {
       return `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}`;
     },
     filename(ext) {
-      return `OCG_History_${this.timestamp()}.${ext}`;
+      const localizedLabel = String(t('history')).replace(/[^\p{L}\p{N}]+/gu, '_').replace(/^_+|_+$/g, '') || 'LOG';
+      return `OCG_${localizedLabel}_${this.timestamp()}.${ext}`;
     },
     documentHtml({ printMode = false } = {}) {
       History.render();
@@ -3712,7 +4378,7 @@ html[data-player-names="off"] .lp-button {
         font: root.dataset.font || 'system',
         turnOrder: Store.state.settings.turnOrderVisible === false ? 'off' : 'on'
       };
-      const title = `${Store.state.names.p1} vs ${Store.state.names.p2} - HISTORY`;
+      const title = `${Store.state.names.p1} ${t('versus')} ${Store.state.names.p2} - ${t('history')}`;
       const lang = Store.state.settings.language || 'ja';
       const printScript = printMode ? `<script>window.addEventListener('load',()=>setTimeout(()=>{window.focus();window.print();},250));<\/script>` : '';
 
@@ -3804,10 +4470,10 @@ html[data-player-names="off"] .lp-button {
 </head>
 <body>
 <main class="export-history-shell">
-  <h1 class="export-history-title">HISTORY</h1>
+  <h1 class="export-history-title">${escapeHTML(t('history'))}</h1>
   <div class="export-history-meta">
-    <span>${escapeHTML(Store.state.names.p1)} vs ${escapeHTML(Store.state.names.p2)}</span>
-    <span>${escapeHTML(new Date().toLocaleString())}</span>
+    <span>${escapeHTML(Store.state.names.p1)} ${escapeHTML(t('versus'))} ${escapeHTML(Store.state.names.p2)}</span>
+    <span>${escapeHTML(new Date().toLocaleString(Store.state.settings.language || undefined))}</span>
   </div>
   ${cloned.innerHTML}
 </main>
@@ -3876,8 +4542,22 @@ ${printScript}
     input: '',
     root: null,
 
-    isPortraitPersistent() {
-      return window.matchMedia('(orientation: portrait)').matches && window.matchMedia('(max-width: 600px)').matches;
+    isForcedPersistent() {
+      const main = $('.main');
+      const life = $('.life-screen');
+      if (!main || !life) return false;
+      const style = getComputedStyle(life);
+      const horizontalPadding = (parseFloat(style.paddingLeft) || 0) + (parseFloat(style.paddingRight) || 0);
+      const verticalPadding = (parseFloat(style.paddingTop) || 0) + (parseFloat(style.paddingBottom) || 0);
+      const columnGap = parseFloat(style.columnGap || style.gap) || 0;
+      const availableWidth = Math.max(1, main.clientWidth - horizontalPadding);
+      const availableHeight = Math.max(1, main.clientHeight - verticalPadding);
+      const playerCardWidth = Math.max(1, (availableWidth - columnGap) / 2);
+      return availableHeight > playerCardWidth * 2;
+    },
+
+    shouldUsePersistent() {
+      return this.isForcedPersistent();
     },
 
     isPersistentRoot() {
@@ -3889,7 +4569,7 @@ ${printScript}
       this.operator = '-';
       this.input = '';
 
-      if (this.isPortraitPersistent()) {
+      if (this.shouldUsePersistent()) {
         this.mountPersistent();
         this.render();
         return;
@@ -4108,7 +4788,15 @@ ${printScript}
     },
 
     syncPersistent() {
-      if (!this.isPortraitPersistent()) return;
+      const persistent = this.shouldUsePersistent();
+      document.documentElement.dataset.persistentCalculator = persistent ? 'on' : 'off';
+      const host = $('#persistentCalculator');
+      if (!persistent) {
+        if (host?.contains(this.root)) this.root = null;
+        if (host) host.replaceChildren();
+        return;
+      }
+      if ($('#calculatorModal')) Modal.close();
       this.mountPersistent();
       this.render();
     }
@@ -4126,12 +4814,12 @@ ${printScript}
       this.stat = stat;
       this.operator = '=';
       this.input = '';
-      const label = stat === 'atk' ? 'ATK' : 'DEF';
+      const label = stat === 'atk' ? t('attackLabel') : t('defenseLabel');
       const current = this.currentValue();
       Modal.show(`
         <div class="modal token-calculator-fullscreen duel-calculator" id="tokenCalculator" role="dialog" aria-modal="true" aria-label="${escapeHTML(t('tokenStatInput', label))}">
           <div class="modal-head">
-            <div class="modal-title">TOKEN ${label}</div>
+            <div class="modal-title">${escapeHTML(t('tokenDefault'))} ${escapeHTML(label)}</div>
             <button class="close-btn" data-modal-close aria-label="${escapeHTML(t('close'))}">×</button>
           </div>
           <div class="calc-status">
@@ -4431,12 +5119,12 @@ ${printScript}
             <button class="token-delete" data-token-delete aria-label="${escapeHTML(t('deleteToken'))}">×</button>
           </div>
           <div class="token-values-row">
-            <button class="token-value-block" data-token-stat="atk" aria-label="${escapeHTML(token.name)} ATK">
-              <span class="token-value-label">ATK</span>
+            <button class="token-value-block" data-token-stat="atk" aria-label="${escapeHTML(token.name)} ${escapeHTML(t('attackLabel'))}">
+              <span class="token-value-label">${escapeHTML(t('attackLabel'))}</span>
               <span class="token-value-number">${token.atk === '' ? '—' : token.atk}</span>
             </button>
-            <button class="token-value-block" data-token-stat="def" aria-label="${escapeHTML(token.name)} DEF">
-              <span class="token-value-label">DEF</span>
+            <button class="token-value-block" data-token-stat="def" aria-label="${escapeHTML(token.name)} ${escapeHTML(t('defenseLabel'))}">
+              <span class="token-value-label">${escapeHTML(t('defenseLabel'))}</span>
               <span class="token-value-number">${token.def === '' ? '—' : token.def}</span>
             </button>
           </div>
@@ -4609,8 +5297,8 @@ ${printScript}
           <div class="modal-head"><div class="modal-title">${escapeHTML(t('chooseWinnerTitle'))}</div><button class="close-btn" data-modal-close aria-label="${escapeHTML(t('close'))}">×</button></div>
           <div class="confirm-text">${escapeHTML(t('chooseWinnerBody'))}</div>
           <div class="winner-choice-grid">
-            <button type="button" class="winner-choice-btn p1" data-winner="p1"><strong>${escapeHTML(Store.state.names.p1)}</strong><span>WIN +1</span></button>
-            <button type="button" class="winner-choice-btn p2" data-winner="p2"><strong>${escapeHTML(Store.state.names.p2)}</strong><span>WIN +1</span></button>
+            <button type="button" class="winner-choice-btn p1" data-winner="p1"><strong>${escapeHTML(Store.state.names.p1)}</strong><span>${escapeHTML(t('winAdd'))}</span></button>
+            <button type="button" class="winner-choice-btn p2" data-winner="p2"><strong>${escapeHTML(Store.state.names.p2)}</strong><span>${escapeHTML(t('winAdd'))}</span></button>
           </div>
           <div class="modal-actions" style="margin-top:10px">
             <button class="action-btn" data-modal-close>${escapeHTML(t('cancel'))}</button>
@@ -4819,9 +5507,9 @@ ${printScript}
         const icon = footerBtn.querySelector('.nav-icon');
         const label = footerBtn.querySelector('.footer-toggle-label');
         if (icon) icon.textContent = this.footerCollapsed ? '⌃' : '⌄';
-        if (label) label.textContent = this.footerCollapsed ? 'SHOW' : 'HIDE';
-        footerBtn.setAttribute('aria-label', this.footerCollapsed ? 'Expand footer' : 'Collapse footer');
-        footerBtn.title = this.footerCollapsed ? 'Expand footer' : 'Collapse footer';
+        if (label) label.textContent = this.footerCollapsed ? t('footerShow') : t('footerHide');
+        footerBtn.setAttribute('aria-label', this.footerCollapsed ? t('expandFooter') : t('collapseFooter'));
+        footerBtn.title = this.footerCollapsed ? t('expandFooter') : t('collapseFooter');
       }
       requestAnimationFrame(() => { this.fitAllLP(); this.adaptHeaderLayout(); });
     },
@@ -4831,10 +5519,10 @@ ${printScript}
     },
     renderWins() {
       const enabled = Store.state.settings.winCountVisible !== false;
-      ['p1','p2'].forEach(player => {
+      PLAYERS.forEach(player => {
         const el = $(`#${player}WinDisplay`);
         if (!el) return;
-        el.textContent = `WIN ${Math.max(0, Math.trunc(Store.state.wins?.[player] || 0))}`;
+        el.textContent = `${t('winShort')} ${Math.max(0, Math.trunc(Store.state.wins?.[player] || 0))}`;
         el.hidden = !enabled;
       });
     },
@@ -4864,14 +5552,15 @@ ${printScript}
       toast(t('turnAdvanced', Store.state.turn));
     },
     renderTurnOrder() {
-      ['p1','p2'].forEach(player => {
+      PLAYERS.forEach(player => {
         const el = $(`#${player}TurnOrder`);
         if (!el) return;
         const role = Store.state.turnOrder?.[player] === 'second' ? 'second' : 'first';
-        el.textContent = role === 'first' ? 'FIRST' : 'SECOND';
+        const roleLabel = role === 'first' ? t('firstLabel') : t('secondLabel');
+        el.textContent = roleLabel;
         el.classList.toggle('first', role === 'first');
         el.classList.toggle('second', role === 'second');
-        el.setAttribute('aria-label', `${Store.state.names[player] || player.toUpperCase()}: ${role === 'first' ? 'FIRST' : 'SECOND'}. ${t('ariaTapToEdit')}.`);
+        el.setAttribute('aria-label', `${Store.state.names[player] || player.toUpperCase()}: ${roleLabel}. ${t('ariaTapToEdit')}.`);
       });
     },
     toggleTurnOrder() {
@@ -4900,7 +5589,7 @@ ${printScript}
       $('#p2NameDisplay').textContent = Store.state.names.p2;
     },
     renderLP() {
-      ['p1','p2'].forEach(player => {
+      PLAYERS.forEach(player => {
         $(`#${player}LP`).textContent = formatLP(Store.state.lp[player]);
         const last = Store.state.lastChange[player];
         const label = $(`#${player}LastLabel`);
@@ -5104,7 +5793,7 @@ ${printScript}
     reflowLPAfterOrientationChange() {
       // Orientation changes can report the old layout for a few frames, especially on iOS.
       // Restore the final LP values first, then recalculate repeatedly as the viewport settles.
-      ['p1', 'p2'].forEach(player => {
+      PLAYERS.forEach(player => {
         if (this.lpCountAnimations[player]) {
           cancelAnimationFrame(this.lpCountAnimations[player]);
           this.lpCountAnimations[player] = null;
@@ -5127,10 +5816,7 @@ ${printScript}
       setTimeout(refit, 320);
 
       setTimeout(() => {
-        if (Calculator.isPortraitPersistent()) {
-          if ($('#calculatorModal')) Modal.close();
-          Calculator.syncPersistent();
-        }
+        Calculator.syncPersistent();
       }, 80);
     },
     swapPlayers() {
@@ -5174,26 +5860,12 @@ ${printScript}
       toast(t('playersSwapped'));
     },
     renderDominusRestrictions() {
-      const meta = {
-        light:  { short: t('attrLightShort'), label: 'LIGHT' },
-        dark:   { short: t('attrDarkShort'), label: 'DARK' },
-        earth:  { short: t('attrEarthShort'), label: 'EARTH' },
-        water:  { short: t('attrWaterShort'), label: 'WATER' },
-        fire:   { short: t('attrFireShort'), label: 'FIRE' },
-        wind:   { short: t('attrWindShort'), label: 'WIND' }
-      };
       const enabled = Store.state.settings.dominusVisible !== false;
-      ['p1','p2'].forEach(player => {
+      PLAYERS.forEach(player => {
         const state = { ...defaults.dominusRestrictions[player], ...(Store.state.dominusManualRestrictions?.[player] || Store.state.dominusRestrictions?.[player] || {}) };
-        const presetMap = {
-          purge: ['dark','water','fire'],
-          impulse: ['light','earth','wind'],
-          spiral: ['light','dark'],
-          spark: ['earth','water','fire','wind']
-        };
-        Object.entries(presetMap).forEach(([key, attrs]) => {
+        DOMINUS_PRESET_ENTRIES.forEach(([key, preset]) => {
           if (!Store.state.dominusPresets?.[player]?.[key]) return;
-          attrs.forEach(attr => state[attr] = true);
+          preset.attrs.forEach(attr => state[attr] = true);
         });
         Store.state.dominusRestrictions[player] = { ...state };
         const zone = document.querySelector(`[data-dominus-player="${player}"]`);
@@ -5205,40 +5877,17 @@ ${printScript}
           root.innerHTML = '';
           return;
         }
-        const blocked = Object.keys(meta).filter(attr => !!state[attr]);
+        const blocked = DOMINUS_ATTRS.filter(attr => !!state[attr]);
         root.innerHTML = blocked.map(attr => `
-          <span class="dominus-icon" data-attr="${attr}" title="${meta[attr].label}: BLOCKED" aria-label="${meta[attr].label} monster effects blocked">${meta[attr].short}</span>
+          <span class="dominus-icon" data-attr="${attr}" title="${DOMINUS_META[attr].label}: BLOCKED" aria-label="${DOMINUS_META[attr].label} monster effects blocked">${DOMINUS_META[attr].short}</span>
         `).join('');
         const placeholder = zone.querySelector('.dominus-placeholder');
         if (placeholder) placeholder.hidden = blocked.length > 0;
-        zone.setAttribute('aria-label', `${player.toUpperCase()} DOMINUS: ${blocked.length ? blocked.map(attr => meta[attr].label).join(', ') + ' ' + t('ariaDominusBlocked') : t('ariaDominusNone')}. ${t('ariaTapToEdit')}.`);
+        zone.setAttribute('aria-label', `${player.toUpperCase()} DOMINUS: ${blocked.length ? blocked.map(attr => DOMINUS_META[attr].label).join(', ') + ' ' + t('ariaDominusBlocked') : t('ariaDominusNone')}. ${t('ariaTapToEdit')}.`);
       });
     },
     openDominusSelector(player) {
       if (Store.state.settings.dominusVisible === false) return;
-      const meta = {
-        light:  { short: t('attrLightShort'), label: 'LIGHT' },
-        dark:   { short: t('attrDarkShort'), label: 'DARK' },
-        earth:  { short: t('attrEarthShort'), label: 'EARTH' },
-        water:  { short: t('attrWaterShort'), label: 'WATER' },
-        fire:   { short: t('attrFireShort'), label: 'FIRE' },
-        wind:   { short: t('attrWindShort'), label: 'WIND' }
-      };
-      const presets = {
-        purge: {
-          jp: '聖王の粉砕', en: 'Dominus Purge', attrs: ['dark','water','fire']
-        },
-        impulse: {
-          jp: '霊王の波動', en: 'Dominus Impulse', attrs: ['light','earth','wind']
-        },
-        spiral: {
-          jp: '命王の螺旋', en: 'Dominus Spiral', attrs: ['light','dark']
-        },
-        spark: {
-          jp: '霆王の閃光', en: 'Dominus Spark', attrs: ['earth','water','fire','wind']
-        }
-      };
-
       // 既存状態は手動属性として引き継ぎ、カードプリセットは独立して管理する。
       if (!Store.state.dominusManualRestrictions) {
         Store.state.dominusManualRestrictions = clone(defaults.dominusManualRestrictions);
@@ -5261,7 +5910,7 @@ ${printScript}
         Object.keys(effective).forEach(attr => {
           effective[attr] = !!manualDraft[attr];
         });
-        Object.entries(presets).forEach(([key, preset]) => {
+        DOMINUS_PRESET_ENTRIES.forEach(([key, preset]) => {
           if (!presetDraft[key]) return;
           preset.attrs.forEach(attr => effective[attr] = true);
         });
@@ -5269,7 +5918,7 @@ ${printScript}
       };
 
       const renderChoice = attr => {
-        const item = meta[attr];
+        const item = DOMINUS_META[attr];
         const effective = computeEffective();
         return `
           <div class="dominus-choice-wrap">
@@ -5282,7 +5931,7 @@ ${printScript}
         <button type="button" class="dominus-preset-btn" data-dominus-preset="${key}" aria-pressed="${presetDraft[key] ? 'true' : 'false'}">
           <span class="dominus-preset-jp">《${preset.jp}》</span>
           <span class="dominus-preset-en">${preset.en}</span>
-          <span class="dominus-preset-attrs">${preset.attrs.map(attr => meta[attr].short).join('・')}</span>
+          <span class="dominus-preset-attrs">${preset.attrs.map(attr => DOMINUS_META[attr].short).join('・')}</span>
         </button>`;
 
       Modal.show(`
@@ -5295,10 +5944,10 @@ ${printScript}
             <button class="close-btn" data-modal-close aria-label="${escapeHTML(t('close'))}">×</button>
           </div>
           <div class="confirm-text">${escapeHTML(t('dominusHint'))}</div>
-          <div class="dominus-choice-grid">${Object.keys(meta).map(renderChoice).join('')}</div>
+          <div class="dominus-choice-grid">${DOMINUS_ATTRS.map(renderChoice).join('')}</div>
           <div class="dominus-preset-section">
             <div class="dominus-preset-title">CARD PRESETS</div>
-            <div class="dominus-preset-grid">${Object.entries(presets).map(([key,preset]) => renderPreset(key,preset)).join('')}</div>
+            <div class="dominus-preset-grid">${DOMINUS_PRESET_ENTRIES.map(([key,preset]) => renderPreset(key,preset)).join('')}</div>
           </div>
           <div class="modal-actions">
             <button class="action-btn" id="clearDominus">${escapeHTML(t('dominusClear'))}</button>
@@ -5324,7 +5973,7 @@ ${printScript}
               if (effective[attr]) {
                 // 個別で許可へ戻す場合、その属性を含む有効プリセットも解除する。
                 manualDraft[attr] = false;
-                Object.entries(presets).forEach(([key, preset]) => {
+                DOMINUS_PRESET_ENTRIES.forEach(([key, preset]) => {
                   if (presetDraft[key] && preset.attrs.includes(attr)) presetDraft[key] = false;
                 });
               } else {
@@ -5343,8 +5992,8 @@ ${printScript}
           });
 
           $('#clearDominus').addEventListener('click', () => {
-            Object.keys(meta).forEach(attr => manualDraft[attr] = false);
-            Object.keys(presets).forEach(key => presetDraft[key] = false);
+            DOMINUS_ATTRS.forEach(attr => manualDraft[attr] = false);
+            DOMINUS_PRESET_ENTRIES.forEach(([key]) => presetDraft[key] = false);
             syncAll();
           });
 
@@ -5444,7 +6093,6 @@ ${printScript}
       CounterTool.render();
       CounterTool.bind();
       this.bind();
-      Calculator.syncPersistent();
       this.updateChrome();
       window.addEventListener('resize', () => {
         this.reflowLPAfterOrientationChange();
@@ -6296,13 +6944,13 @@ html[data-player-names="off"] .player-win-row { top: 5px !important; }
 }
 
 
-/* Portrait iPhone: LP calculator is permanently visible at the bottom of LIFE. */
+/* Persistent LP calculator. JavaScript enables this layout either from the
+   user setting or when the hypothetical LP-card height exceeds 2x its width. */
 .persistent-lp-calculator {
   display: none;
 }
 
-@media (orientation: portrait) and (max-width: 600px) {
-  .screen.life-screen {
+  html[data-persistent-calculator="on"] .screen.life-screen {
     grid-template-columns: minmax(0,1fr) minmax(0,1fr);
     grid-template-rows: minmax(0, 42%) minmax(0, 58%);
     gap: 5px;
@@ -6311,13 +6959,13 @@ html[data-player-names="off"] .player-win-row { top: 5px !important; }
     padding-bottom: max(5px, env(safe-area-inset-bottom));
   }
 
-  .screen.life-screen > .player-card {
+  html[data-persistent-calculator="on"] .screen.life-screen > .player-card {
     grid-row: 1;
     min-height: 0;
   }
 
-  .persistent-lp-calculator {
-    display: block;
+  html[data-persistent-calculator="on"] .persistent-lp-calculator {
+    display: block !important;
     grid-column: 1 / -1;
     grid-row: 2;
     min-width: 0;
@@ -6441,26 +7089,18 @@ html[data-player-names="off"] .player-win-row { top: 5px !important; }
   }
 
   /* Give the upper LP cards more room in the reduced portrait area. */
-  .screen.life-screen .player-card .lp-button {
+  html[data-persistent-calculator="on"] .screen.life-screen .player-card .lp-button {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
   }
 
-  .screen.life-screen .player-status-row {
+  html[data-persistent-calculator="on"] .screen.life-screen .player-status-row {
     bottom: clamp(27px, 7vw, 34px);
   }
 
-  .screen.life-screen .change-line {
+  html[data-persistent-calculator="on"] .screen.life-screen .change-line {
     bottom: 4px;
   }
-}
-
-/* Landscape and larger portrait devices keep the tap-to-open fullscreen calculator. */
-@media (orientation: landscape), (min-width: 601px) {
-  .persistent-lp-calculator {
-    display: none !important;
-  }
-}
 
 
 /* Standalone changelog column inside SETTINGS */
@@ -6786,5 +7426,220 @@ html[lang="pt"] body {
 .screen[data-screen="settings"] select#languageSelect {
   min-width: min(48vw, 220px);
 }
+
+
+/* Compact wording support */
+.screen[data-screen="settings"] .setting-desc{font-size:9px!important;line-height:1.3!important}
+.screen[data-screen="settings"] .setting-row{min-height:54px!important;padding:9px 0!important}
+.screen[data-screen="settings"]>.settings-section>summary{min-height:46px!important;padding-top:10px!important;padding-bottom:10px!important}
+
+
+/* Compact LOG stats */
+.history-match-stat-main,
+.history-match-stat-game {
+  white-space: nowrap;
+}
+.history-match-stat-bo3split {
+  gap: 2px 6px !important;
+}
+.history-match-stat-bo3split span {
+  white-space: nowrap;
+}
+@media (orientation: portrait) and (max-width: 600px) {
+  .history-match-stat-main { font-size: 10px !important; }
+  .history-match-stat-game { font-size: 9px !important; }
+  .history-match-stat-split { font-size: 8px !important; }
+  .history-win-row .time-col { font-size: 8px !important; }
+}
+
+
+/* Theme contrast normalization -------------------------------------------
+   Solid fills and text accents need different colors. Keeping them separate
+   prevents pale themes from producing white-on-white text and dark themes
+   from producing low-contrast accent labels. */
+:root {
+  --accent-readable: #242933;
+  --p1-readable: #315374;
+  --p2-readable: #714737;
+}
+
+html[data-mode="dark"] {
+  --accent-readable: #e3e7ee;
+  --p1-readable: #8db8e6;
+  --p2-readable: #e4a58b;
+}
+
+html[data-theme="ritual"] {
+  --accent-readable: #24577c;
+  --accent-contrast: #ffffff;
+  --p1-readable: #245f83;
+  --p2-readable: #234d6c;
+}
+html[data-theme="fusion"] {
+  --accent-readable: #623a82;
+  --accent-contrast: #ffffff;
+  --p1-readable: #633b84;
+  --p2-readable: #593573;
+}
+html[data-theme="synchro"] {
+  --accent-readable: #58616d;
+  --accent-contrast: #111318;
+  --p1-readable: #4d5866;
+  --p2-readable: #56606c;
+}
+html[data-theme="xyz"] {
+  --accent-readable: #30323a;
+  --accent-contrast: #ffffff;
+  --p1-readable: #40434d;
+  --p2-readable: #555966;
+}
+html[data-theme="pendulum"] {
+  --accent: #137a66;
+  --accent-readable: #0e6f5c;
+  --accent-contrast: #ffffff;
+  --p1-readable: #0d6871;
+  --p2-readable: #7a3d69;
+}
+html[data-theme="link"] {
+  --accent-readable: #0f4fa9;
+  --accent-contrast: #ffffff;
+  --p1-readable: #115cae;
+  --p2-readable: #21467f;
+}
+
+html[data-theme="ritual"][data-mode="dark"] {
+  --accent-readable: #73b7e6;
+  --p1-readable: #78bde8;
+  --p2-readable: #73acd6;
+}
+html[data-theme="fusion"][data-mode="dark"] {
+  --accent-readable: #c28bea;
+  --p1-readable: #c49ae5;
+  --p2-readable: #b78bd2;
+}
+html[data-theme="synchro"][data-mode="dark"] {
+  --accent-readable: #d6dbe2;
+  --p1-readable: #d2d8e1;
+  --p2-readable: #b7c0cd;
+}
+html[data-theme="xyz"][data-mode="dark"] {
+  --accent-readable: #d4d6dc;
+  --p1-readable: #c5c8d0;
+  --p2-readable: #d0d3da;
+}
+html[data-theme="pendulum"][data-mode="dark"] {
+  --accent-readable: #5fd6b8;
+  --p1-readable: #62d4dc;
+  --p2-readable: #e2a1d0;
+}
+html[data-theme="link"][data-mode="dark"] {
+  --accent-readable: #78aef5;
+  --p1-readable: #79b7f4;
+  --p2-readable: #91b2e8;
+}
+
+/* SYNCHRO and XYZ own their base luminance.
+   This keeps the white Synchro frame and black Xyz frame distinct even when
+   the global appearance setting would otherwise give both a gray base. */
+html[data-theme="synchro"][data-mode] {
+  color-scheme: light;
+  --bg: #eef0f3;
+  --surface: #ffffff;
+  --surface-2: #dfe3e8;
+  --text: #101216;
+  --muted: #5c6470;
+  --border: rgba(16, 18, 22, .17);
+  --accent: #c7ccd4;
+  --accent-readable: #46505d;
+  --accent-contrast: #111318;
+  --p1: #e4e8ed;
+  --p2: #bcc3cd;
+  --p1-readable: #414b58;
+  --p2-readable: #3d4651;
+  --danger: #b3261e;
+  --success: #2e7d32;
+  --shadow: 0 10px 30px rgba(28, 34, 42, .12);
+  --tap: rgba(16, 18, 22, .07);
+}
+
+html[data-theme="xyz"][data-mode] {
+  color-scheme: dark;
+  --bg: #030406;
+  --surface: #0b0d11;
+  --surface-2: #171a20;
+  --text: #f4f6f8;
+  --muted: #aeb4bf;
+  --border: rgba(255, 255, 255, .15);
+  --accent: #252933;
+  --accent-readable: #eceff4;
+  --accent-contrast: #ffffff;
+  --p1: #171a20;
+  --p2: #343943;
+  --p1-readable: #e2e5ea;
+  --p2-readable: #cbd0d8;
+  --danger: #ff8a80;
+  --success: #81c784;
+  --shadow: 0 14px 38px rgba(0, 0, 0, .52);
+  --tap: rgba(255, 255, 255, .09);
+}
+
+html[data-theme="high-contrast"] {
+  --accent-readable: #000000;
+  --p1-readable: #0057b8;
+  --p2-readable: #9c3300;
+}
+html[data-theme="high-contrast"][data-mode="dark"] {
+  --accent-readable: #ffffff;
+  --p1-readable: #7cc6ff;
+  --p2-readable: #ffad85;
+}
+
+/* Accent-colored text placed on page and panel surfaces. */
+.section-title,
+.history-export-trigger,
+.history-turn-row td,
+.token-value-label,
+.utility-section > summary::after,
+.manual-box summary::after,
+.manual-content a,
+.settings-section > summary,
+.manual-chapter h3,
+.calc-result-preview,
+.calc-quick .calc-key.set-mode,
+.calc-key.op,
+.history-match-row td,
+.export-history-title {
+  color: var(--accent-readable);
+}
+
+/* Player colors remain decorative; readable variants are used for text. */
+.player-card.p1 { --player-readable: var(--p1-readable); }
+.player-card.p2 { --player-readable: var(--p2-readable); }
+.player-tag { color: var(--player-readable); }
+.history-win-row td:first-child,
+.history-table th.p1-col { color: var(--p1-readable); }
+.history-win-row td:last-child,
+.history-table th.p2-col { color: var(--p2-readable); }
+
+/* FIRST uses a solid player fill, so pale summon themes need a dark label. */
+html[data-theme="synchro"] .turn-order-btn.first { color: #111318; }
+html[data-theme="pendulum"] .player-card.p1 .turn-order-btn.first { color: #07191d; }
+html[data-theme="ritual"] .player-card.p1 .turn-order-btn.first { color: #000000; }
+html[data-theme="high-contrast"][data-mode="dark"] .turn-order-btn.first { color: #000000; }
+
+/* Native select menus sometimes ignore the inherited foreground color. */
+html[data-mode="light"] { color-scheme: light; }
+html[data-mode="dark"] { color-scheme: dark; }
+select,
+select option,
+select optgroup,
+input,
+textarea {
+  background-color: var(--bg);
+  color: var(--text);
+}
+select option:checked { background-color: var(--accent); color: var(--accent-contrast); }
+input::placeholder,
+textarea::placeholder { color: var(--muted); opacity: 1; }
 
 </style>
