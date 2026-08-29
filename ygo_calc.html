@@ -747,6 +747,28 @@ html[data-clock-format="datetime12s"] .header-clock { font-size: clamp(9px, 1.95
   letter-spacing: .045em;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
+.player-name-group {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: clamp(5px, 1.2vw, 9px);
+}
+.player-name-group .player-name { min-width: 0; }
+.match-status {
+  flex: 0 0 auto;
+  font-family: var(--display-font);
+  font-size: clamp(10px, 2.5vw, 14px);
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: .08em;
+  color: var(--text);
+  white-space: nowrap;
+}
+.match-status[hidden] { display: none !important; }
+.match-result-win { color: var(--success); }
+.match-result-loss { color: var(--danger); }
+.match-result-pending { color: var(--muted); }
 .player-tag { font-size: 10px; font-weight: 900; letter-spacing: .135em; color: var(--player-color); }
 
 .player-win-row {
@@ -2436,7 +2458,7 @@ html[data-player-names="off"] .lp-button {
     <section class="screen life-screen" data-screen="life">
       <article class="player-card p1">
         <div class="player-head">
-          <div class="player-name" id="p1NameDisplay">PLAYER 1</div>
+          <div class="player-name-group"><div class="match-status" id="p1MatchStatus" hidden>－－－</div><div class="player-name" id="p1NameDisplay">PLAYER 1</div></div>
           <div class="player-win-inline" id="p1WinDisplay">WIN 0</div>
         </div>
         <button type="button" class="lp-button" id="p1LPButton" data-player="p1" aria-label="PLAYER 1 のライフポイントを計算">
@@ -2457,7 +2479,7 @@ html[data-player-names="off"] .lp-button {
 
       <article class="player-card p2">
         <div class="player-head">
-          <div class="player-name" id="p2NameDisplay">PLAYER 2</div>
+          <div class="player-name-group"><div class="match-status" id="p2MatchStatus" hidden>－－－</div><div class="player-name" id="p2NameDisplay">PLAYER 2</div></div>
           <div class="player-win-inline" id="p2WinDisplay">WIN 0</div>
         </div>
         <button type="button" class="lp-button" id="p2LPButton" data-player="p2" aria-label="PLAYER 2 のライフポイントを計算">
@@ -2582,9 +2604,15 @@ html[data-player-names="off"] .lp-button {
 </div><div class="setting-row">
 <div>
 <div class="setting-label" data-i18n="winCountDisplay">WINカウント</div>
-<div class="setting-desc" data-i18n="winCountDisplayDesc">LIFE・LOGにゲーム勝利数を表示・記録</div>
+<div class="setting-desc" data-i18n="winCountDisplayDesc">通常はGAME、マッチ戦時はMATCH勝利数を表示</div>
 </div>
 <label class="switch"><input checked="" id="winCountVisibleSetting" type="checkbox"/><span class="slider"></span></label>
+</div><div class="setting-row">
+<div>
+<div class="setting-label" data-i18n="autoWinnerByLP">LP優勢で自動判定</div>
+<div class="setting-desc" data-i18n="autoWinnerByLPDesc">LP変動時、LPが多い方を勝者として記録</div>
+</div>
+<label class="switch"><input checked="" id="autoWinnerByLPSetting" type="checkbox"/><span class="slider"></span></label>
 </div><div class="setting-row">
 <div>
 <div class="setting-label" data-i18n="matchModeDisplay">マッチ（BO3）記録</div>
@@ -2667,10 +2695,16 @@ html[data-player-names="off"] .lp-button {
 </select>
 </div><div class="setting-row">
 <div>
-<div class="setting-label" data-i18n="timerTarget">タイマー目標時間 A</div>
-<div class="setting-desc" data-i18n="timerTargetDesc">この時間を基準に強調表示します</div>
+<div class="setting-label" data-i18n="timerTargetMatch">MATCH リミット A</div>
+<div class="setting-desc" data-i18n="timerTargetMatchDesc">マッチ（BO3）時の目標時間</div>
 </div>
-<input aria-label="Timer target minutes" class="setting-number" id="timerTargetInput" inputmode="numeric" max="999" min="1" step="1" type="number" value="40"/>
+<input aria-label="Match timer target minutes" class="setting-number" id="timerTargetMatchInput" inputmode="numeric" max="999" min="1" step="1" type="number" value="40"/>
+</div><div class="setting-row">
+<div>
+<div class="setting-label" data-i18n="timerTargetSingle">1 DUEL リミット A</div>
+<div class="setting-desc" data-i18n="timerTargetSingleDesc">1デュエル時の目標時間</div>
+</div>
+<input aria-label="Single duel timer target minutes" class="setting-number" id="timerTargetSingleInput" inputmode="numeric" max="999" min="1" step="1" type="number" value="20"/>
 </div><div class="setting-row">
 <div>
 <div class="setting-label" data-i18n="timerWarningLead">強調開始 B</div>
@@ -2745,7 +2779,15 @@ html[data-player-names="off"] .lp-button {
       </details><details class="panel settings-section changelog-section">
         <summary data-i18n="settingsChangelog">CHANGELOG / 更新履歴</summary>
         <div class="settings-section-body changelog-section-body">
-                    <div class="manual-version manual-changelog changelog-standalone">
+          <div class="manual-version manual-changelog changelog-standalone">
+            <p><strong>v1.3.1</strong> <span class="manual-version-date" data-i18n="manualVersionDateV131">2026/08/28</span></p>
+            <ul>
+              <li data-i18n="manualChangelogV131A">エクスポートを完了GAME限定・未使用時間非表示・PDF多列へ改善</li>
+              <li data-i18n="manualChangelogV131B">LP優勢の自動勝者設定と必要時のみの勝者選択を追加</li>
+              <li data-i18n="manualChangelogV131C">形式別リミットAとGAME／MATCH確定時の自動タイマーRESETを追加</li>
+              <li data-i18n="manualChangelogV131D">MATCH状況・MATCH勝利数表示と前GAME敗者のFIRST自動設定を追加</li>
+              <li data-i18n="manualChangelogV131E">UI・フッターを英語固定、説明文と言語選択肢のみ各言語表記へ変更</li>
+            </ul>
             <p><strong>v1.3.0</strong> <span class="manual-version-date" data-i18n="manualVersionDateV130">2026/08/25</span></p>
             <ul>
               <li data-i18n="manualChangelogV130A">BO3・LOG保持・MATCH／GAME進行と戦績を追加</li>
@@ -2825,7 +2867,7 @@ html[data-player-names="off"] .lp-button {
     turn: 1,
     turnOrder: { p1: 'first', p2: 'second' },
     timer: { elapsedMs: 0, running: false, startedAt: null },
-    settings: { mode: 'system', theme: 'standard', fontFamily: 'system', language: 'ja', playerNamesVisible: true, turnOrderVisible: true, dominusVisible: true, winCountVisible: true, matchModeEnabled: false, dynamicBackgroundPattern: 'drift', clockEnabled: true, clockFormat: '24h', wakeLock: true, orientationLock: false, timerTargetMin: 40, timerWarningLeadMin: 5 },
+    settings: { mode: 'system', theme: 'standard', fontFamily: 'system', language: 'ja', playerNamesVisible: true, turnOrderVisible: true, dominusVisible: true, winCountVisible: true, autoWinnerByLP: true, matchModeEnabled: false, dynamicBackgroundPattern: 'drift', clockEnabled: true, clockFormat: '24h', wakeLock: true, orientationLock: false, timerTargetMatchMin: 40, timerTargetSingleMin: 20, timerWarningLeadMin: 5 },
     tokenMemos: [{ id: 'token-initial', name: '原始生命態トークン', atk: '', def: '' }],
     cardCounters: [{ id: 'counter-initial', name: '', count: 0 }],
     dominusRestrictions: {
@@ -2871,6 +2913,16 @@ html[data-player-names="off"] .lp-button {
         const saved = JSON.parse(raw);
         this.state.names = { ...defaults.names, ...(saved.names || {}) };
         this.state.settings = { ...defaults.settings, ...(saved.settings || {}) };
+        const legacyTimerTarget = Number(saved.settings?.timerTargetMin);
+        if (!Object.prototype.hasOwnProperty.call(saved.settings || {}, 'timerTargetMatchMin') && Number.isFinite(legacyTimerTarget)) {
+          this.state.settings.timerTargetMatchMin = Math.max(1, Math.min(999, Math.trunc(legacyTimerTarget)));
+        }
+        delete this.state.settings.timerTargetMin;
+        const timerLeadMax = Math.min(
+          Math.max(1, Number(this.state.settings.timerTargetMatchMin) || defaults.settings.timerTargetMatchMin),
+          Math.max(1, Number(this.state.settings.timerTargetSingleMin) || defaults.settings.timerTargetSingleMin)
+        );
+        this.state.settings.timerWarningLeadMin = Math.max(0, Math.min(timerLeadMax, Number(this.state.settings.timerWarningLeadMin) || 0));
         if (saved.settings && (saved.settings.dynamicBackground === false || saved.settings.backgroundAnimation === false)) {
           this.state.settings.dynamicBackgroundPattern = 'off';
         }
@@ -3091,6 +3143,48 @@ html[data-player-names="off"] .lp-button {
   Object.assign(I18N["es"], {manualLife:"LP CALC aparece automáticamente si el área LP sería más del doble de alta que ancha. Toca P1/P2 para cambiar objetivo; de lo contrario toca LP para abrir la calculadora completa."});
   Object.assign(I18N["pt"], {manualLife:"LP CALC aparece automaticamente se a área de LP tiver mais que o dobro da altura em relação à largura. Toque P1/P2 para trocar o alvo; caso contrário, toque nos LP para tela cheia."});
 
+  const AUTO_WINNER_LOCALE = {
+    ja: {autoWinnerByLP:'LP優勢で自動判定', autoWinnerByLPDesc:'LP変動時、LPが多い方を勝者として記録', resetBody:'LPを8000、TURNを1に戻します。自動判定ONでは、LP変動後にLPが多い方を勝者として記録します。同点・変動なしは手動選択。BO3は2勝先取。タイマーRESETでもLOG／GAME／MATCHを保持します。', manualHeader:'SWAP、UNDO、RESETを操作できます。自動判定ONでは、LP変動後のRESET時にLPが多い方を勝者として記録し、同点・変動なしは手動選択します。'},
+    en: {autoWinnerByLP:'AUTO WINNER BY LP', autoWinnerByLPDesc:'After an LP change, record the player with more LP', resetBody:'Reset LP to 8000 and TURN to 1. When AUTO WINNER is ON, the player with more LP after an LP change is recorded; ties or unchanged LP use manual selection. BO3 is first to 2. Timer reset keeps LOG/GAME/MATCH.', manualHeader:'Use SWAP, UNDO, and RESET. With AUTO WINNER ON, RESET records the player with more LP after an LP change; ties or unchanged LP use manual selection.'},
+    ko: {autoWinnerByLP:'LP 우세 자동 판정', autoWinnerByLPDesc:'LP 변동 시 LP가 높은 플레이어를 승자로 기록', resetBody:'LP를 8000, TURN을 1로 되돌립니다. 자동 판정 ON이면 LP 변동 후 LP가 높은 플레이어를 승자로 기록합니다. 동점 또는 변동 없음은 직접 선택합니다. BO3는 2승제이며 타이머 RESET에도 LOG/GAME/MATCH를 유지합니다.', manualHeader:'SWAP·UNDO·RESET을 사용합니다. 자동 판정 ON이면 LP 변동 후 RESET 시 LP가 높은 플레이어를 승자로 기록하며, 동점 또는 변동 없음은 직접 선택합니다.'},
+    'zh-CN': {autoWinnerByLP:'按LP优势自动判胜', autoWinnerByLPDesc:'LP变动后自动记录LP较高者为胜者', resetBody:'LP恢复8000，TURN恢复1。自动判定开启时，LP变动后自动记录LP较高者；同分或无变动时手动选择。BO3为2局先胜，重置计时器仍保留LOG/GAME/MATCH。', manualHeader:'可使用SWAP、UNDO和RESET。自动判定开启时，RESET会记录LP变动后LP较高者；同分或无变动时手动选择。'},
+    'zh-TW': {autoWinnerByLP:'依LP優勢自動判勝', autoWinnerByLPDesc:'LP變動後自動記錄LP較高者為勝者', resetBody:'LP恢復8000，TURN恢復1。自動判定開啟時，LP變動後自動記錄LP較高者；同分或無變動時手動選擇。BO3為2局先勝，重設計時器仍保留LOG/GAME/MATCH。', manualHeader:'可使用SWAP、UNDO及RESET。自動判定開啟時，RESET會記錄LP變動後LP較高者；同分或無變動時手動選擇。'},
+    fr: {autoWinnerByLP:'VAINQUEUR AUTO PAR LP', autoWinnerByLPDesc:'Après un changement, enregistrer le joueur aux LP supérieurs', resetBody:'Remet LP à 8000 et TURN à 1. Avec AUTO activé, le joueur ayant le plus de LP après un changement est enregistré ; égalité ou LP inchangés : choix manuel. BO3 : 2 victoires. Reset timer conserve LOG/GAME/MATCH.', manualHeader:'Utilisez SWAP, UNDO et RESET. Avec AUTO activé, RESET enregistre le joueur ayant le plus de LP après un changement ; égalité ou LP inchangés : choix manuel.'},
+    de: {autoWinnerByLP:'SIEGER AUTO NACH LP', autoWinnerByLPDesc:'Nach LP-Änderung Spieler mit mehr LP als Sieger erfassen', resetBody:'Setzt LP auf 8000 und TURN auf 1. Bei AUTO wird nach einer LP-Änderung der Spieler mit mehr LP erfasst; Gleichstand oder unveränderte LP werden manuell gewählt. BO3: 2 Siege. Timer-Reset behält LOG/GAME/MATCH.', manualHeader:'SWAP, UNDO und RESET verwenden. Bei AUTO erfasst RESET nach einer LP-Änderung den Spieler mit mehr LP; Gleichstand oder unveränderte LP werden manuell gewählt.'},
+    it: {autoWinnerByLP:'VINCITORE AUTO PER LP', autoWinnerByLPDesc:'Dopo una variazione, registra chi ha più LP', resetBody:'Riporta LP a 8000 e TURN a 1. Con AUTO attivo, dopo una variazione viene registrato chi ha più LP; parità o LP invariati richiedono scelta manuale. BO3: 2 vittorie. Reset timer conserva LOG/GAME/MATCH.', manualHeader:'Usa SWAP, UNDO e RESET. Con AUTO attivo, RESET registra chi ha più LP dopo una variazione; parità o LP invariati richiedono scelta manuale.'},
+    es: {autoWinnerByLP:'GANADOR AUTO POR LP', autoWinnerByLPDesc:'Tras un cambio, registra a quien tenga más LP', resetBody:'Devuelve LP a 8000 y TURN a 1. Con AUTO activado, tras un cambio se registra a quien tenga más LP; empate o LP sin cambios requiere selección manual. BO3: 2 victorias. Reset del timer conserva LOG/GAME/MATCH.', manualHeader:'Usa SWAP, UNDO y RESET. Con AUTO activado, RESET registra a quien tenga más LP tras un cambio; empate o LP sin cambios requiere selección manual.'},
+    pt: {autoWinnerByLP:'VENCEDOR AUTO POR LP', autoWinnerByLPDesc:'Após mudança, registra quem tiver mais LP', resetBody:'Retorna LP a 8000 e TURN a 1. Com AUTO ligado, após mudança registra quem tiver mais LP; empate ou LP sem alteração exige escolha manual. BO3: 2 vitórias. Reset do timer mantém LOG/GAME/MATCH.', manualHeader:'Use SWAP, UNDO e RESET. Com AUTO ligado, RESET registra quem tiver mais LP após mudança; empate ou LP sem alteração exige escolha manual.'}
+  };
+  Object.entries(AUTO_WINNER_LOCALE).forEach(([lang, values]) => Object.assign(I18N[lang], values));
+
+  const TIMER_MODE_LOCALE = {
+    ja: {timerTargetMatch:'MATCH リミット A', timerTargetMatchDesc:'マッチ（BO3）時の目標時間', timerTargetSingle:'1 DUEL リミット A', timerTargetSingleDesc:'1デュエル時の目標時間', manualTimer:'リミットAはMATCH用40分、1 DUEL用20分が初期値で、対戦形式に応じて自動参照します。Bは共通の強調開始時間です。RESET時のタイマーリセットは1 DUELで初期ON、MATCHで初期OFFです。', resetBody:'LPを8000、TURNを1に戻します。自動勝者ONではLP変動後に高い方を記録し、同点・変動なしは手動選択します。タイマーリセットは1 DUELで初期ON、MATCHで初期OFFですが変更できます。LOG／GAME／MATCHは保持します。'},
+    en: {timerTargetMatch:'MATCH LIMIT A', timerTargetMatchDesc:'Target time for Match (BO3)', timerTargetSingle:'1 DUEL LIMIT A', timerTargetSingleDesc:'Target time for a single Duel', manualTimer:'Limit A defaults to 40 min for MATCH and 20 min for 1 DUEL, selected automatically by mode. B is the shared warning lead. Timer reset defaults ON for 1 DUEL and OFF for MATCH.', resetBody:'Reset LP to 8000 and TURN to 1. AUTO WINNER records the higher LP after a change; ties or unchanged LP use manual selection. Timer reset defaults ON for 1 DUEL and OFF for MATCH, but can be changed. LOG/GAME/MATCH remain.'},
+    ko: {timerTargetMatch:'MATCH 제한 A', timerTargetMatchDesc:'매치(BO3) 목표 시간', timerTargetSingle:'1 DUEL 제한 A', timerTargetSingleDesc:'1듀얼 목표 시간', manualTimer:'제한 A 기본값은 MATCH 40분, 1 DUEL 20분이며 모드에 따라 자동 적용됩니다. B는 공통 사전 강조 시간입니다. RESET 시 타이머 초기화는 1 DUEL에서 기본 ON, MATCH에서 기본 OFF입니다.', resetBody:'LP를 8000, TURN을 1로 되돌립니다. 자동 승자는 LP 변동 후 높은 쪽을 기록하며 동점·변동 없음은 직접 선택합니다. 타이머 초기화는 1 DUEL 기본 ON, MATCH 기본 OFF이며 변경할 수 있습니다. LOG/GAME/MATCH는 유지됩니다.'},
+    'zh-CN': {timerTargetMatch:'MATCH 时限 A', timerTargetMatchDesc:'比赛（BO3）的目标时间', timerTargetSingle:'1 DUEL 时限 A', timerTargetSingleDesc:'单局决斗的目标时间', manualTimer:'时限A默认MATCH 40分钟、1 DUEL 20分钟，并按模式自动选用。B为共用提前警告时间。RESET时，1 DUEL默认重置计时器，MATCH默认不重置。', resetBody:'LP恢复8000，TURN恢复1。自动判胜会在LP变动后记录较高者；同分或无变动时手动选择。计时器重置在1 DUEL默认开启、MATCH默认关闭，可手动更改。LOG/GAME/MATCH保留。'},
+    'zh-TW': {timerTargetMatch:'MATCH 時限 A', timerTargetMatchDesc:'比賽（BO3）的目標時間', timerTargetSingle:'1 DUEL 時限 A', timerTargetSingleDesc:'單局決鬥的目標時間', manualTimer:'時限A預設MATCH 40分鐘、1 DUEL 20分鐘，並依模式自動選用。B為共用提前警告時間。RESET時，1 DUEL預設重設計時器，MATCH預設不重設。', resetBody:'LP恢復8000，TURN恢復1。自動判勝會在LP變動後記錄較高者；同分或無變動時手動選擇。計時器重設在1 DUEL預設開啟、MATCH預設關閉，可手動更改。LOG/GAME/MATCH保留。'},
+    fr: {timerTargetMatch:'LIMITE MATCH A', timerTargetMatchDesc:'Temps cible du Match (BO3)', timerTargetSingle:'LIMITE 1 DUEL A', timerTargetSingleDesc:'Temps cible d’un Duel', manualTimer:'La limite A vaut par défaut 40 min en MATCH et 20 min en 1 DUEL, selon le mode. B est l’alerte commune. Au RESET, le timer est coché en 1 DUEL et décoché en MATCH.', resetBody:'Remet LP à 8000 et TURN à 1. AUTO enregistre les LP supérieurs après changement ; égalité ou aucun changement : choix manuel. Reset timer est coché en 1 DUEL et décoché en MATCH, modifiable. LOG/GAME/MATCH restent.'},
+    de: {timerTargetMatch:'MATCH-LIMIT A', timerTargetMatchDesc:'Zielzeit für Match (BO3)', timerTargetSingle:'1-DUEL-LIMIT A', timerTargetSingleDesc:'Zielzeit für ein Duell', manualTimer:'Limit A ist standardmäßig 40 Min. für MATCH und 20 Min. für 1 DUEL und wird je Modus gewählt. B ist die gemeinsame Vorwarnung. Beim RESET ist Timer-Reset für 1 DUEL an, für MATCH aus.', resetBody:'Setzt LP auf 8000 und TURN auf 1. AUTO erfasst nach Änderung die höheren LP; Gleichstand oder unverändert: manuelle Wahl. Timer-Reset ist für 1 DUEL an und MATCH aus, aber änderbar. LOG/GAME/MATCH bleiben.'},
+    it: {timerTargetMatch:'LIMITE MATCH A', timerTargetMatchDesc:'Tempo obiettivo per Match (BO3)', timerTargetSingle:'LIMITE 1 DUEL A', timerTargetSingleDesc:'Tempo obiettivo per un Duello', manualTimer:'Il limite A predefinito è 40 min per MATCH e 20 min per 1 DUEL, scelto dal modo. B è l’avviso comune. Al RESET, timer reset è ON per 1 DUEL e OFF per MATCH.', resetBody:'Riporta LP a 8000 e TURN a 1. AUTO registra gli LP maggiori dopo una variazione; parità o nessuna variazione: scelta manuale. Timer reset è ON per 1 DUEL e OFF per MATCH, modificabile. LOG/GAME/MATCH restano.'},
+    es: {timerTargetMatch:'LÍMITE MATCH A', timerTargetMatchDesc:'Tiempo objetivo para Match (BO3)', timerTargetSingle:'LÍMITE 1 DUEL A', timerTargetSingleDesc:'Tiempo objetivo para un Duelo', manualTimer:'El límite A predeterminado es 40 min para MATCH y 20 min para 1 DUEL, según el modo. B es el aviso común. En RESET, reiniciar timer está ON para 1 DUEL y OFF para MATCH.', resetBody:'Devuelve LP a 8000 y TURN a 1. AUTO registra los LP mayores tras un cambio; empate o sin cambios: selección manual. Reiniciar timer está ON para 1 DUEL y OFF para MATCH, pero puede cambiarse. LOG/GAME/MATCH permanecen.'},
+    pt: {timerTargetMatch:'LIMITE MATCH A', timerTargetMatchDesc:'Tempo-alvo para Match (BO3)', timerTargetSingle:'LIMITE 1 DUEL A', timerTargetSingleDesc:'Tempo-alvo para um Duelo', manualTimer:'O limite A padrão é 40 min para MATCH e 20 min para 1 DUEL, escolhido pelo modo. B é o aviso comum. No RESET, resetar timer fica ON em 1 DUEL e OFF em MATCH.', resetBody:'Retorna LP a 8000 e TURN a 1. AUTO registra o maior LP após mudança; empate ou sem mudança: escolha manual. Resetar timer fica ON em 1 DUEL e OFF em MATCH, mas pode ser alterado. LOG/GAME/MATCH permanecem.'}
+  };
+  Object.entries(TIMER_MODE_LOCALE).forEach(([lang, values]) => Object.assign(I18N[lang], values));
+
+  const MATCH_FLOW_LOCALE = {
+    ja: {manualTimer:'リミットAはMATCH 40分、1 DUEL 20分が初期値です。1 DUELはGAME終了ごと、MATCHは2勝目で勝者が確定した時だけタイマーを自動リセットします。Bは共通の強調開始時間です。', manualHeader:'RESETは勝者を自動判定できない時だけ選択画面を表示します。MATCHでは名前左に○／×／－でGAME結果を表示し、敗者を次GAMEのFIRSTへ自動設定します。'},
+    en: {manualTimer:'Limit A defaults to 40 min for MATCH and 20 min for 1 DUEL. The timer resets after every 1 DUEL GAME, and in MATCH only when the second win decides the MATCH. B is the shared warning lead.', manualHeader:'RESET shows a winner dialog only when automatic judgment is unavailable. MATCH shows ○/×/－ beside each name and assigns the previous GAME loser as FIRST in the next GAME.'},
+    ko: {manualTimer:'제한 A 기본값은 MATCH 40분, 1 DUEL 20분입니다. 1 DUEL은 매 GAME 종료 시, MATCH는 2승째로 승자가 확정될 때만 타이머를 자동 초기화합니다. B는 공통 강조 시작 시간입니다.', manualHeader:'RESET은 승자를 자동 판정할 수 없을 때만 선택 화면을 표시합니다. MATCH에서는 이름 왼쪽에 ○/×/－ 결과를 표시하고 이전 GAME 패자를 다음 GAME의 FIRST로 자동 설정합니다.'},
+    'zh-CN': {manualTimer:'时限A默认MATCH 40分钟、1 DUEL 20分钟。1 DUEL每局结束自动重置计时器；MATCH仅在第2胜确定胜者时重置。B为共用提前警告时间。', manualHeader:'RESET仅在无法自动判定胜者时显示选择画面。MATCH会在姓名左侧以○/×/－显示结果，并将上一GAME败者自动设为下一GAME的FIRST。'},
+    'zh-TW': {manualTimer:'時限A預設MATCH 40分鐘、1 DUEL 20分鐘。1 DUEL每局結束自動重設計時器；MATCH僅在第2勝確定勝者時重設。B為共用提前警告時間。', manualHeader:'RESET僅在無法自動判定勝者時顯示選擇畫面。MATCH會在姓名左側以○/×/－顯示結果，並將上一GAME敗者自動設為下一GAME的FIRST。'},
+    fr: {manualTimer:'La limite A vaut 40 min en MATCH et 20 min en 1 DUEL par défaut. Le timer se réinitialise après chaque 1 DUEL, et en MATCH seulement quand la 2e victoire décide le MATCH. B est l’alerte commune.', manualHeader:'RESET demande le vainqueur uniquement si le jugement auto est impossible. En MATCH, ○/×/－ apparaît près du nom et le perdant devient FIRST au GAME suivant.'},
+    de: {manualTimer:'Limit A ist standardmäßig 40 Min. für MATCH und 20 Min. für 1 DUEL. Der Timer resettiert nach jedem 1 DUEL und im MATCH nur beim entscheidenden 2. Sieg. B ist die gemeinsame Vorwarnung.', manualHeader:'RESET fragt nur nach dem Sieger, wenn keine Automatik möglich ist. Im MATCH stehen ○/×/－ neben dem Namen; der Verlierer wird im nächsten GAME FIRST.'},
+    it: {manualTimer:'Il limite A predefinito è 40 min per MATCH e 20 min per 1 DUEL. Il timer si azzera dopo ogni 1 DUEL e nel MATCH solo alla 2ª vittoria decisiva. B è l’avviso comune.', manualHeader:'RESET chiede il vincitore solo se non è possibile il giudizio automatico. Nel MATCH, ○/×/－ appare accanto al nome e chi perde diventa FIRST nel GAME seguente.'},
+    es: {manualTimer:'El límite A predeterminado es 40 min para MATCH y 20 min para 1 DUEL. El timer se reinicia tras cada 1 DUEL y en MATCH solo con la 2.ª victoria decisiva. B es el aviso común.', manualHeader:'RESET pide ganador solo si no puede juzgarse automáticamente. En MATCH, ○/×/－ aparece junto al nombre y quien pierde pasa a FIRST en el siguiente GAME.'},
+    pt: {manualTimer:'O limite A padrão é 40 min para MATCH e 20 min para 1 DUEL. O timer reinicia após cada 1 DUEL e no MATCH apenas na 2ª vitória decisiva. B é o aviso comum.', manualHeader:'RESET pede o vencedor apenas sem julgamento automático. No MATCH, ○/×/－ aparece ao lado do nome e quem perde vira FIRST no próximo GAME.'}
+  };
+  Object.entries(MATCH_FLOW_LOCALE).forEach(([lang, values]) => Object.assign(I18N[lang], values));
+
   /* All visible UI outside the header and DOMINUS icon system follows the
      selected language. Header labels and DOMINUS icon glyphs/English captions
      intentionally remain fixed. */
@@ -3128,7 +3222,7 @@ html[data-player-names="off"] .lp-button {
       'LOGをリロードまで保持し、MATCH／GAME戦績を統合',
       '縦画面LP電卓をカード比率で自動表示',
       'LP／トークン電卓とUTILITY UIを統一',
-      'Safe Area・縦横表示・SETTINGSを改善',
+      'Safe Area・縦横表示・SETTINGS・対戦形式別タイマーを改善',
       '10言語対応とUI表記の言語連動を追加',
       'テーマの可読性を改善。SYNCHROは白、XYZは黒を基調化',
       '文言を短縮し、戦績をWIN／M／G表記へ統一',
@@ -3712,11 +3806,127 @@ html[data-player-names="off"] .lp-button {
     });
   });
 
-  const t = (key, ...args) => {
-    const lang = Store.state.settings.language || 'ja';
-    const value = I18N[lang]?.[key] ?? I18N.ja[key] ?? key;
+  const CHANGELOG_V131 = {
+    ja: [
+      'エクスポートを完了GAME限定・未使用時間非表示・PDF多列へ改善',
+      'LP優勢の自動勝者設定と必要時のみの勝者選択を追加',
+      '形式別リミットAとGAME／MATCH確定時の自動タイマーRESETを追加',
+      'MATCH状況・MATCH勝利数表示と前GAME敗者のFIRST自動設定を追加',
+      'UI・フッターを英語固定、説明文と言語選択肢のみ各言語表記へ変更'
+    ],
+    en: [
+      'Export now excludes unfinished GAMEs, hides unused time, and uses multi-column PDF',
+      'Added optional LP-based auto winner and winner selection only when needed',
+      'Added mode-specific Limit A and automatic timer RESET at GAME/MATCH completion',
+      'Added MATCH status/win count and automatic FIRST assignment to the previous GAME loser',
+      'Fixed UI/footer to English; explanatory text and language names remain localized'
+    ],
+    ko: [
+      '완료 GAME만 내보내고 미사용 시간을 숨기며 PDF를 다단으로 개선',
+      'LP 우세 자동 승자 설정과 필요할 때만 승자 선택 추가',
+      '형식별 리미트 A와 GAME/MATCH 확정 시 타이머 자동 RESET 추가',
+      'MATCH 상황·승리 수 표시와 이전 GAME 패자의 FIRST 자동 설정 추가',
+      'UI와 푸터는 영어 고정, 설명문과 언어명만 각 언어로 표시'
+    ],
+    'zh-CN': [
+      '导出仅含已完成 GAME，隐藏未使用时间，并改进 PDF 多栏排版',
+      '新增可选的 LP 优势自动胜者及仅在需要时选择胜者',
+      '新增按形式区分的限制 A 与 GAME/MATCH 确定时自动 RESET 计时器',
+      '新增 MATCH 状态、胜场显示及自动将上一 GAME 败者设为 FIRST',
+      'UI 与页脚固定为英文，仅说明文字及语言名称使用各语言表记'
+    ],
+    'zh-TW': [
+      '匯出僅含已完成 GAME，隱藏未使用時間，並改善 PDF 多欄排版',
+      '新增可選的 LP 優勢自動勝者及僅在需要時選擇勝者',
+      '新增依形式區分的限制 A 與 GAME/MATCH 確定時自動 RESET 計時器',
+      '新增 MATCH 狀態、勝場顯示及自動將上一 GAME 敗者設為 FIRST',
+      'UI 與頁尾固定為英文，僅說明文字及語言名稱使用各語言表記'
+    ],
+    fr: [
+      'Export limité aux GAME terminées, temps inutilisé masqué et PDF multicolonne',
+      'Ajout du gagnant automatique selon les LP et du choix seulement si nécessaire',
+      'Ajout de la limite A par format et du RESET automatique à la fin de GAME/MATCH',
+      'Ajout du statut/victoires MATCH et du FIRST automatique au perdant de la GAME précédente',
+      'Interface et pied en anglais ; explications et noms de langue localisés'
+    ],
+    de: [
+      'Export auf beendete GAMEs begrenzt, ungenutzte Zeit verborgen und PDF mehrspaltig',
+      'Optionaler LP-basierter Sieger und Auswahl nur bei Bedarf ergänzt',
+      'Formatspezifisches Limit A und Timer-RESET bei GAME/MATCH-Ende ergänzt',
+      'MATCH-Status/Siege und automatisches FIRST für den Verlierer der letzten GAME ergänzt',
+      'UI und Footer Englisch; Erklärtexte und Sprachnamen lokalisiert'
+    ],
+    it: [
+      'Export limitato alle GAME concluse, tempo inutilizzato nascosto e PDF multicolonna',
+      'Aggiunti vincitore automatico in base agli LP e scelta solo quando necessaria',
+      'Aggiunti limite A per formato e RESET automatico a fine GAME/MATCH',
+      'Aggiunti stato/vittorie MATCH e FIRST automatico al perdente della GAME precedente',
+      'UI e footer in inglese; spiegazioni e nomi delle lingue localizzati'
+    ],
+    es: [
+      'Exportación solo de GAME finalizados, tiempo sin usar oculto y PDF multicolumna',
+      'Añadidos ganador automático por LP y selección solo cuando sea necesaria',
+      'Añadidos límite A por formato y RESET automático al concluir GAME/MATCH',
+      'Añadidos estado/victorias MATCH y FIRST automático al perdedor del GAME anterior',
+      'Interfaz y pie en inglés; explicaciones y nombres de idioma localizados'
+    ],
+    pt: [
+      'Exportação só de GAME concluídos, tempo não usado oculto e PDF em colunas',
+      'Adicionados vencedor automático por LP e seleção apenas quando necessária',
+      'Adicionados limite A por formato e RESET automático ao concluir GAME/MATCH',
+      'Adicionados estado/vitórias MATCH e FIRST automático ao perdedor do GAME anterior',
+      'UI e rodapé em inglês; explicações e nomes dos idiomas localizados'
+    ]
+  };
+  Object.entries(CHANGELOG_V131).forEach(([lang, entries]) => {
+    I18N[lang].manualVersionDateV131 = '2026/08/28';
+    entries.forEach((entry, index) => {
+      I18N[lang][`manualChangelogV131${String.fromCharCode(65 + index)}`] = entry;
+    });
+  });
+
+  const WIN_COUNT_MODE_LOCALE = {
+    ja: { winCountDisplay:'WINカウント', winCountDisplayDesc:'通常はGAME、マッチ戦時はMATCH勝利数を表示' },
+    en: { winCountDisplay:'WIN COUNT', winCountDisplayDesc:'Show GAME wins normally and MATCH wins in Match mode' },
+    ko: { winCountDisplay:'WIN 카운트', winCountDisplayDesc:'일반 모드는 GAME, 매치 모드는 MATCH 승리 수 표시' },
+    'zh-CN': { winCountDisplay:'WIN 计数', winCountDisplayDesc:'通常显示 GAME 胜场，比赛模式显示 MATCH 胜场' },
+    'zh-TW': { winCountDisplay:'WIN 計數', winCountDisplayDesc:'通常顯示 GAME 勝場，比賽模式顯示 MATCH 勝場' },
+    fr: { winCountDisplay:'COMPTE WIN', winCountDisplayDesc:'Victoires GAME normalement, MATCH en mode Match' },
+    de: { winCountDisplay:'WIN-ZÄHLER', winCountDisplayDesc:'Normal GAME-Siege, im Match-Modus MATCH-Siege' },
+    it: { winCountDisplay:'CONTEGGIO WIN', winCountDisplayDesc:'Vittorie GAME normalmente, MATCH in modalità Match' },
+    es: { winCountDisplay:'CONTADOR WIN', winCountDisplayDesc:'Victorias GAME normalmente y MATCH en modo Match' },
+    pt: { winCountDisplay:'CONTAGEM WIN', winCountDisplayDesc:'Vitórias GAME normalmente e MATCH no modo Match' }
+  };
+  Object.entries(WIN_COUNT_MODE_LOCALE).forEach(([lang, values]) => Object.assign(I18N[lang], values));
+
+  const LOCALIZED_EXPLANATION_KEYS = new Set([
+    'creator', 'savedBrowser', 'memoPlaceholder', 'tapToCalculate', 'counterEmpty',
+    'keepOneToken', 'enterNumber', 'clearSettingsDone', 'historyExportHtmlDone',
+    'historyExportPopupBlocked', 'memoCleared', 'noChange', 'noUndo',
+    'orientationLockFailed', 'orientationLocked', 'orientationUnlocked',
+    'orientationUnsupported', 'playersSwapped', 'resetBoth', 'resetLP', 'rolling',
+    'tossing', 'turnAdvanced', 'undoDone', 'wakeUnsupported', 'winRecorded'
+  ]);
+  const usesSelectedLanguage = key =>
+    LOCALIZED_EXPLANATION_KEYS.has(key) ||
+    key.startsWith('manual') ||
+    key.startsWith('rights') ||
+    key.endsWith('Desc') ||
+    key.endsWith('Body') ||
+    key.endsWith('Hint');
+  const textForLanguage = (lang, key, ...args) => {
+    const value = I18N[lang]?.[key] ?? I18N.en?.[key] ?? I18N.ja[key] ?? key;
     return typeof value === 'function' ? value(...args) : value;
   };
+  const localizedText = (key, ...args) => {
+    const lang = Store.state.settings.language || 'ja';
+    return textForLanguage(lang, key, ...args);
+  };
+  const t = (key, ...args) => textForLanguage(
+    usesSelectedLanguage(key) ? (Store.state.settings.language || 'ja') : 'en',
+    key,
+    ...args
+  );
   const Language = {
     apply() {
       const lang = Store.state.settings.language || 'ja';
@@ -3725,8 +3935,13 @@ html[data-player-names="off"] .lp-button {
       const initialToken = Store.state.tokenMemos?.find(token => token.id === 'token-initial');
       const knownInitialTokenNames = new Set(["原始生命態トークン", "Primal Being Token", "원시생명체 토큰", "原始生命态衍生物", "原始生命態衍生物", "Jeton Être Primitif", "Urwesen-Spielmarke", "Segna-Primordiale", "Ficha Ser Primitivo", "Ficha Ser Primitivo"]);
       if (initialToken && knownInitialTokenNames.has(initialToken.name)) initialToken.name = t('initialTokenName');
-      $$('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
-      $$('[data-i18n-placeholder]').forEach(el => { el.setAttribute('placeholder', t(el.dataset.i18nPlaceholder)); });
+      $$('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        el.textContent = t(key);
+      });
+      $$('[data-i18n-placeholder]').forEach(el => {
+        el.setAttribute('placeholder', localizedText(el.dataset.i18nPlaceholder));
+      });
       const clock = $('#localClock');
       if (clock) clock.setAttribute('aria-label', t('ariaCurrentTime'));
       const timerWrap = $('#timerWrap');
@@ -3740,8 +3955,10 @@ html[data-player-names="off"] .lp-button {
       const turnDisplay = $('#turnDisplay');
       if (turnDisplay) turnDisplay.setAttribute('aria-label', t('ariaAdvanceTurn'));
       if (typeof UI !== 'undefined') UI.renderTurn();
-      const targetInput = $('#timerTargetInput');
-      if (targetInput) targetInput.setAttribute('aria-label', t('timerTarget'));
+      const matchTargetInput = $('#timerTargetMatchInput');
+      if (matchTargetInput) matchTargetInput.setAttribute('aria-label', t('timerTargetMatch'));
+      const singleTargetInput = $('#timerTargetSingleInput');
+      if (singleTargetInput) singleTargetInput.setAttribute('aria-label', t('timerTargetSingle'));
       const leadInput = $('#timerWarningLeadInput');
       if (leadInput) leadInput.setAttribute('aria-label', t('timerWarningLead'));
       const persistentCalculator = $('#persistentCalculator');
@@ -3849,7 +4066,7 @@ html[data-player-names="off"] .lp-button {
       UI.syncUndoButtons();
       toast(t('undoDone', entry.player.toUpperCase(), entry.before));
     },
-    reset(resetTimer, winner = null) {
+    reset(winner = null) {
       const resetFrom = { p1: Store.state.lp.p1, p2: Store.state.lp.p2 };
       const resetAt = Timer.currentMs();
       const resetGame = Math.max(1, Math.trunc(Store.state.game || 1));
@@ -3872,6 +4089,10 @@ html[data-player-names="off"] .lp-button {
         endedGame.game = resetGame;
         endedGame.gameSeq = resetGameSeq;
         endedGame.match = resetMatch;
+        endedGame.timerUsed = resetAt > 0 || Store.state.history.some(entry =>
+          Math.max(1, Math.trunc(entry?.gameSeq || entry?.game || 1)) === resetGameSeq &&
+          Math.max(0, Math.trunc(entry?.timerMs || 0)) > 0
+        );
       }
 
       if (resultTrackingEnabled && (winner === 'p1' || winner === 'p2')) {
@@ -3881,6 +4102,7 @@ html[data-player-names="off"] .lp-button {
 
       let nextMatch = resetMatch;
       let nextGame = resetGame + 1;
+      let matchWinner = null;
       if (matchModeEnabled) {
         const matchGames = (Store.state.gameStarts || []).filter(start =>
           Math.max(1, Math.trunc(start.match || 1)) === resetMatch &&
@@ -3889,7 +4111,7 @@ html[data-player-names="off"] .lp-button {
         );
         const p1Games = matchGames.filter(start => start.winner === 'p1').length;
         const p2Games = matchGames.filter(start => start.winner === 'p2').length;
-        const matchWinner = p1Games >= 2 ? 'p1' : p2Games >= 2 ? 'p2' : null;
+        matchWinner = p1Games >= 2 ? 'p1' : p2Games >= 2 ? 'p2' : null;
 
         if (matchWinner) {
           const exists = (Store.state.matchResults || []).some(result =>
@@ -3907,6 +4129,18 @@ html[data-player-names="off"] .lp-button {
           nextGame = 1;
         }
       }
+
+      // Within a MATCH, the previous GAME loser chooses FIRST for the next GAME.
+      // A newly started MATCH keeps the current order so GAME 1 can be set manually.
+      if (matchModeEnabled && !matchWinner && (winner === 'p1' || winner === 'p2')) {
+        const loser = winner === 'p1' ? 'p2' : 'p1';
+        Store.state.turnOrder = {
+          p1: loser === 'p1' ? 'first' : 'second',
+          p2: loser === 'p2' ? 'first' : 'second'
+        };
+      }
+
+      const resetTimer = !matchModeEnabled || !!matchWinner;
 
       Store.state.lp.p1 = 8000;
       Store.state.lp.p2 = 8000;
@@ -3939,6 +4173,8 @@ html[data-player-names="off"] .lp-button {
 
       UI.renderTurn();
       UI.renderWins();
+      UI.renderMatchStatus();
+      UI.renderTurnOrder();
       UI.renderLP();
       if (resetFrom.p1 !== 8000) UI.animateLPChange('p1', resetFrom.p1, 8000);
       if (resetFrom.p2 !== 8000) UI.animateLPChange('p2', resetFrom.p2, 8000);
@@ -4011,7 +4247,9 @@ html[data-player-names="off"] .lp-button {
       if (icon) icon.textContent = running ? 'Ⅱ' : '▶';
       if (label) label.textContent = running ? 'PAUSE' : (resumed ? 'RESUME' : 'START');
       btn?.setAttribute('aria-label', running ? 'Pause timer' : (resumed ? 'Resume timer' : 'Start timer'));
-      const targetMin = Math.max(1, Number(Store.state.settings.timerTargetMin) || defaults.settings.timerTargetMin);
+      const matchModeEnabled = Store.state.settings.matchModeEnabled === true;
+      const targetSetting = matchModeEnabled ? 'timerTargetMatchMin' : 'timerTargetSingleMin';
+      const targetMin = Math.max(1, Number(Store.state.settings[targetSetting]) || defaults.settings[targetSetting]);
       const leadMin = Math.max(0, Math.min(targetMin, Number(Store.state.settings.timerWarningLeadMin) || 0));
       const warningStartMs = Math.max(0, (targetMin - leadMin) * 60 * 1000);
       $('#timerWrap')?.classList.toggle('timer-warning', current >= warningStartMs);
@@ -4182,14 +4420,14 @@ html[data-player-names="off"] .lp-button {
         starts.sort((a,b) => a.gameSeq - b.gameSeq);
       }
 
-      const pushMatchRow = match => {
-        rows.push(`<tr class="history-match-row"><td colspan="3">${escapeHTML(t('matchLabel'))} ${match}</td></tr>`);
+      const pushMatchRow = (match, gameSeq) => {
+        rows.push(`<tr class="history-match-row" data-game-seq="${gameSeq}"><td colspan="3">${escapeHTML(t('matchLabel'))} ${match}</td></tr>`);
       };
-      const pushGameRow = game => {
-        rows.push(`<tr class="history-game-row"><td colspan="3">${escapeHTML(t('gameLabel'))} ${game}</td></tr>`);
+      const pushGameRow = (game, gameSeq) => {
+        rows.push(`<tr class="history-game-row" data-game-seq="${gameSeq}"><td colspan="3">${escapeHTML(t('gameLabel'))} ${game}</td></tr>`);
       };
-      const pushTurnRow = turn => {
-        rows.push(`<tr class="history-turn-row"><td colspan="3">${escapeHTML(t('turnHistoryLabel'))} ${turn}</td></tr>`);
+      const pushTurnRow = (turn, gameSeq) => {
+        rows.push(`<tr class="history-turn-row" data-game-seq="${gameSeq}"><td colspan="3">${escapeHTML(t('turnHistoryLabel'))} ${turn}</td></tr>`);
       };
       const orderBadge = role => role === 'first' ? `<div class="history-order first">${escapeHTML(t('firstLabel'))}</div>` : '';
 
@@ -4287,11 +4525,11 @@ html[data-player-names="off"] .lp-button {
       let shownMatch = null;
       starts.forEach(start => {
         if (matchModeEnabled && shownMatch !== start.match) {
-          pushMatchRow(start.match);
+          pushMatchRow(start.match, start.gameSeq);
           shownMatch = start.match;
         }
-        pushGameRow(start.game);
-        pushTurnRow(1);
+        pushGameRow(start.game, start.gameSeq);
+        pushTurnRow(1, start.gameSeq);
 
         const order = {
           p1: start?.turnOrder?.p1 === 'second' ? 'second' : 'first',
@@ -4301,7 +4539,7 @@ html[data-player-names="off"] .lp-button {
         const startTimerMs = Math.max(0, Math.trunc(start?.timerMs || 0));
 
         rows.push(`
-          <tr>
+          <tr data-game-seq="${start.gameSeq}">
             <td class="${winner === 'p1' ? 'game-winner-cell' : ''}"><div class="history-cell p1 initial ${winner === 'p1' ? 'game-winner' : ''}">${orderBadge(order.p1)}<div class="history-lp">8000</div></div></td>
             <td class="time-col"><span class="history-time">${formatTime(startTimerMs)}</span></td>
             <td class="${winner === 'p2' ? 'game-winner-cell' : ''}"><div class="history-cell p2 initial ${winner === 'p2' ? 'game-winner' : ''}">${orderBadge(order.p2)}<div class="history-lp">8000</div></div></td>
@@ -4311,7 +4549,7 @@ html[data-player-names="off"] .lp-button {
         (entriesByGameSeq.get(start.gameSeq) || []).forEach(h => {
             const turn = Math.max(1, Math.trunc(h.turn || 1));
             if (shownTurn !== turn) {
-              pushTurnRow(turn);
+              pushTurnRow(turn, start.gameSeq);
               shownTurn = turn;
             }
             const cell = `
@@ -4320,7 +4558,7 @@ html[data-player-names="off"] .lp-button {
                 <div class="history-lp">${h.after}</div>
               </div>`;
             rows.push(`
-              <tr>
+              <tr data-game-seq="${start.gameSeq}">
                 <td class="${winner === 'p1' ? 'game-winner-cell' : ''}">${h.player === 'p1' ? cell : '<span class="history-empty-cell">—</span>'}</td>
                 <td class="time-col"><span class="history-time">${formatTime(h.timerMs || 0)}</span></td>
                 <td class="${winner === 'p2' ? 'game-winner-cell' : ''}">${h.player === 'p2' ? cell : '<span class="history-empty-cell">—</span>'}</td>
@@ -4358,6 +4596,60 @@ html[data-player-names="off"] .lp-button {
       const localizedLabel = String(t('history')).replace(/[^\p{L}\p{N}]+/gu, '_').replace(/^_+|_+$/g, '') || 'LOG';
       return `OCG_${localizedLabel}_${this.timestamp()}.${ext}`;
     },
+    completedGameSeqs() {
+      const currentSeq = Math.max(1, Math.trunc(Store.state.gameSeq || 1));
+      return new Set((Store.state.gameStarts || [])
+        .filter(start => {
+          const gameSeq = Math.max(1, Math.trunc(start?.gameSeq || start?.game || 1));
+          return gameSeq < currentSeq || start?.winner === 'p1' || start?.winner === 'p2';
+        })
+        .map(start => Math.max(1, Math.trunc(start?.gameSeq || start?.game || 1))));
+    },
+    timerWasUsed(completedGameSeqs) {
+      const hasTimedStart = (Store.state.gameStarts || []).some(start =>
+        completedGameSeqs.has(Math.max(1, Math.trunc(start?.gameSeq || start?.game || 1))) &&
+        (start?.timerUsed === true || Math.max(0, Math.trunc(start?.timerMs || 0)) > 0)
+      );
+      const hasTimedEntry = (Store.state.history || []).some(entry =>
+        completedGameSeqs.has(Math.max(1, Math.trunc(entry?.gameSeq || entry?.game || 1))) &&
+        Math.max(0, Math.trunc(entry?.timerMs || 0)) > 0
+      );
+      return hasTimedStart || hasTimedEntry;
+    },
+    prepareClone(cloned, { printMode = false } = {}) {
+      const completedGameSeqs = this.completedGameSeqs();
+      cloned.querySelectorAll('tbody tr[data-game-seq]').forEach(row => {
+        const gameSeq = Math.max(1, Math.trunc(Number(row.dataset.gameSeq) || 1));
+        if (!completedGameSeqs.has(gameSeq)) row.remove();
+      });
+
+      if (!this.timerWasUsed(completedGameSeqs)) {
+        cloned.querySelectorAll('.history-time').forEach(el => { el.textContent = ''; });
+      }
+
+      if (!printMode) return;
+      const wrap = cloned.querySelector('.history-table-wrap');
+      const table = wrap?.querySelector('.history-table');
+      const tbody = table?.tBodies?.[0];
+      if (!wrap || !table || !tbody) return;
+
+      const headerHtml = table.tHead?.outerHTML || '';
+      const summaryRows = [...tbody.rows].filter(row => !row.dataset.gameSeq);
+      const gameSeqs = [...new Set([...tbody.querySelectorAll('tr[data-game-seq]')]
+        .map(row => Math.max(1, Math.trunc(Number(row.dataset.gameSeq) || 1))))];
+
+      const summaryHtml = summaryRows.length
+        ? `<div class="export-print-summary"><table class="history-table">${headerHtml}<tbody>${summaryRows.map(row => row.outerHTML).join('')}</tbody></table></div>`
+        : '';
+      const gamesHtml = gameSeqs.map(gameSeq => {
+        const gameRows = [...tbody.querySelectorAll(`tr[data-game-seq="${gameSeq}"]`)]
+          .map(row => row.outerHTML).join('');
+        return `<section class="export-game-card"><table class="history-table">${headerHtml}<tbody>${gameRows}</tbody></table></section>`;
+      }).join('');
+
+      wrap.innerHTML = `${summaryHtml}<div class="export-game-columns">${gamesHtml}</div>`;
+      wrap.classList.add('export-print-layout');
+    },
     documentHtml({ printMode = false } = {}) {
       History.render();
       const source = $('#historyContainer');
@@ -4365,6 +4657,7 @@ html[data-player-names="off"] .lp-button {
       if (Store.state.settings.turnOrderVisible === false) {
         cloned.querySelectorAll('.history-order').forEach(el => el.remove());
       }
+      this.prepareClone(cloned, { printMode });
 
       const pageStyle = document.querySelector('style')?.textContent || '';
       const fontLinks = [...document.querySelectorAll('link[rel="preconnect"], link[rel="stylesheet"]')]
@@ -4401,6 +4694,18 @@ body{margin:0;padding:24px;font-family:var(--font);-webkit-print-color-adjust:ex
 .export-history-shell .history-table{width:100%;}
 .export-history-shell .history-table tr{break-inside:avoid;page-break-inside:avoid;}
 .export-history-shell .history-table thead{display:table-header-group;}
+.export-print-summary{margin-bottom:5mm;}
+.export-game-columns{column-count:2;column-gap:5mm;}
+.export-game-card{display:inline-block;width:100%;margin:0 0 4mm;break-inside:avoid;page-break-inside:avoid;vertical-align:top;}
+.export-game-card .history-table{table-layout:fixed;font-size:8px;}
+.export-game-card .history-table th,.export-game-card .history-table td{padding:3px 2px;}
+.export-game-card .history-table th.time-col,.export-game-card .history-table td.time-col{width:34px;}
+.export-game-card .history-lp{font-size:14px;}
+.export-game-card .history-cell.initial{min-height:38px;}
+.export-game-card .history-cell.initial .history-lp{font-size:17px;}
+.export-game-card .history-delta{font-size:8px;}
+.export-game-card .history-game-row td,.export-game-card .history-match-row td,.export-game-card .history-turn-row td{font-size:8px;padding:4px 3px;}
+.export-game-card .history-order{font-size:7px;padding:2px 4px;}
 @page{size:A4 portrait;margin:12mm;}
 @media print{
   html,body{background:var(--bg)!important;}
@@ -4408,7 +4713,7 @@ body{margin:0;padding:24px;font-family:var(--font);-webkit-print-color-adjust:ex
   .export-history-shell{width:100%;max-width:none;}
   .export-history-title{font-size:18px;margin-bottom:10px;}
   .export-history-meta{font-size:9px;margin-bottom:10px;}
-  .history-table th,.history-table td{padding:8px 6px;}
+  .export-print-summary .history-table th,.export-print-summary .history-table td{padding:6px 4px;}
 }
 
 @media (max-width: 430px) {
@@ -5255,43 +5560,36 @@ ${printScript}
 
   const Dialogs = {
     reset() {
-      Modal.show(`
-        <div class="modal small" role="dialog" aria-modal="true" aria-label="${escapeHTML(t('resetMatch'))}">
-          <div class="modal-head"><div class="modal-title">${escapeHTML(t('resetTitle'))}</div><button class="close-btn" data-modal-close aria-label="${escapeHTML(t('close'))}">×</button></div>
-          <div class="confirm-text">${escapeHTML(t('resetBody'))}</div>
-          <label class="check-row"><input type="checkbox" id="resetTimerCheck">${escapeHTML(t('resetTimerToo'))}</label>
-          <div class="modal-actions">
-            <button class="action-btn" data-modal-close>${escapeHTML(t('cancel'))}</button>
-            <button class="action-btn danger" id="confirmReset">${escapeHTML(t('reset'))}</button>
-          </div>
-        </div>`, () => {
-          $('#confirmReset').addEventListener('click', () => {
-            const withTimer = $('#resetTimerCheck').checked;
-            const resultTrackingEnabled =
-              Store.state.settings.winCountVisible !== false ||
-              Store.state.settings.matchModeEnabled === true;
+      const resultTrackingEnabled =
+        Store.state.settings.winCountVisible !== false ||
+        Store.state.settings.matchModeEnabled === true;
 
-            if (!resultTrackingEnabled) {
-              LP.reset(withTimer, null);
-              Modal.close();
-              toast(withTimer ? t('resetBoth') : t('resetLP'));
-              return;
-            }
+      if (!resultTrackingEnabled) {
+        LP.reset(null);
+        toast(Store.state.settings.matchModeEnabled === true ? t('resetLP') : t('resetBoth'));
+        return;
+      }
 
-            const p1Zero = Store.state.lp.p1 <= 0;
-            const p2Zero = Store.state.lp.p2 <= 0;
-            if (p1Zero !== p2Zero) {
-              const winner = p1Zero ? 'p2' : 'p1';
-              LP.reset(withTimer, winner);
-              Modal.close();
-              toast(t('winRecorded', Store.state.names[winner]));
-              return;
-            }
-            this.chooseWinner(withTimer);
-          });
-        });
+      const p1Zero = Store.state.lp.p1 <= 0;
+      const p2Zero = Store.state.lp.p2 <= 0;
+      if (p1Zero !== p2Zero) {
+        const winner = p1Zero ? 'p2' : 'p1';
+        LP.reset(winner);
+        toast(t('winRecorded', Store.state.names[winner]));
+        return;
+      }
+
+      const lpChanged = Store.state.lp.p1 !== defaults.lp.p1 || Store.state.lp.p2 !== defaults.lp.p2;
+      const differentLP = Store.state.lp.p1 !== Store.state.lp.p2;
+      if (Store.state.settings.autoWinnerByLP !== false && lpChanged && differentLP) {
+        const winner = Store.state.lp.p1 > Store.state.lp.p2 ? 'p1' : 'p2';
+        LP.reset(winner);
+        toast(t('winRecorded', Store.state.names[winner]));
+        return;
+      }
+      this.chooseWinner();
     },
-    chooseWinner(resetTimer = false) {
+    chooseWinner() {
       Modal.show(`
         <div class="modal small" role="dialog" aria-modal="true" aria-label="${escapeHTML(t('chooseWinnerTitle'))}">
           <div class="modal-head"><div class="modal-title">${escapeHTML(t('chooseWinnerTitle'))}</div><button class="close-btn" data-modal-close aria-label="${escapeHTML(t('close'))}">×</button></div>
@@ -5307,14 +5605,14 @@ ${printScript}
         </div>`, () => {
           $$('[data-winner]').forEach(btn => btn.addEventListener('click', () => {
             const winner = btn.dataset.winner;
-            LP.reset(resetTimer, winner);
+            LP.reset(winner);
             Modal.close();
             toast(t('winRecorded', Store.state.names[winner]));
           }));
           $('#resetWithoutWinner')?.addEventListener('click', () => {
-            LP.reset(resetTimer, null);
+            LP.reset(null);
             Modal.close();
-            toast(t('resetLP'));
+            toast(Store.state.settings.matchModeEnabled === true ? t('resetLP') : t('resetBoth'));
           });
         });
     },
@@ -5361,6 +5659,7 @@ ${printScript}
       $('#playerNamesVisibleSetting').checked = Store.state.settings.playerNamesVisible !== false;
       $('#turnOrderVisibleSetting').checked = Store.state.settings.turnOrderVisible !== false;
       $('#winCountVisibleSetting').checked = Store.state.settings.winCountVisible !== false;
+      $('#autoWinnerByLPSetting').checked = Store.state.settings.autoWinnerByLP !== false;
       $('#matchModeSetting').checked = Store.state.settings.matchModeEnabled === true;
       $('#dominusVisibleSetting').checked = Store.state.settings.dominusVisible !== false;
       $('#dynamicBackgroundPatternSelect').value = Store.state.settings.dynamicBackgroundPattern || 'drift';
@@ -5370,7 +5669,12 @@ ${printScript}
       const orientationToggle = $('#orientationLockSetting');
       orientationToggle.checked = !!Store.state.settings.orientationLock && OrientationLock.supported();
       orientationToggle.disabled = !OrientationLock.supported();
-      $('#timerTargetInput').value = Math.max(1, Number(Store.state.settings.timerTargetMin) || defaults.settings.timerTargetMin);
+      $('#timerTargetMatchInput').value = Math.max(1, Number(Store.state.settings.timerTargetMatchMin) || defaults.settings.timerTargetMatchMin);
+      $('#timerTargetSingleInput').value = Math.max(1, Number(Store.state.settings.timerTargetSingleMin) || defaults.settings.timerTargetSingleMin);
+      $('#timerWarningLeadInput').max = Math.min(
+        Math.max(1, Number(Store.state.settings.timerTargetMatchMin) || defaults.settings.timerTargetMatchMin),
+        Math.max(1, Number(Store.state.settings.timerTargetSingleMin) || defaults.settings.timerTargetSingleMin)
+      );
       $('#timerWarningLeadInput').value = Math.max(0, Number(Store.state.settings.timerWarningLeadMin) || 0);
     },
     bind() {
@@ -5423,10 +5727,17 @@ ${printScript}
         History.render();
         requestAnimationFrame(() => UI.fitAllLP());
       });
+      $('#autoWinnerByLPSetting').addEventListener('change', e => {
+        Store.state.settings.autoWinnerByLP = e.target.checked;
+        Store.save();
+      });
       $('#matchModeSetting').addEventListener('change', e => {
         Store.state.settings.matchModeEnabled = e.target.checked;
         Store.save();
+        Timer.render();
+        UI.renderWins();
         UI.renderTurn();
+        UI.renderMatchStatus();
         History.render();
         requestAnimationFrame(() => UI.adaptHeaderLayout());
       });
@@ -5478,19 +5789,25 @@ ${printScript}
         Language.apply();
       });
       const saveTimerWarning = () => {
-        const targetInput = $('#timerTargetInput');
+        const matchTargetInput = $('#timerTargetMatchInput');
+        const singleTargetInput = $('#timerTargetSingleInput');
         const leadInput = $('#timerWarningLeadInput');
-        const target = clampInt(targetInput.value, 1, 999, defaults.settings.timerTargetMin);
-        const lead = clampInt(leadInput.value, 0, target, defaults.settings.timerWarningLeadMin);
-        targetInput.value = target;
-        leadInput.max = target;
+        const matchTarget = clampInt(matchTargetInput.value, 1, 999, defaults.settings.timerTargetMatchMin);
+        const singleTarget = clampInt(singleTargetInput.value, 1, 999, defaults.settings.timerTargetSingleMin);
+        const leadMax = Math.min(matchTarget, singleTarget);
+        const lead = clampInt(leadInput.value, 0, leadMax, defaults.settings.timerWarningLeadMin);
+        matchTargetInput.value = matchTarget;
+        singleTargetInput.value = singleTarget;
+        leadInput.max = leadMax;
         leadInput.value = lead;
-        Store.state.settings.timerTargetMin = target;
+        Store.state.settings.timerTargetMatchMin = matchTarget;
+        Store.state.settings.timerTargetSingleMin = singleTarget;
         Store.state.settings.timerWarningLeadMin = lead;
         Store.save();
         Timer.render();
       };
-      $('#timerTargetInput').addEventListener('change', saveTimerWarning);
+      $('#timerTargetMatchInput').addEventListener('change', saveTimerWarning);
+      $('#timerTargetSingleInput').addEventListener('change', saveTimerWarning);
       $('#timerWarningLeadInput').addEventListener('change', saveTimerWarning);
       $('#clearAllSettings').addEventListener('click', () => Dialogs.clearAllSettings());
     }
@@ -5519,10 +5836,17 @@ ${printScript}
     },
     renderWins() {
       const enabled = Store.state.settings.winCountVisible !== false;
+      const matchModeEnabled = Store.state.settings.matchModeEnabled === true;
+      const displayedWins = matchModeEnabled
+        ? PLAYERS.reduce((counts, player) => {
+            counts[player] = (Store.state.matchResults || []).filter(result => result?.winner === player).length;
+            return counts;
+          }, { p1: 0, p2: 0 })
+        : Store.state.wins;
       PLAYERS.forEach(player => {
         const el = $(`#${player}WinDisplay`);
         if (!el) return;
-        el.textContent = `${t('winShort')} ${Math.max(0, Math.trunc(Store.state.wins?.[player] || 0))}`;
+        el.textContent = `${t('winShort')} ${Math.max(0, Math.trunc(displayedWins?.[player] || 0))}`;
         el.hidden = !enabled;
       });
     },
@@ -5587,6 +5911,34 @@ ${printScript}
     renderNames() {
       $('#p1NameDisplay').textContent = Store.state.names.p1;
       $('#p2NameDisplay').textContent = Store.state.names.p2;
+      this.renderMatchStatus();
+    },
+    renderMatchStatus() {
+      const enabled = Store.state.settings.matchModeEnabled === true;
+      const currentMatch = Math.max(1, Math.trunc(Store.state.match || 1));
+      const games = (Store.state.gameStarts || [])
+        .filter(start =>
+          Math.max(1, Math.trunc(start?.match || 1)) === currentMatch &&
+          (start?.winner === 'p1' || start?.winner === 'p2')
+        )
+        .sort((a, b) => Math.max(1, Math.trunc(a?.game || 1)) - Math.max(1, Math.trunc(b?.game || 1)))
+        .slice(0, 3);
+
+      PLAYERS.forEach(player => {
+        const el = $(`#${player}MatchStatus`);
+        if (!el) return;
+        el.hidden = !enabled;
+        if (!enabled) return;
+        const results = Array.from({ length: 3 }, (_, index) => {
+          const game = games[index];
+          if (!game) return { symbol: '－', className: 'match-result-pending' };
+          return game.winner === player
+            ? { symbol: '○', className: 'match-result-win' }
+            : { symbol: '×', className: 'match-result-loss' };
+        });
+        el.innerHTML = results.map(result => `<span class="${result.className}">${result.symbol}</span>`).join('');
+        el.setAttribute('aria-label', `${t('matchLabel')}: ${results.map(result => result.symbol).join(' ')}`);
+      });
     },
     renderLP() {
       PLAYERS.forEach(player => {
