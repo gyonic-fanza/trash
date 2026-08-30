@@ -2436,6 +2436,7 @@ html[data-player-names="off"] .lp-button {
   <header class="topbar">
     <div class="header-clock" id="localClock" aria-label="Current time">00:00</div>
     <div class="header-center">
+      <button type="button" class="header-format-toggle" id="duelFormatToggle" data-format="single" aria-label="Switch to Match" title="DUEL FORMAT">SINGLE</button>
       <div class="timer-wrap" id="timerWrap" aria-label="Duel timer">
         <button class="header-action-btn" id="timerToggle" aria-label="Start timer" title="TIMER"><span class="header-action-icon">▶</span></button>
         <div class="timer" id="timerDisplay">0:00</div>
@@ -2780,6 +2781,11 @@ html[data-player-names="off"] .lp-button {
         <summary data-i18n="settingsChangelog">CHANGELOG / 更新履歴</summary>
         <div class="settings-section-body changelog-section-body">
           <div class="manual-version manual-changelog changelog-standalone">
+            <p><strong>v1.3.2</strong> <span class="manual-version-date" data-i18n="manualVersionDateV132">2026/08/29</span></p>
+            <ul>
+              <li data-i18n="manualChangelogV132A">ヘッダーへSINGLE／MATCH切替を追加</li>
+              <li data-i18n="manualChangelogV132B">形式混在時の進行・戦績・LOG・エクスポートを分離処理</li>
+            </ul>
             <p><strong>v1.3.1</strong> <span class="manual-version-date" data-i18n="manualVersionDateV131">2026/08/28</span></p>
             <ul>
               <li data-i18n="manualChangelogV131A">エクスポートを完了GAME限定・未使用時間非表示・PDF多列へ改善</li>
@@ -2861,7 +2867,7 @@ html[data-player-names="off"] .lp-button {
     game: 1,
     gameSeq: 1,
     match: 1,
-    gameStarts: [{ game: 1, gameSeq: 1, match: 1, timerMs: 0, turnOrder: { p1: 'first', p2: 'second' }, winner: null }],
+    gameStarts: [{ game: 1, gameSeq: 1, match: 1, format: 'single', timerMs: 0, turnOrder: { p1: 'first', p2: 'second' }, winner: null }],
     matchResults: [],
     wins: { p1: 0, p2: 0 },
     turn: 1,
@@ -2964,6 +2970,8 @@ html[data-player-names="off"] .lp-button {
     return h > 0 ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}` : `${m}:${String(s).padStart(2,'0')}`;
   };
   const formatClock = ts => new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const gameFormatOf = start => start?.format === 'match' ? 'match' : 'single';
+  const currentFormat = () => Store.state.settings.matchModeEnabled === true ? 'match' : 'single';
   const escapeHTML = value => String(value).replace(/[&<>"']/g, ch => ({
     '&': '&amp;',
     '<': '&lt;',
@@ -3885,6 +3893,40 @@ html[data-player-names="off"] .lp-button {
     });
   });
 
+  const CHANGELOG_V132 = {
+    ja: ['ヘッダーへSINGLE／MATCH切替を追加', '形式混在時の進行・戦績・LOG・エクスポートを分離処理'],
+    en: ['Added SINGLE/MATCH switching to the header', 'Separated flow, stats, LOG, and export when formats are mixed'],
+    ko: ['헤더에 SINGLE/MATCH 전환 추가', '형식 혼용 시 진행·전적·LOG·내보내기를 분리 처리'],
+    'zh-CN': ['在顶部栏新增 SINGLE/MATCH 切换', '混合形式时分别处理流程、战绩、LOG 与导出'],
+    'zh-TW': ['在頁首新增 SINGLE/MATCH 切換', '混合形式時分別處理流程、戰績、LOG 與匯出'],
+    fr: ['Ajout du sélecteur SINGLE/MATCH dans l’en-tête', 'Séparation du déroulement, des stats, du LOG et de l’export par format'],
+    de: ['SINGLE/MATCH-Umschaltung im Header ergänzt', 'Ablauf, Statistik, LOG und Export bei gemischten Formaten getrennt'],
+    it: ['Aggiunto il selettore SINGLE/MATCH nell’intestazione', 'Separati flusso, statistiche, LOG ed export per formato'],
+    es: ['Añadido el selector SINGLE/MATCH en el encabezado', 'Separados flujo, estadísticas, LOG y exportación por formato'],
+    pt: ['Adicionada alternância SINGLE/MATCH no cabeçalho', 'Separados fluxo, estatísticas, LOG e exportação por formato']
+  };
+  Object.entries(CHANGELOG_V132).forEach(([lang, entries]) => {
+    I18N[lang].manualVersionDateV132 = '2026/08/29';
+    entries.forEach((entry, index) => {
+      I18N[lang][`manualChangelogV132${String.fromCharCode(65 + index)}`] = entry;
+    });
+  });
+
+  const FORMAT_SWITCH_LOCALE = {
+    ja: { formatSwitchBlocked:'進行中のGAMEでは形式を変更できません。RESET後に切り替えてください', formatSingleSet:'SINGLEへ切り替えました', formatMatchSet:'MATCHへ切り替えました', matchModeDisplayDesc:'ヘッダーまたは設定からSINGLE／MATCHを切替。過去の記録は保持', manualHeader:'ヘッダーのSINGLE／MATCHで形式を切り替えます。進行中GAMEではRESET後に切り替えてください。SWAP、UNDO、RESET、TURN進行もヘッダーから操作できます。' },
+    en: { formatSwitchBlocked:'Reset the active GAME before changing format', formatSingleSet:'Switched to SINGLE', formatMatchSet:'Switched to MATCH', matchModeDisplayDesc:'Switch SINGLE/MATCH from the header or Settings; prior records remain', manualHeader:'Use SINGLE/MATCH in the header to change format. Reset an active GAME before switching. SWAP, UNDO, RESET, and TURN are also in the header.' },
+    ko: { formatSwitchBlocked:'진행 중인 GAME은 RESET 후 형식을 변경하세요', formatSingleSet:'SINGLE로 전환했습니다', formatMatchSet:'MATCH로 전환했습니다', matchModeDisplayDesc:'헤더 또는 설정에서 SINGLE/MATCH 전환. 이전 기록 유지', manualHeader:'헤더의 SINGLE/MATCH로 형식을 전환합니다. 진행 중 GAME은 RESET 후 전환하세요. SWAP, UNDO, RESET, TURN도 헤더에서 조작합니다.' },
+    'zh-CN': { formatSwitchBlocked:'进行中的 GAME 请先 RESET 再切换形式', formatSingleSet:'已切换为 SINGLE', formatMatchSet:'已切换为 MATCH', matchModeDisplayDesc:'可从顶部栏或设置切换 SINGLE/MATCH，并保留既有记录', manualHeader:'通过顶部栏的 SINGLE/MATCH 切换形式。进行中的 GAME 请先 RESET。SWAP、UNDO、RESET 与 TURN 也可在顶部栏操作。' },
+    'zh-TW': { formatSwitchBlocked:'進行中的 GAME 請先 RESET 再切換形式', formatSingleSet:'已切換為 SINGLE', formatMatchSet:'已切換為 MATCH', matchModeDisplayDesc:'可從頁首或設定切換 SINGLE/MATCH，並保留既有記錄', manualHeader:'透過頁首的 SINGLE/MATCH 切換形式。進行中的 GAME 請先 RESET。SWAP、UNDO、RESET 與 TURN 也可在頁首操作。' },
+    fr: { formatSwitchBlocked:'RESET la GAME en cours avant de changer de format', formatSingleSet:'Format SINGLE activé', formatMatchSet:'Format MATCH activé', matchModeDisplayDesc:'Changer SINGLE/MATCH depuis l’en-tête ou les réglages sans perdre l’historique', manualHeader:'Changez de format avec SINGLE/MATCH dans l’en-tête. RESET la GAME en cours avant le changement. SWAP, UNDO, RESET et TURN sont aussi disponibles.' },
+    de: { formatSwitchBlocked:'Aktive GAME vor dem Formatwechsel RESETTEN', formatSingleSet:'Auf SINGLE gewechselt', formatMatchSet:'Auf MATCH gewechselt', matchModeDisplayDesc:'SINGLE/MATCH im Header oder in den Einstellungen wechseln; Verlauf bleibt', manualHeader:'Format im Header mit SINGLE/MATCH wechseln. Eine aktive GAME vorher RESETTEN. SWAP, UNDO, RESET und TURN sind ebenfalls im Header.' },
+    it: { formatSwitchBlocked:'Esegui RESET della GAME attiva prima di cambiare formato', formatSingleSet:'Formato SINGLE attivo', formatMatchSet:'Formato MATCH attivo', matchModeDisplayDesc:'Cambia SINGLE/MATCH da intestazione o impostazioni mantenendo lo storico', manualHeader:'Cambia formato con SINGLE/MATCH nell’intestazione. Esegui RESET della GAME attiva prima del cambio. Sono disponibili anche SWAP, UNDO, RESET e TURN.' },
+    es: { formatSwitchBlocked:'Haz RESET del GAME activo antes de cambiar el formato', formatSingleSet:'Formato SINGLE activado', formatMatchSet:'Formato MATCH activado', matchModeDisplayDesc:'Cambia SINGLE/MATCH desde el encabezado o Ajustes sin perder el historial', manualHeader:'Cambia el formato con SINGLE/MATCH en el encabezado. Haz RESET del GAME activo antes de cambiar. También incluye SWAP, UNDO, RESET y TURN.' },
+    pt: { formatSwitchBlocked:'Faça RESET do GAME ativo antes de mudar o formato', formatSingleSet:'Formato SINGLE ativado', formatMatchSet:'Formato MATCH ativado', matchModeDisplayDesc:'Alterne SINGLE/MATCH no cabeçalho ou nas configurações mantendo o histórico', manualHeader:'Alterne o formato com SINGLE/MATCH no cabeçalho. Faça RESET do GAME ativo antes da troca. SWAP, UNDO, RESET e TURN também ficam no cabeçalho.' }
+  };
+  Object.entries(FORMAT_SWITCH_LOCALE).forEach(([lang, values]) => Object.assign(I18N[lang], values));
+  Object.values(I18N).forEach(dict => { dict.matchModeDisplay = 'DUEL FORMAT'; });
+
   const WIN_COUNT_MODE_LOCALE = {
     ja: { winCountDisplay:'WINカウント', winCountDisplayDesc:'通常はGAME、マッチ戦時はMATCH勝利数を表示' },
     en: { winCountDisplay:'WIN COUNT', winCountDisplayDesc:'Show GAME wins normally and MATCH wins in Match mode' },
@@ -3905,7 +3947,8 @@ html[data-player-names="off"] .lp-button {
     'historyExportPopupBlocked', 'memoCleared', 'noChange', 'noUndo',
     'orientationLockFailed', 'orientationLocked', 'orientationUnlocked',
     'orientationUnsupported', 'playersSwapped', 'resetBoth', 'resetLP', 'rolling',
-    'tossing', 'turnAdvanced', 'undoDone', 'wakeUnsupported', 'winRecorded'
+    'tossing', 'turnAdvanced', 'undoDone', 'wakeUnsupported', 'winRecorded',
+    'formatSwitchBlocked', 'formatSingleSet', 'formatMatchSet'
   ]);
   const usesSelectedLanguage = key =>
     LOCALIZED_EXPLANATION_KEYS.has(key) ||
@@ -3976,6 +4019,7 @@ html[data-player-names="off"] .lp-button {
       CounterTool.render();
       Utility.renderLast();
       UI.renderNames();
+      UI.renderFormat();
       UI.renderWins();
       UI.renderTurnOrder();
       UI.renderLP();
@@ -4035,6 +4079,7 @@ html[data-player-names="off"] .lp-button {
         game: Math.max(1, Math.trunc(Store.state.game || 1)),
         gameSeq: Math.max(1, Math.trunc(Store.state.gameSeq || 1)),
         match: Math.max(1, Math.trunc(Store.state.match || 1)),
+        format: currentFormat(),
         turn: Store.state.turn
       };
       Store.state.history.unshift(entry);
@@ -4089,6 +4134,7 @@ html[data-player-names="off"] .lp-button {
         endedGame.game = resetGame;
         endedGame.gameSeq = resetGameSeq;
         endedGame.match = resetMatch;
+        endedGame.format = matchModeEnabled ? 'match' : 'single';
         endedGame.timerUsed = resetAt > 0 || Store.state.history.some(entry =>
           Math.max(1, Math.trunc(entry?.gameSeq || entry?.game || 1)) === resetGameSeq &&
           Math.max(0, Math.trunc(entry?.timerMs || 0)) > 0
@@ -4096,7 +4142,9 @@ html[data-player-names="off"] .lp-button {
       }
 
       if (resultTrackingEnabled && (winner === 'p1' || winner === 'p2')) {
-        Store.state.wins[winner] = Math.max(0, Math.trunc(Store.state.wins?.[winner] || 0)) + 1;
+        if (!matchModeEnabled) {
+          Store.state.wins[winner] = Math.max(0, Math.trunc(Store.state.wins?.[winner] || 0)) + 1;
+        }
         if (endedGame) endedGame.winner = winner;
       }
 
@@ -4105,6 +4153,7 @@ html[data-player-names="off"] .lp-button {
       let matchWinner = null;
       if (matchModeEnabled) {
         const matchGames = (Store.state.gameStarts || []).filter(start =>
+          gameFormatOf(start) === 'match' &&
           Math.max(1, Math.trunc(start.match || 1)) === resetMatch &&
           Math.max(1, Math.trunc(start.gameSeq || start.game || 1)) <= resetGameSeq &&
           (start.winner === 'p1' || start.winner === 'p2')
@@ -4120,6 +4169,7 @@ html[data-player-names="off"] .lp-button {
           if (!exists) {
             Store.state.matchResults.push({
               match: resetMatch,
+              format: 'match',
               winner: matchWinner,
               p1Games,
               p2Games
@@ -4160,6 +4210,7 @@ html[data-player-names="off"] .lp-button {
         game: Store.state.game,
         gameSeq: Store.state.gameSeq,
         match: Store.state.match,
+        format: matchModeEnabled ? 'match' : 'single',
         timerMs: resetTimer ? 0 : resetAt,
         turnOrder: { ...Store.state.turnOrder },
         winner: null
@@ -4391,6 +4442,115 @@ html[data-player-names="off"] .lp-button {
     }
   };
 
+  const DuelFormat = {
+    currentStart() {
+      const currentGameSeq = Math.max(1, Math.trunc(Store.state.gameSeq || 1));
+      return (Store.state.gameStarts || []).find(start =>
+        Math.max(1, Math.trunc(start?.gameSeq || start?.game || 1)) === currentGameSeq
+      ) || null;
+    },
+    currentGameIsPristine() {
+      const currentGameSeq = Math.max(1, Math.trunc(Store.state.gameSeq || 1));
+      const hasHistory = (Store.state.history || []).some(entry =>
+        Math.max(1, Math.trunc(entry?.gameSeq || entry?.game || 1)) === currentGameSeq
+      );
+      return !hasHistory &&
+        Store.state.lp.p1 === defaults.lp.p1 &&
+        Store.state.lp.p2 === defaults.lp.p2 &&
+        Math.max(1, Math.trunc(Store.state.turn || 1)) === 1;
+    },
+    nextNumber(format, currentStart) {
+      const starts = (Store.state.gameStarts || []).filter(start =>
+        start !== currentStart && gameFormatOf(start) === format
+      );
+      const field = format === 'match' ? 'match' : 'game';
+      return starts.reduce((max, start) =>
+        Math.max(max, Math.max(1, Math.trunc(start?.[field] || 1))), 0
+      ) + 1;
+    },
+    initialize() {
+      const format = currentFormat();
+      let start = this.currentStart();
+      if (!start) {
+        start = clone(defaults.gameStarts[0]);
+        Store.state.gameStarts = [start];
+      }
+      start.format = format;
+      start.game = 1;
+      start.match = 1;
+      Store.state.game = 1;
+      Store.state.match = 1;
+    },
+    set(matchModeEnabled, { notify = true } = {}) {
+      const targetFormat = matchModeEnabled ? 'match' : 'single';
+      if (currentFormat() === targetFormat) {
+        UI.renderFormat();
+        return true;
+      }
+      if (!this.currentGameIsPristine()) {
+        if (notify) toast(t('formatSwitchBlocked'));
+        Settings.render();
+        UI.renderFormat();
+        return false;
+      }
+
+      let start = this.currentStart();
+      if (!start) {
+        start = {
+          game: 1,
+          gameSeq: Math.max(1, Math.trunc(Store.state.gameSeq || 1)),
+          match: 1,
+          format: targetFormat,
+          timerMs: 0,
+          turnOrder: { ...Store.state.turnOrder },
+          winner: null
+        };
+        Store.state.gameStarts.push(start);
+      }
+
+      Store.state.settings.matchModeEnabled = matchModeEnabled;
+      if (targetFormat === 'match') {
+        Store.state.match = this.nextNumber('match', start);
+        Store.state.game = 1;
+      } else {
+        Store.state.game = this.nextNumber('single', start);
+        const previousMatches = (Store.state.gameStarts || []).filter(item => item !== start && gameFormatOf(item) === 'match');
+        Store.state.match = previousMatches.reduce((max, item) =>
+          Math.max(max, Math.max(1, Math.trunc(item?.match || 1))), 1
+        );
+      }
+      Object.assign(start, {
+        game: Store.state.game,
+        gameSeq: Math.max(1, Math.trunc(Store.state.gameSeq || 1)),
+        match: Store.state.match,
+        format: targetFormat,
+        timerMs: 0,
+        timerUsed: false,
+        turnOrder: { ...Store.state.turnOrder },
+        winner: null
+      });
+      Store.state.lastChange = { p1: null, p2: null };
+      Store.state.turn = 1;
+      Timer.reset();
+      Store.save();
+
+      UI.renderFormat();
+      UI.renderWins();
+      UI.renderTurn();
+      UI.renderMatchStatus();
+      UI.renderTurnOrder();
+      UI.renderLP();
+      History.render();
+      Settings.render();
+      requestAnimationFrame(() => UI.adaptHeaderLayout());
+      if (notify) toast(t(targetFormat === 'match' ? 'formatMatchSet' : 'formatSingleSet'));
+      return true;
+    },
+    toggle() {
+      return this.set(Store.state.settings.matchModeEnabled !== true);
+    }
+  };
+
   const History = {
     render() {
       const root = $('#historyContainer');
@@ -4403,7 +4563,8 @@ html[data-player-names="off"] .lp-button {
           ...start,
           game: Math.max(1, Math.trunc(start?.game || 1)),
           gameSeq: Math.max(1, Math.trunc(start?.gameSeq || start?.game || 1)),
-          match: Math.max(1, Math.trunc(start?.match || 1))
+          match: Math.max(1, Math.trunc(start?.match || 1)),
+          format: gameFormatOf(start)
         }))
         .sort((a,b) => a.gameSeq - b.gameSeq);
 
@@ -4413,6 +4574,7 @@ html[data-player-names="off"] .lp-button {
           game: Math.max(1, Math.trunc(Store.state.game || 1)),
           gameSeq: currentSeq,
           match: Math.max(1, Math.trunc(Store.state.match || 1)),
+          format: currentFormat(),
           timerMs: Timer.currentMs(),
           turnOrder: { ...Store.state.turnOrder },
           winner: null
@@ -4440,53 +4602,62 @@ html[data-player-names="off"] .lp-button {
         entriesByGameSeq.get(gameSeq).push(entry);
       });
 
-      const gameStats = Object.fromEntries(PLAYERS.map(player => [player, {
-        games: completedGames.length,
-        wins: 0,
-        first: { games: 0, wins: 0 },
-        second: { games: 0, wins: 0 }
-      }]));
-      completedGames.forEach(start => {
-        PLAYERS.forEach(player => {
-          const stat = gameStats[player];
-          const role = start?.turnOrder?.[player] || (player === 'p1' ? 'first' : 'second');
-          const isWin = start?.winner === player;
-          if (isWin) stat.wins += 1;
-          if (role === 'first' || role === 'second') {
-            stat[role].games += 1;
-            if (isWin) stat[role].wins += 1;
-          }
+      const buildGameStats = games => {
+        const stats = Object.fromEntries(PLAYERS.map(player => [player, {
+          games: games.length,
+          wins: 0,
+          first: { games: 0, wins: 0 },
+          second: { games: 0, wins: 0 }
+        }]));
+        games.forEach(start => {
+          PLAYERS.forEach(player => {
+            const stat = stats[player];
+            const role = start?.turnOrder?.[player] || (player === 'p1' ? 'first' : 'second');
+            const isWin = start?.winner === player;
+            if (isWin) stat.wins += 1;
+            if (role === 'first' || role === 'second') {
+              stat[role].games += 1;
+              if (isWin) stat[role].wins += 1;
+            }
+          });
         });
-      });
+        return stats;
+      };
+      const singleCompletedGames = completedGames.filter(start => gameFormatOf(start) === 'single');
+      const matchCompletedGames = completedGames.filter(start => gameFormatOf(start) === 'match');
+      const singleGameStats = buildGameStats(singleCompletedGames);
+      const matchGameStats = buildGameStats(matchCompletedGames);
 
-      const gameStatFor = player => {
-        const { games, wins, first, second } = gameStats[player];
+      const gameStatFor = (player, stats) => {
+        const { games, wins, first, second } = stats[player];
         const rate = games > 0 ? (wins / games) * 100 : 0;
         const rateText = Number.isInteger(rate) ? `${rate.toFixed(0)}%` : `${rate.toFixed(1)}%`;
         return { games, wins, rateText, first, second };
       };
 
-      const gameStatCell = player => {
-        const stat = gameStatFor(player);
+      const gameStatCell = (player, stats) => {
+        const stat = gameStatFor(player, stats);
         return `<div class="history-match-stat">
           <div class="history-match-stat-main">${escapeHTML(t('gameShort'))} ${stat.wins}/${stat.games} · ${stat.rateText}</div>
           <div class="history-match-stat-split">${escapeHTML(t('firstShort'))} ${stat.first.wins}/${stat.first.games} · ${escapeHTML(t('secondShort'))} ${stat.second.wins}/${stat.second.games}</div>
         </div>`;
       };
 
-      if (!matchModeEnabled && Store.state.settings.winCountVisible !== false) {
-        rows.push(`<tr class="history-win-row"><td>${gameStatCell('p1')}</td><td class="time-col">${escapeHTML(t('statLabel'))}</td><td>${gameStatCell('p2')}</td></tr>`);
+      const hasSingleSession = starts.some(start => gameFormatOf(start) === 'single');
+      if (hasSingleSession && Store.state.settings.winCountVisible !== false) {
+        rows.push(`<tr class="history-win-row"><td>${gameStatCell('p1', singleGameStats)}</td><td class="time-col">1 DUEL</td><td>${gameStatCell('p2', singleGameStats)}</td></tr>`);
       }
 
-      if (matchModeEnabled) {
-        const matchResults = Store.state.matchResults || [];
+      const matchResults = Store.state.matchResults || [];
+      const hasMatchSession = matchModeEnabled || starts.some(start => gameFormatOf(start) === 'match') || matchResults.length > 0;
+      if (hasMatchSession) {
         const bo3GameSplitByPlayer = Object.fromEntries(PLAYERS.map(player => [player, {
           g1First: { games: 0, wins: 0 },
           g1Second: { games: 0, wins: 0 },
           laterFirst: { games: 0, wins: 0 },
           laterSecond: { games: 0, wins: 0 }
         }]));
-        completedGames.forEach(start => {
+        matchCompletedGames.forEach(start => {
           const gameNo = Math.max(1, Math.trunc(start?.game || 1));
           PLAYERS.forEach(player => {
             const role = start?.turnOrder?.[player] === 'second' ? 'second' : 'first';
@@ -4503,7 +4674,7 @@ html[data-player-names="off"] .lp-button {
           const wins = matchResults.filter(result => result?.winner === player).length;
           const rate = played ? (wins / played) * 100 : 0;
           const rateText = Number.isInteger(rate) ? `${rate.toFixed(0)}%` : `${rate.toFixed(1)}%`;
-          const game = gameStatFor(player);
+          const game = gameStatFor(player, matchGameStats);
           const bo3GameSplit = bo3GameSplitByPlayer[player];
 
           const splitText = bucket => `${bucket.wins}/${bucket.games}`;
@@ -4524,7 +4695,8 @@ html[data-player-names="off"] .lp-button {
 
       let shownMatch = null;
       starts.forEach(start => {
-        if (matchModeEnabled && shownMatch !== start.match) {
+        const startFormat = gameFormatOf(start);
+        if (startFormat === 'match' && shownMatch !== start.match) {
           pushMatchRow(start.match, start.gameSeq);
           shownMatch = start.match;
         }
@@ -4535,7 +4707,7 @@ html[data-player-names="off"] .lp-button {
           p1: start?.turnOrder?.p1 === 'second' ? 'second' : 'first',
           p2: start?.turnOrder?.p2 === 'first' ? 'first' : 'second'
         };
-        const winner = (Store.state.settings.winCountVisible !== false || matchModeEnabled) ? start?.winner : null;
+        const winner = (Store.state.settings.winCountVisible !== false || startFormat === 'match') ? start?.winner : null;
         const startTimerMs = Math.max(0, Math.trunc(start?.timerMs || 0));
 
         rows.push(`
@@ -5627,8 +5799,11 @@ ${printScript}
           </div>
         </div>`, () => {
           $('#confirmClearSettings').addEventListener('click', () => {
+            const activeMatchMode = Store.state.settings.matchModeEnabled === true;
             Store.state.names = clone(defaults.names);
             Store.state.settings = clone(defaults.settings);
+            // Clearing preferences must not reinterpret the active GAME or prior session records.
+            Store.state.settings.matchModeEnabled = activeMatchMode;
             try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
             Theme.apply();
             WakeLock.apply(Store.state.settings.wakeLock);
@@ -5732,14 +5907,7 @@ ${printScript}
         Store.save();
       });
       $('#matchModeSetting').addEventListener('change', e => {
-        Store.state.settings.matchModeEnabled = e.target.checked;
-        Store.save();
-        Timer.render();
-        UI.renderWins();
-        UI.renderTurn();
-        UI.renderMatchStatus();
-        History.render();
-        requestAnimationFrame(() => UI.adaptHeaderLayout());
+        DuelFormat.set(e.target.checked);
       });
       $('#dominusVisibleSetting').addEventListener('change', e => {
         Store.state.settings.dominusVisible = e.target.checked;
@@ -5842,13 +6010,27 @@ ${printScript}
             counts[player] = (Store.state.matchResults || []).filter(result => result?.winner === player).length;
             return counts;
           }, { p1: 0, p2: 0 })
-        : Store.state.wins;
+        : PLAYERS.reduce((counts, player) => {
+            counts[player] = (Store.state.gameStarts || []).filter(start =>
+              gameFormatOf(start) === 'single' && start?.winner === player
+            ).length;
+            return counts;
+          }, { p1: 0, p2: 0 });
       PLAYERS.forEach(player => {
         const el = $(`#${player}WinDisplay`);
         if (!el) return;
         el.textContent = `${t('winShort')} ${Math.max(0, Math.trunc(displayedWins?.[player] || 0))}`;
         el.hidden = !enabled;
       });
+    },
+    renderFormat() {
+      const button = $('#duelFormatToggle');
+      if (!button) return;
+      const matchModeEnabled = Store.state.settings.matchModeEnabled === true;
+      button.dataset.format = matchModeEnabled ? 'match' : 'single';
+      button.textContent = matchModeEnabled ? 'MATCH' : 'SINGLE';
+      button.setAttribute('aria-label', matchModeEnabled ? 'Switch to 1 Duel' : 'Switch to Match');
+      button.title = matchModeEnabled ? 'MATCH — SWITCH TO 1 DUEL' : '1 DUEL — SWITCH TO MATCH';
     },
     renderTurn() {
       const el = $('#turnDisplay');
@@ -5901,6 +6083,7 @@ ${printScript}
         game: currentGame,
         gameSeq: currentGameSeq,
         match: currentMatch,
+        format: currentFormat(),
         timerMs: (currentMatch === 1 && currentGame === 1) ? 0 : Timer.currentMs(),
         turnOrder: { ...Store.state.turnOrder },
         winner: null
@@ -5918,6 +6101,7 @@ ${printScript}
       const currentMatch = Math.max(1, Math.trunc(Store.state.match || 1));
       const games = (Store.state.gameStarts || [])
         .filter(start =>
+          gameFormatOf(start) === 'match' &&
           Math.max(1, Math.trunc(start?.match || 1)) === currentMatch &&
           (start?.winner === 'p1' || start?.winner === 'p2')
         )
@@ -6410,6 +6594,7 @@ ${printScript}
       $('#swapPlayers').addEventListener('click', () => this.swapPlayers());
       $('#quickUndo').addEventListener('click', () => LP.undo());
       $('#openReset').addEventListener('click', () => Dialogs.reset());
+      $('#duelFormatToggle').addEventListener('click', () => DuelFormat.toggle());
       $$('.nav-btn[data-nav]').forEach(btn => btn.addEventListener('click', () => this.nav(btn.dataset.nav)));
 
       $$('[data-step]').forEach(btn => btn.addEventListener('click', () => {
@@ -6432,6 +6617,7 @@ ${printScript}
     init() {
       $$('.utility-section, .settings-section').forEach(section => { section.open = false; });
       this.renderNames();
+      this.renderFormat();
       this.renderWins();
       this.renderTurn();
       this.renderTurnOrder();
@@ -6475,6 +6661,7 @@ ${printScript}
   };
 
   Store.load();
+  DuelFormat.initialize();
   Clock.init();
   WakeLock.init();
   OrientationLock.init();
@@ -7232,6 +7419,34 @@ html[data-player-names="off"] .player-win-row { top: 5px !important; }
   background: color-mix(in srgb, var(--accent) 8%, var(--surface));
 }
 .match-display[hidden] { display: none !important; }
+
+.header-format-toggle {
+  flex: 0 0 auto;
+  width: clamp(42px, 10vw, 54px);
+  height: 30px;
+  margin-bottom: 2px;
+  padding: 0 4px;
+  border: 1px solid color-mix(in srgb, var(--accent-contrast) 42%, transparent);
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--accent-contrast) 14%, transparent);
+  color: var(--accent-contrast);
+  font-size: clamp(9px, 2.2vw, 11px);
+  font-weight: 950;
+  line-height: 1;
+  letter-spacing: .035em;
+  cursor: pointer;
+  white-space: nowrap;
+  touch-action: manipulation;
+}
+.header-format-toggle[data-format="match"] {
+  background: var(--accent-contrast);
+  color: var(--accent);
+}
+.header-format-toggle:active { transform: scale(.96); }
+
+@media (max-width: 370px) {
+  .header-format-toggle { width: 40px; font-size: 8px; padding-inline: 2px; }
+}
 
 
 /* iPhone / smartphone portrait: prioritize TIMER + TURN.
