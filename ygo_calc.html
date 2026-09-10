@@ -1532,7 +1532,7 @@ html[data-turn-order="on"] .player-card .lp-button {
   vertical-align: middle;
 }
 .history-table tr:last-child td { border-bottom: 0; }
-.history-table tbody tr:not(.history-game-row):not(.history-turn-row) > td:not(.time-col) { vertical-align: bottom; }
+.history-table tbody tr:not(.history-format-row):not(.history-game-row):not(.history-turn-row) > td:not(.time-col) { vertical-align: bottom; }
 .history-table th {
   font-size: 11px;
   letter-spacing: .095em;
@@ -1543,6 +1543,17 @@ html[data-turn-order="on"] .player-card .lp-button {
 .history-table td.time-col { width: 76px; }
 .history-table th.p1-col { color: var(--p1); }
 .history-table th.p2-col { color: var(--p2); }
+.history-format-row td {
+  padding: 8px;
+  background: var(--text);
+  color: var(--surface);
+  font-size: 11px;
+  font-weight: 1000;
+  letter-spacing: .2em;
+  text-align: center;
+  border-top: 5px solid var(--bg);
+  border-bottom: 0;
+}
 .history-game-row td {
   padding: 9px 8px;
   background: var(--accent);
@@ -2616,8 +2627,8 @@ html[data-player-names="off"] .lp-button {
 <label class="switch"><input checked="" id="autoWinnerByLPSetting" type="checkbox"/><span class="slider"></span></label>
 </div><div class="setting-row">
 <div>
-<div class="setting-label" data-i18n="matchModeDisplay">マッチ（BO3）記録</div>
-<div class="setting-desc" data-i18n="matchModeDisplayDesc">2ゲーム先取でマッチ勝敗を記録</div>
+<div class="setting-label" data-i18n="matchModeDisplay">DUEL FORMAT</div>
+<div class="setting-desc" data-i18n="matchModeDisplayDesc">SINGLE／MATCHを切り替え、過去の記録は保持</div>
 </div>
 <label class="switch"><input id="matchModeSetting" type="checkbox"/><span class="slider"></span></label>
 </div><div class="setting-row">
@@ -2702,8 +2713,8 @@ html[data-player-names="off"] .lp-button {
 <input aria-label="Match timer target minutes" class="setting-number" id="timerTargetMatchInput" inputmode="numeric" max="999" min="1" step="1" type="number" value="40"/>
 </div><div class="setting-row">
 <div>
-<div class="setting-label" data-i18n="timerTargetSingle">1 DUEL リミット A</div>
-<div class="setting-desc" data-i18n="timerTargetSingleDesc">1デュエル時の目標時間</div>
+<div class="setting-label" data-i18n="timerTargetSingle">SINGLE LIMIT A</div>
+<div class="setting-desc" data-i18n="timerTargetSingleDesc">SINGLEの目標時間</div>
 </div>
 <input aria-label="Single duel timer target minutes" class="setting-number" id="timerTargetSingleInput" inputmode="numeric" max="999" min="1" step="1" type="number" value="20"/>
 </div><div class="setting-row">
@@ -2763,12 +2774,13 @@ html[data-player-names="off"] .lp-button {
       </details><details class="panel settings-section manual-section">
         <summary data-i18n="settingsHelp">HELP / 操作マニュアル</summary>
         <div class="manual-pro">
-          <div class="manual-chapter"><h3 data-i18n="manualLifeShortTitle">LP</h3><p data-i18n="manualLife">iPhone等の縦画面ではLIFE下部にLP電卓を常時表示します。P1／P2のLPをタップすると計算対象だけを切り替えます。横画面ではLPをタップして全画面電卓を開きます。1〜2桁入力は末尾00を補助し、＋／－／×2／÷2／指定LPに対応します。</p></div>
-          <div class="manual-chapter"><h3 data-i18n="manualTimerShortTitle">タイマー</h3><p data-i18n="manualTimer">ヘッダーのタイマーは0:00からカウントアップします。設定した目標時間Aと強調開始Bに応じて表示を強調します。「タイマーもリセットする」を選んだRESETではタイマーだけ0:00へ戻り、LOGやGAME／MATCH記録は保持します。</p></div>
-          <div class="manual-chapter"><h3 data-i18n="manualControlsShortTitle">操作</h3><p data-i18n="manualHeader">ヘッダーからP1／P2入れ替え、UNDO、RESETを操作できます。TURNはタップで進行します。横画面ではGAME／MATCHを表示し、iPhone等の縦画面では時計・GAME・MATCHを省略してタイマーとTURNを優先表示します。</p></div>
-          <div class="manual-chapter"><h3 data-i18n="manualUtilityTitle">UTILITY</h3><p data-i18n="manualUtility">UTILITYではコイン／ダイス、トークン、カードカウンターを利用できます。各ツールは共通デザインで表示し、コイン／ダイス結果は実行時のみ表示され、UTILITY以外へ移動すると非表示になります。トークンのATK／DEFは専用電卓で編集できます。</p></div>
-          <div class="manual-chapter"><h3 data-i18n="manualStorageShortTitle">保存</h3><p data-i18n="manualStorageShort">永続保存されるのはプレイヤー名とSETTINGSの内容のみです。LP、TURN、タイマー、LOG、GAME／MATCH戦績、UTILITY、MEMOなどの対戦データはページ再読み込み時に初期化されます。</p></div>
-          <div class="manual-chapter"><h3 data-i18n="manualHomeTitle">ホーム画面から使う</h3><p data-i18n="manualHome">iPhone / iPadではSafariの共有メニューから「ホーム画面に追加」を選ぶと、ホーム画面からアプリのように起動できます。AndroidではChrome等でメニューから「ホーム画面に追加」または「アプリをインストール」を選択します。端末やブラウザによって項目名・表示方法・対応機能が異なる場合があります。</p></div>
+          <div class="manual-chapter"><h3 data-i18n="manualLifeShortTitle">LP</h3><p data-i18n="manualLife">LPカードの高さが幅の2倍を超える場合、LP CALCを自動表示します。表示中はP1／P2で対象を切り替え、それ以外はLPをタップして全画面のLP CALCを開きます。</p></div>
+          <div class="manual-chapter"><h3 data-i18n="manualTimerShortTitle">タイマー</h3><p data-i18n="manualTimer">TIMERを開始すると0:00から計測します。リミットAの初期値はSINGLEが20分、MATCHが40分です。SINGLEはGAME終了時、MATCHは勝者決定時に自動でRESETします。Bは共通の警告開始時間です。</p></div>
+          <div class="manual-chapter"><h3 data-i18n="manualControlsShortTitle">操作</h3><p data-i18n="manualHeader">ヘッダーのSINGLE／MATCHで形式を切り替えます。進行中のGAMEはRESETしてから切り替えてください。SWAP、UNDO、RESET、TURNもヘッダーから操作します。</p></div>
+          <div class="manual-chapter"><h3 data-i18n="manualUtilityTitle">UTILITY</h3><p data-i18n="manualUtility">UTILITYでコイン／ダイス、トークン、カウンターを使用します。コイン／ダイスの結果はUTILITY内だけに表示します。</p></div>
+          <div class="manual-chapter"><h3 data-i18n="manualLogShortTitle">LOG / EXPORT</h3><p data-i18n="manualHistory">LOGは形式が変わるたびにSINGLE／MATCHを表示します。未使用のTIMERは—で表示し、完了したGAMEだけを書き出します。HTMLは外部依存のない単体ファイル、PDFは2列の印刷画面で出力します。</p></div>
+          <div class="manual-chapter"><h3 data-i18n="manualStorageShortTitle">保存</h3><p data-i18n="manualStorageShort">プレイヤー名とSETTINGSだけを保存します。LP、TURN、TIMER、LOG、GAME／MATCH戦績、UTILITY、MEMOは再読み込み時に初期化します。</p></div>
+          <div class="manual-chapter"><h3 data-i18n="manualHomeTitle">ホーム画面から使う</h3><p data-i18n="manualHome">iPhone／iPadではSafariの共有から「ホーム画面に追加」を選びます。Androidでは「追加」または「インストール」を選びます。項目名や対応機能は端末・ブラウザにより異なります。</p></div>
           <div class="manual-chapter"><h3 data-i18n="rightsTitle">権利・利用</h3><p data-i18n="rightsNotice">本ツールのソースコードおよび独自制作部分について、制作者は著作権その他の権利を主張しません。必要に応じて自由にダウンロード・改変・再配布してください。遊戯王OCGを含む第三者の名称・商標等の権利は各権利者に帰属します。</p></div>
 
           <div class="manual-note" data-i18n="manualNoteShort">大会・イベントでは主催者の端末利用ルールを優先してください。</div>
@@ -2781,6 +2793,17 @@ html[data-player-names="off"] .lp-button {
         <summary data-i18n="settingsChangelog">CHANGELOG / 更新履歴</summary>
         <div class="settings-section-body changelog-section-body">
           <div class="manual-version manual-changelog changelog-standalone">
+            <p><strong>v1.3.4</strong> <span class="manual-version-date" data-i18n="manualVersionDateV134">2026/09/11</span></p>
+            <ul>
+              <li data-i18n="manualChangelogV134A">LOGの形式切替地点へSINGLE／MATCH見出しを追加</li>
+              <li data-i18n="manualChangelogV134B">TIMER未使用のGAMEを—表示へ変更</li>
+              <li data-i18n="manualChangelogV134C">対戦形式の表記をSINGLE／MATCHへ統一</li>
+              <li data-i18n="manualChangelogV134D">HTML書き出しをLOG専用CSSへ軽量化し、外部フォント依存を削除</li>
+            </ul>
+            <p><strong>v1.3.3</strong> <span class="manual-version-date" data-i18n="manualVersionDateV133">2026/08/30</span></p>
+            <ul>
+              <li data-i18n="manualChangelogV133A">マニュアルと更新履歴の用語・文体を統一</li>
+            </ul>
             <p><strong>v1.3.2</strong> <span class="manual-version-date" data-i18n="manualVersionDateV132">2026/08/29</span></p>
             <ul>
               <li data-i18n="manualChangelogV132A">ヘッダーへSINGLE／MATCH切替を追加</li>
@@ -2867,7 +2890,7 @@ html[data-player-names="off"] .lp-button {
     game: 1,
     gameSeq: 1,
     match: 1,
-    gameStarts: [{ game: 1, gameSeq: 1, match: 1, format: 'single', timerMs: 0, turnOrder: { p1: 'first', p2: 'second' }, winner: null }],
+    gameStarts: [{ game: 1, gameSeq: 1, match: 1, format: 'single', timerMs: 0, timerUsed: false, turnOrder: { p1: 'first', p2: 'second' }, winner: null }],
     matchResults: [],
     wins: { p1: 0, p2: 0 },
     turn: 1,
@@ -3941,6 +3964,229 @@ html[data-player-names="off"] .lp-button {
   };
   Object.entries(WIN_COUNT_MODE_LOCALE).forEach(([lang, values]) => Object.assign(I18N[lang], values));
 
+  const DOCUMENTATION_UNIFIED = {
+    ja: {
+      manualLife:'LPカードの高さが幅の2倍を超える場合、LP CALCを自動表示します。表示中はP1／P2で対象を切り替え、それ以外はLPをタップして全画面のLP CALCを開きます。',
+      manualTimer:'TIMERを開始すると0:00から計測します。リミットAの初期値はSINGLEが20分、MATCHが40分です。SINGLEはGAME終了時、MATCHは勝者決定時に自動でRESETします。Bは共通の警告開始時間です。',
+      manualHeader:'ヘッダーのSINGLE／MATCHで形式を切り替えます。進行中のGAMEはRESETしてから切り替えてください。SWAP、UNDO、RESET、TURNもヘッダーから操作します。',
+      manualUtility:'UTILITYでコイン／ダイス、トークン、カウンターを使用します。コイン／ダイスの結果はUTILITY内だけに表示します。',
+      manualStorageShort:'プレイヤー名とSETTINGSだけを保存します。LP、TURN、TIMER、LOG、GAME／MATCH戦績、UTILITY、MEMOは再読み込み時に初期化します。',
+      manualHome:'iPhone／iPadではSafariの共有から「ホーム画面に追加」を選びます。Androidでは「追加」または「インストール」を選びます。項目名や対応機能は端末・ブラウザにより異なります。',
+      manualNoteShort:'大会・イベントでは主催者の端末利用ルールを優先してください。'
+    },
+    en: {
+      manualLife:'LP CALC appears automatically when an LP card would be more than twice as tall as wide. While shown, tap P1/P2 to change the target; otherwise tap LP to open LP CALC full screen.',
+      manualTimer:'Start TIMER to count from 0:00. Limit A defaults to 20 minutes for SINGLE and 40 minutes for MATCH. TIMER resets after each SINGLE GAME and when a MATCH winner is decided. B sets the shared warning start.',
+      manualHeader:'Use SINGLE/MATCH in the header to change format. RESET an active GAME before switching. SWAP, UNDO, RESET, and TURN are also controlled from the header.',
+      manualUtility:'Use coin/dice, tokens, and counters in UTILITY. Coin/dice results appear only inside UTILITY.',
+      manualStorageShort:'Only player names and SETTINGS are saved. LP, TURN, TIMER, LOG, GAME/MATCH records, UTILITY, and MEMO reset on reload.',
+      manualHome:'On iPhone/iPad, choose Add to Home Screen from Safari Share. On Android, choose Add or Install. Labels and supported features vary by device and browser.',
+      manualNoteShort:'Follow the organizer\'s device rules at tournaments and events.'
+    },
+    ko: {
+      manualLife:'LP 카드 높이가 너비의 2배를 넘으면 LP CALC를 자동으로 표시합니다. 표시 중에는 P1/P2로 대상을 바꾸고, 그 외에는 LP를 눌러 전체 화면 LP CALC를 엽니다.',
+      manualTimer:'TIMER를 시작하면 0:00부터 측정합니다. 리미트 A 기본값은 SINGLE 20분, MATCH 40분입니다. SINGLE은 GAME 종료 시, MATCH는 승자 결정 시 자동으로 RESET됩니다. B는 공통 경고 시작 시간입니다.',
+      manualHeader:'헤더의 SINGLE/MATCH로 형식을 전환합니다. 진행 중인 GAME은 RESET 후 전환하세요. SWAP, UNDO, RESET, TURN도 헤더에서 조작합니다.',
+      manualUtility:'UTILITY에서 코인/주사위, 토큰, 카운터를 사용합니다. 코인/주사위 결과는 UTILITY 안에서만 표시합니다.',
+      manualStorageShort:'플레이어 이름과 SETTINGS만 저장합니다. LP, TURN, TIMER, LOG, GAME/MATCH 전적, UTILITY, MEMO는 새로고침 시 초기화합니다.',
+      manualHome:'iPhone/iPad는 Safari 공유에서 홈 화면에 추가를 선택합니다. Android는 추가 또는 설치를 선택합니다. 항목명과 지원 기능은 기기와 브라우저에 따라 다릅니다.',
+      manualNoteShort:'대회와 이벤트에서는 주최자의 기기 사용 규칙을 우선하세요.'
+    },
+    'zh-CN': {
+      manualLife:'LP卡片高度超过宽度2倍时自动显示LP CALC。显示时点P1/P2切换对象；否则点LP打开全屏LP CALC。',
+      manualTimer:'启动TIMER后从0:00开始计时。限制A默认SINGLE为20分钟、MATCH为40分钟。SINGLE在GAME结束时自动RESET，MATCH在确定胜者时自动RESET。B为共用警告开始时间。',
+      manualHeader:'通过顶部栏的SINGLE/MATCH切换形式。进行中的GAME请先RESET。SWAP、UNDO、RESET与TURN也在顶部栏操作。',
+      manualUtility:'在UTILITY中使用硬币/骰子、衍生物和指示物。硬币/骰子结果仅在UTILITY内显示。',
+      manualStorageShort:'仅保存玩家名称和SETTINGS。LP、TURN、TIMER、LOG、GAME/MATCH战绩、UTILITY与MEMO在刷新时初始化。',
+      manualHome:'iPhone/iPad请从Safari分享中选择添加到主屏幕。Android请选择添加或安装。项目名称和支持功能因设备及浏览器而异。',
+      manualNoteShort:'赛事中请优先遵守主办方的设备使用规则。'
+    },
+    'zh-TW': {
+      manualLife:'LP卡片高度超過寬度2倍時自動顯示LP CALC。顯示時點P1/P2切換對象；否則點LP開啟全螢幕LP CALC。',
+      manualTimer:'啟動TIMER後從0:00開始計時。限制A預設SINGLE為20分鐘、MATCH為40分鐘。SINGLE在GAME結束時自動RESET，MATCH在確定勝者時自動RESET。B為共用警告開始時間。',
+      manualHeader:'透過頁首的SINGLE/MATCH切換形式。進行中的GAME請先RESET。SWAP、UNDO、RESET與TURN也在頁首操作。',
+      manualUtility:'在UTILITY中使用硬幣/骰子、衍生物和計數器。硬幣/骰子結果僅在UTILITY內顯示。',
+      manualStorageShort:'僅儲存玩家名稱和SETTINGS。LP、TURN、TIMER、LOG、GAME/MATCH戰績、UTILITY與MEMO在重新整理時初始化。',
+      manualHome:'iPhone/iPad請從Safari分享中選擇加入主畫面。Android請選擇新增或安裝。項目名稱和支援功能依裝置及瀏覽器而異。',
+      manualNoteShort:'賽事中請優先遵守主辦方的裝置使用規則。'
+    },
+    fr: {
+      manualLife:'LP CALC apparaît automatiquement si une carte LP dépasse deux fois sa largeur en hauteur. Lorsqu’il est affiché, touchez P1/P2 pour changer de cible ; sinon, touchez LP pour ouvrir LP CALC en plein écran.',
+      manualTimer:'Démarrez TIMER pour compter depuis 0:00. La limite A vaut par défaut 20 minutes en SINGLE et 40 minutes en MATCH. TIMER se RESET à la fin de chaque GAME en SINGLE et lorsque le gagnant du MATCH est décidé. B définit le début de l’alerte commune.',
+      manualHeader:'Changez de format avec SINGLE/MATCH dans l’en-tête. Effectuez RESET sur une GAME en cours avant de changer. SWAP, UNDO, RESET et TURN se contrôlent aussi dans l’en-tête.',
+      manualUtility:'Utilisez pièce/dé, jetons et compteurs dans UTILITY. Les résultats pièce/dé apparaissent uniquement dans UTILITY.',
+      manualStorageShort:'Seuls les noms des joueurs et SETTINGS sont enregistrés. LP, TURN, TIMER, LOG, les résultats GAME/MATCH, UTILITY et MEMO sont réinitialisés au rechargement.',
+      manualHome:'Sur iPhone/iPad, choisissez Ajouter à l’écran d’accueil dans le menu Partager de Safari. Sur Android, choisissez Ajouter ou Installer. Les libellés et fonctions varient selon l’appareil et le navigateur.',
+      manualNoteShort:'Lors des tournois et événements, respectez en priorité les règles de l’organisateur sur les appareils.'
+    },
+    de: {
+      manualLife:'LP CALC erscheint automatisch, wenn eine LP-Karte mehr als doppelt so hoch wie breit wird. Tippen Sie dann auf P1/P2, um das Ziel zu wechseln; andernfalls öffnet LP den LP CALC im Vollbild.',
+      manualTimer:'Starten Sie TIMER, um ab 0:00 zu zählen. Limit A beträgt standardmäßig 20 Minuten für SINGLE und 40 Minuten für MATCH. TIMER wird nach jeder SINGLE-GAME und bei der Entscheidung eines MATCH-Siegers RESET. B legt den gemeinsamen Warnbeginn fest.',
+      manualHeader:'Wechseln Sie das Format mit SINGLE/MATCH im Header. Führen Sie vor dem Wechsel bei einer laufenden GAME RESET aus. SWAP, UNDO, RESET und TURN werden ebenfalls im Header bedient.',
+      manualUtility:'Verwenden Sie Münze/Würfel, Token und Zähler in UTILITY. Münz-/Würfelergebnisse erscheinen nur in UTILITY.',
+      manualStorageShort:'Nur Spielernamen und SETTINGS werden gespeichert. LP, TURN, TIMER, LOG, GAME/MATCH-Ergebnisse, UTILITY und MEMO werden beim Neuladen zurückgesetzt.',
+      manualHome:'Wählen Sie auf iPhone/iPad in Safari Teilen die Option Zum Home-Bildschirm. Wählen Sie auf Android Hinzufügen oder Installieren. Bezeichnungen und Funktionen variieren je nach Gerät und Browser.',
+      manualNoteShort:'Bei Turnieren und Events gelten vorrangig die Geräteregeln des Veranstalters.'
+    },
+    it: {
+      manualLife:'LP CALC appare automaticamente se una scheda LP supera il doppio della larghezza in altezza. Quando è visibile, tocca P1/P2 per cambiare bersaglio; altrimenti tocca LP per aprire LP CALC a schermo intero.',
+      manualTimer:'Avvia TIMER per contare da 0:00. Il limite A predefinito è 20 minuti per SINGLE e 40 minuti per MATCH. TIMER esegue RESET al termine di ogni GAME in SINGLE e quando viene deciso il vincitore del MATCH. B imposta l’inizio dell’avviso comune.',
+      manualHeader:'Cambia formato con SINGLE/MATCH nell’intestazione. Esegui RESET della GAME attiva prima del cambio. SWAP, UNDO, RESET e TURN si controllano anche dall’intestazione.',
+      manualUtility:'Usa moneta/dado, gettoni e contatori in UTILITY. I risultati di moneta/dado appaiono solo in UTILITY.',
+      manualStorageShort:'Vengono salvati solo i nomi dei giocatori e SETTINGS. LP, TURN, TIMER, LOG, risultati GAME/MATCH, UTILITY e MEMO si azzerano al ricaricamento.',
+      manualHome:'Su iPhone/iPad scegli Aggiungi alla schermata Home da Condividi in Safari. Su Android scegli Aggiungi o Installa. Etichette e funzioni variano in base al dispositivo e al browser.',
+      manualNoteShort:'Nei tornei e negli eventi, dai priorità alle regole dell’organizzatore sui dispositivi.'
+    },
+    es: {
+      manualLife:'LP CALC aparece automáticamente si una tarjeta LP supera el doble de su anchura en altura. Cuando se muestra, toca P1/P2 para cambiar el objetivo; de lo contrario, toca LP para abrir LP CALC a pantalla completa.',
+      manualTimer:'Inicia TIMER para contar desde 0:00. El límite A predeterminado es 20 minutos para SINGLE y 40 minutos para MATCH. TIMER hace RESET al terminar cada GAME en SINGLE y cuando se decide el ganador del MATCH. B establece el inicio del aviso común.',
+      manualHeader:'Cambia el formato con SINGLE/MATCH en el encabezado. Haz RESET del GAME activo antes de cambiar. SWAP, UNDO, RESET y TURN también se controlan desde el encabezado.',
+      manualUtility:'Usa moneda/dado, fichas y contadores en UTILITY. Los resultados de moneda/dado solo aparecen en UTILITY.',
+      manualStorageShort:'Solo se guardan los nombres de los jugadores y SETTINGS. LP, TURN, TIMER, LOG, resultados GAME/MATCH, UTILITY y MEMO se reinician al recargar.',
+      manualHome:'En iPhone/iPad, elige Añadir a pantalla de inicio desde Compartir en Safari. En Android, elige Añadir o Instalar. Las etiquetas y funciones varían según el dispositivo y el navegador.',
+      manualNoteShort:'En torneos y eventos, da prioridad a las reglas del organizador sobre dispositivos.'
+    },
+    pt: {
+      manualLife:'LP CALC aparece automaticamente se um cartão LP tiver mais que o dobro da largura em altura. Quando exibido, toque em P1/P2 para trocar o alvo; caso contrário, toque em LP para abrir LP CALC em tela cheia.',
+      manualTimer:'Inicie TIMER para contar a partir de 0:00. O limite A padrão é 20 minutos para SINGLE e 40 minutos para MATCH. TIMER faz RESET ao fim de cada GAME em SINGLE e quando o vencedor do MATCH é decidido. B define o início do aviso comum.',
+      manualHeader:'Alterne o formato com SINGLE/MATCH no cabeçalho. Faça RESET do GAME ativo antes da troca. SWAP, UNDO, RESET e TURN também são controlados no cabeçalho.',
+      manualUtility:'Use moeda/dado, fichas e marcadores em UTILITY. Os resultados de moeda/dado aparecem apenas em UTILITY.',
+      manualStorageShort:'Apenas os nomes dos jogadores e SETTINGS são salvos. LP, TURN, TIMER, LOG, resultados GAME/MATCH, UTILITY e MEMO reiniciam ao recarregar.',
+      manualHome:'No iPhone/iPad, escolha Adicionar à Tela de Início em Compartilhar no Safari. No Android, escolha Adicionar ou Instalar. Rótulos e funções variam conforme o dispositivo e o navegador.',
+      manualNoteShort:'Em torneios e eventos, priorize as regras do organizador sobre dispositivos.'
+    }
+  };
+  Object.entries(DOCUMENTATION_UNIFIED).forEach(([lang, values]) => Object.assign(I18N[lang], values));
+
+  const DOCUMENTATION_TERM_REPLACEMENTS = {
+    fr: [[/JOURNAL/g, 'LOG'], [/PARTIES?/g, 'GAME'], [/OUTILS/g, 'UTILITY'], [/RÉGLAGES/g, 'SETTINGS'], [/\bPV\b/g, 'LP']],
+    de: [[/PROTOKOLL(?:S)?/g, 'LOG'], [/SPIEL(?:E|S)?/g, 'GAME'], [/WERKZEUGE/g, 'UTILITY'], [/EINSTELLUNGEN/g, 'SETTINGS']],
+    it: [[/REGISTRO/g, 'LOG'], [/PARTITA/g, 'GAME'], [/STRUMENTI/g, 'UTILITY'], [/IMPOSTAZIONI/g, 'SETTINGS']],
+    es: [[/REGISTRO/g, 'LOG'], [/DUELO/g, 'GAME'], [/HERRAMIENTAS/g, 'UTILITY'], [/AJUSTES/g, 'SETTINGS']],
+    pt: [[/REGISTRO/g, 'LOG'], [/DUELO/g, 'GAME'], [/FERRAMENTAS/g, 'UTILITY'], [/CONFIGURAÇÕES/g, 'SETTINGS']]
+  };
+  Object.entries(DOCUMENTATION_TERM_REPLACEMENTS).forEach(([lang, replacements]) => {
+    Object.keys(I18N[lang]).filter(key => key.startsWith('manualChangelog')).forEach(key => {
+      I18N[lang][key] = replacements.reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), I18N[lang][key]);
+    });
+  });
+
+  const CHANGELOG_V130A_UNIFIED = {
+    ja:'MATCH形式・LOG保持・MATCH／GAME進行と戦績を追加',
+    en:'Added MATCH format, session LOG, MATCH/GAME flow, and stats',
+    ko:'MATCH 형식·LOG 유지·MATCH/GAME 진행과 전적 추가',
+    'zh-CN':'新增MATCH形式、LOG保留、MATCH/GAME流程及战绩',
+    'zh-TW':'新增MATCH形式、LOG保留、MATCH/GAME流程及戰績',
+    fr:'Format MATCH, LOG de session, progression et statistiques ajoutés',
+    de:'MATCH-Format, Sitzungs-LOG, Ablauf und Statistiken ergänzt',
+    it:'Aggiunti formato MATCH, LOG di sessione, flusso e statistiche',
+    es:'Añadidos formato MATCH, LOG de sesión, flujo y estadísticas',
+    pt:'Adicionados formato MATCH, LOG da sessão, fluxo e estatísticas'
+  };
+  Object.entries(CHANGELOG_V130A_UNIFIED).forEach(([lang, entry]) => { I18N[lang].manualChangelogV130A = entry; });
+
+  const CHANGELOG_V133 = {
+    ja:'マニュアルと更新履歴の用語・文体を統一',
+    en:'Unified terminology and style across the manual and CHANGELOG',
+    ko:'매뉴얼과 CHANGELOG의 용어 및 문체 통일',
+    'zh-CN':'统一手册与CHANGELOG的术语和文体',
+    'zh-TW':'統一手冊與CHANGELOG的術語和文體',
+    fr:'Terminologie et style du manuel et du CHANGELOG uniformisés',
+    de:'Begriffe und Stil in Handbuch und CHANGELOG vereinheitlicht',
+    it:'Uniformati terminologia e stile di manuale e CHANGELOG',
+    es:'Unificados la terminología y el estilo del manual y CHANGELOG',
+    pt:'Padronizados os termos e o estilo do manual e CHANGELOG'
+  };
+  Object.entries(CHANGELOG_V133).forEach(([lang, entry]) => {
+    I18N[lang].manualVersionDateV133 = '2026/08/30';
+    I18N[lang].manualChangelogV133A = entry;
+  });
+
+  const EXPORT_LOG_LOCALE = {
+    ja: {
+      timerTargetMatchDesc:'MATCHの目標時間', timerTargetSingleDesc:'SINGLEの目標時間',
+      resetBody:'LPを8000、TURNを1へ戻します。AUTO WINNERが有効でLP変動がある場合は高い方を勝者にし、同点時だけ選択します。TIMERはSINGLEのGAME終了時、MATCHの勝者決定時に自動でRESETします。LOGと戦績は保持します。',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOGは形式が変わるたびにSINGLE／MATCHを表示します。未使用のTIMERは—で表示し、完了したGAMEだけを書き出します。HTMLは外部依存のない単体ファイル、PDFは2列の印刷画面で出力します。',
+      manualHistoryBody:'LOGはSINGLE／MATCH・GAME・TURN単位で表示し、再読み込みまで保持します。MATCHはG1／G2+とFIRST／SECOND別の戦績を表示します。'
+    },
+    en: {
+      timerTargetMatchDesc:'Target time for MATCH', timerTargetSingleDesc:'Target time for SINGLE',
+      resetBody:'Reset LP to 8000 and TURN to 1. With AUTO WINNER enabled after an LP change, the higher LP wins; choose only on a tie. TIMER resets after each SINGLE GAME and when a MATCH winner is decided. LOG and records remain.',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOG inserts SINGLE/MATCH whenever the format changes. Unused TIMER values appear as —, and only completed GAMEs are exported. HTML is a standalone file with no external dependency; PDF opens a two-column print view.',
+      manualHistoryBody:'LOG is grouped by SINGLE/MATCH, GAME, and TURN and remains until reload. MATCH records include G1/G2+ splits by FIRST/SECOND.'
+    },
+    ko: {
+      timerTargetMatchDesc:'MATCH 목표 시간', timerTargetSingleDesc:'SINGLE 목표 시간',
+      resetBody:'LP를 8000, TURN을 1로 되돌립니다. LP 변동 후 AUTO WINNER가 켜져 있으면 LP가 높은 쪽이 승리하며, 동점일 때만 선택합니다. TIMER는 SINGLE의 GAME 종료 시와 MATCH 승자 결정 시 자동 RESET됩니다. LOG와 전적은 유지됩니다.',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'형식이 바뀔 때마다 LOG에 SINGLE/MATCH를 표시합니다. 사용하지 않은 TIMER는 —로 표시하고 완료된 GAME만 내보냅니다. HTML은 외부 의존성이 없는 단일 파일이며 PDF는 2열 인쇄 화면으로 출력합니다.',
+      manualHistoryBody:'LOG는 SINGLE/MATCH, GAME, TURN 단위로 표시하며 새로고침 전까지 유지합니다. MATCH 전적은 G1/G2+와 FIRST/SECOND별로 표시합니다.'
+    },
+    'zh-CN': {
+      timerTargetMatchDesc:'MATCH目标时间', timerTargetSingleDesc:'SINGLE目标时间',
+      resetBody:'将LP恢复为8000、TURN恢复为1。LP变化后启用AUTO WINNER时，LP较高者获胜；仅在同分时选择。TIMER在SINGLE的GAME结束时及MATCH确定胜者时自动RESET。LOG与战绩保留。',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'每次形式变化时，LOG都会显示SINGLE/MATCH。未使用的TIMER显示为—，且仅导出已完成的GAME。HTML为无外部依赖的独立文件；PDF使用双栏打印视图。',
+      manualHistoryBody:'LOG按SINGLE/MATCH、GAME和TURN显示，并保留至刷新。MATCH战绩按G1/G2+及FIRST/SECOND分类。'
+    },
+    'zh-TW': {
+      timerTargetMatchDesc:'MATCH目標時間', timerTargetSingleDesc:'SINGLE目標時間',
+      resetBody:'將LP恢復為8000、TURN恢復為1。LP變化後啟用AUTO WINNER時，LP較高者獲勝；僅在同分時選擇。TIMER在SINGLE的GAME結束時及MATCH確定勝者時自動RESET。LOG與戰績保留。',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'每次形式變化時，LOG都會顯示SINGLE/MATCH。未使用的TIMER顯示為—，且僅匯出已完成的GAME。HTML為無外部依賴的獨立檔案；PDF使用雙欄列印畫面。',
+      manualHistoryBody:'LOG依SINGLE/MATCH、GAME和TURN顯示，並保留至重新整理。MATCH戰績依G1/G2+及FIRST/SECOND分類。'
+    },
+    fr: {
+      timerTargetMatchDesc:'Temps cible de MATCH', timerTargetSingleDesc:'Temps cible de SINGLE',
+      resetBody:'Remet LP à 8000 et TURN à 1. Si AUTO WINNER est actif après une variation de LP, les LP les plus élevés gagnent ; choisissez seulement en cas d’égalité. TIMER se RESET après chaque GAME en SINGLE et lorsque le gagnant du MATCH est décidé. LOG et résultats restent.',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOG insère SINGLE/MATCH à chaque changement de format. Un TIMER inutilisé apparaît comme — et seules les GAME terminées sont exportées. Le HTML est autonome et sans dépendance externe ; le PDF ouvre une vue d’impression sur deux colonnes.',
+      manualHistoryBody:'LOG est regroupé par SINGLE/MATCH, GAME et TURN et reste jusqu’au rechargement. Les résultats MATCH distinguent G1/G2+ et FIRST/SECOND.'
+    },
+    de: {
+      timerTargetMatchDesc:'Zielzeit für MATCH', timerTargetSingleDesc:'Zielzeit für SINGLE',
+      resetBody:'Setzt LP auf 8000 und TURN auf 1. Ist AUTO WINNER nach einer LP-Änderung aktiv, gewinnt der höhere LP-Wert; nur bei Gleichstand wird gewählt. TIMER wird nach jeder GAME in SINGLE und bei der Entscheidung des MATCH-Siegers RESET. LOG und Ergebnisse bleiben.',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOG fügt bei jedem Formatwechsel SINGLE/MATCH ein. Ein ungenutzter TIMER erscheint als —; exportiert werden nur abgeschlossene GAMEs. HTML ist eine eigenständige Datei ohne externe Abhängigkeit; PDF öffnet eine zweispaltige Druckansicht.',
+      manualHistoryBody:'LOG ist nach SINGLE/MATCH, GAME und TURN gegliedert und bleibt bis zum Neuladen erhalten. MATCH-Ergebnisse werden nach G1/G2+ und FIRST/SECOND getrennt.'
+    },
+    it: {
+      timerTargetMatchDesc:'Tempo obiettivo per MATCH', timerTargetSingleDesc:'Tempo obiettivo per SINGLE',
+      resetBody:'Riporta LP a 8000 e TURN a 1. Con AUTO WINNER attivo dopo una variazione LP, vince chi ha più LP; scegli solo in caso di parità. TIMER esegue RESET dopo ogni GAME in SINGLE e quando viene deciso il vincitore del MATCH. LOG e risultati restano.',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOG inserisce SINGLE/MATCH a ogni cambio di formato. Un TIMER non usato appare come — e vengono esportate solo le GAME concluse. HTML è un file autonomo senza dipendenze esterne; PDF apre una vista di stampa a due colonne.',
+      manualHistoryBody:'LOG è raggruppato per SINGLE/MATCH, GAME e TURN e resta fino al ricaricamento. I risultati MATCH distinguono G1/G2+ e FIRST/SECOND.'
+    },
+    es: {
+      timerTargetMatchDesc:'Tiempo objetivo para MATCH', timerTargetSingleDesc:'Tiempo objetivo para SINGLE',
+      resetBody:'Devuelve LP a 8000 y TURN a 1. Con AUTO WINNER activo tras un cambio de LP, gana quien tenga más LP; solo se elige en caso de empate. TIMER hace RESET después de cada GAME en SINGLE y cuando se decide el ganador del MATCH. LOG y resultados permanecen.',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOG inserta SINGLE/MATCH cada vez que cambia el formato. Un TIMER sin usar aparece como — y solo se exportan los GAME terminados. HTML es un archivo independiente sin dependencias externas; PDF abre una vista de impresión en dos columnas.',
+      manualHistoryBody:'LOG se agrupa por SINGLE/MATCH, GAME y TURN y permanece hasta recargar. Los resultados MATCH se dividen por G1/G2+ y FIRST/SECOND.'
+    },
+    pt: {
+      timerTargetMatchDesc:'Tempo-alvo do MATCH', timerTargetSingleDesc:'Tempo-alvo do SINGLE',
+      resetBody:'Retorna LP a 8000 e TURN a 1. Com AUTO WINNER ativo após mudança de LP, vence quem tiver mais LP; selecione apenas em caso de empate. TIMER faz RESET após cada GAME em SINGLE e quando o vencedor do MATCH é decidido. LOG e resultados permanecem.',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOG insere SINGLE/MATCH sempre que o formato muda. Um TIMER não usado aparece como — e apenas GAME concluídos são exportados. HTML é um arquivo independente sem dependências externas; PDF abre uma visualização de impressão em duas colunas.',
+      manualHistoryBody:'LOG é agrupado por SINGLE/MATCH, GAME e TURN e permanece até recarregar. Os resultados MATCH são separados por G1/G2+ e FIRST/SECOND.'
+    }
+  };
+  Object.entries(EXPORT_LOG_LOCALE).forEach(([lang, values]) => Object.assign(I18N[lang], values));
+  Object.values(I18N).forEach(dict => {
+    dict.timerTargetSingle = 'SINGLE LIMIT A';
+    dict.timerTargetMatch = 'MATCH LIMIT A';
+  });
+
+  const CHANGELOG_V134 = {
+    ja:['LOGの形式切替地点へSINGLE／MATCH見出しを追加','TIMER未使用のGAMEを—表示へ変更','対戦形式の表記をSINGLE／MATCHへ統一','HTML書き出しをLOG専用CSSへ軽量化し、外部フォント依存を削除'],
+    en:['Added SINGLE/MATCH headings at format changes in LOG','Changed unused TIMER values to — per GAME','Unified format labels as SINGLE/MATCH','Reduced HTML export to LOG-only CSS and removed external font dependencies'],
+    ko:['LOG 형식 전환 지점에 SINGLE/MATCH 제목 추가','TIMER를 사용하지 않은 GAME을 —로 표시','형식 표기를 SINGLE/MATCH로 통일','HTML 내보내기를 LOG 전용 CSS로 경량화하고 외부 폰트 의존성 제거'],
+    'zh-CN':['在LOG形式切换处新增SINGLE/MATCH标题','未使用TIMER的GAME改为显示—','形式名称统一为SINGLE/MATCH','HTML导出精简为LOG专用CSS并移除外部字体依赖'],
+    'zh-TW':['在LOG形式切換處新增SINGLE/MATCH標題','未使用TIMER的GAME改為顯示—','形式名稱統一為SINGLE/MATCH','HTML匯出精簡為LOG專用CSS並移除外部字型依賴'],
+    fr:['Ajout des titres SINGLE/MATCH aux changements de format du LOG','Affichage de — pour chaque GAME sans TIMER','Libellés de format uniformisés en SINGLE/MATCH','Export HTML allégé avec CSS propre au LOG et sans police externe'],
+    de:['SINGLE/MATCH-Überschriften bei Formatwechseln im LOG ergänzt','Ungenutzter TIMER je GAME als — angezeigt','Formatbezeichnungen auf SINGLE/MATCH vereinheitlicht','HTML-Export auf LOG-CSS reduziert und externe Schriften entfernt'],
+    it:['Aggiunti titoli SINGLE/MATCH ai cambi di formato nel LOG','Mostrato — per ogni GAME senza TIMER','Etichette formato uniformate in SINGLE/MATCH','Export HTML ridotto al CSS del LOG e senza font esterni'],
+    es:['Añadidos encabezados SINGLE/MATCH al cambiar formato en LOG','Mostrado — en cada GAME sin TIMER','Etiquetas de formato unificadas como SINGLE/MATCH','Exportación HTML reducida a CSS de LOG y sin fuentes externas'],
+    pt:['Adicionados títulos SINGLE/MATCH nas mudanças de formato do LOG','Exibido — em cada GAME sem TIMER','Rótulos de formato unificados como SINGLE/MATCH','Exportação HTML reduzida ao CSS do LOG e sem fontes externas']
+  };
+  Object.entries(CHANGELOG_V134).forEach(([lang, entries]) => {
+    I18N[lang].manualVersionDateV134 = '2026/09/11';
+    entries.forEach((entry, index) => { I18N[lang][`manualChangelogV134${String.fromCharCode(65 + index)}`] = entry; });
+  });
+
   const LOCALIZED_EXPLANATION_KEYS = new Set([
     'creator', 'savedBrowser', 'memoPlaceholder', 'tapToCalculate', 'counterEmpty',
     'keepOneToken', 'enterNumber', 'clearSettingsDone', 'historyExportHtmlDone',
@@ -4212,6 +4458,7 @@ html[data-player-names="off"] .lp-button {
         match: Store.state.match,
         format: matchModeEnabled ? 'match' : 'single',
         timerMs: resetTimer ? 0 : resetAt,
+        timerUsed: !resetTimer && resetAt > 0,
         turnOrder: { ...Store.state.turnOrder },
         winner: null
       });
@@ -4585,6 +4832,9 @@ html[data-player-names="off"] .lp-button {
       const pushMatchRow = (match, gameSeq) => {
         rows.push(`<tr class="history-match-row" data-game-seq="${gameSeq}"><td colspan="3">${escapeHTML(t('matchLabel'))} ${match}</td></tr>`);
       };
+      const pushFormatRow = (format, gameSeq) => {
+        rows.push(`<tr class="history-format-row" data-game-seq="${gameSeq}" data-format="${format}"><td colspan="3">${format === 'match' ? 'MATCH' : 'SINGLE'}</td></tr>`);
+      };
       const pushGameRow = (game, gameSeq) => {
         rows.push(`<tr class="history-game-row" data-game-seq="${gameSeq}"><td colspan="3">${escapeHTML(t('gameLabel'))} ${game}</td></tr>`);
       };
@@ -4645,7 +4895,7 @@ html[data-player-names="off"] .lp-button {
 
       const hasSingleSession = starts.some(start => gameFormatOf(start) === 'single');
       if (hasSingleSession && Store.state.settings.winCountVisible !== false) {
-        rows.push(`<tr class="history-win-row"><td>${gameStatCell('p1', singleGameStats)}</td><td class="time-col">1 DUEL</td><td>${gameStatCell('p2', singleGameStats)}</td></tr>`);
+        rows.push(`<tr class="history-win-row history-single-row"><td>${gameStatCell('p1', singleGameStats)}</td><td class="time-col">SINGLE</td><td>${gameStatCell('p2', singleGameStats)}</td></tr>`);
       }
 
       const matchResults = Store.state.matchResults || [];
@@ -4690,12 +4940,18 @@ html[data-player-names="off"] .lp-button {
             </div>
           </div>`;
         };
-        rows.push(`<tr class="history-win-row history-bo3-row"><td>${matchStatCell('p1')}</td><td class="time-col">BO3</td><td>${matchStatCell('p2')}</td></tr>`);
+        rows.push(`<tr class="history-win-row history-bo3-row"><td>${matchStatCell('p1')}</td><td class="time-col">MATCH</td><td>${matchStatCell('p2')}</td></tr>`);
       }
 
       let shownMatch = null;
+      let shownFormat = null;
       starts.forEach(start => {
         const startFormat = gameFormatOf(start);
+        if (startFormat !== shownFormat) {
+          pushFormatRow(startFormat, start.gameSeq);
+          shownFormat = startFormat;
+          shownMatch = null;
+        }
         if (startFormat === 'match' && shownMatch !== start.match) {
           pushMatchRow(start.match, start.gameSeq);
           shownMatch = start.match;
@@ -4709,16 +4965,22 @@ html[data-player-names="off"] .lp-button {
         };
         const winner = (Store.state.settings.winCountVisible !== false || startFormat === 'match') ? start?.winner : null;
         const startTimerMs = Math.max(0, Math.trunc(start?.timerMs || 0));
+        const gameEntries = entriesByGameSeq.get(start.gameSeq) || [];
+        const timerUsed = start?.timerUsed === true ||
+          startTimerMs > 0 ||
+          gameEntries.some(entry => Math.max(0, Math.trunc(entry?.timerMs || 0)) > 0) ||
+          (start.gameSeq === currentSeq && Timer.currentMs() > 0);
+        const gameTime = timerMs => timerUsed ? formatTime(Math.max(0, Math.trunc(timerMs || 0))) : '—';
 
         rows.push(`
           <tr data-game-seq="${start.gameSeq}">
             <td class="${winner === 'p1' ? 'game-winner-cell' : ''}"><div class="history-cell p1 initial ${winner === 'p1' ? 'game-winner' : ''}">${orderBadge(order.p1)}<div class="history-lp">8000</div></div></td>
-            <td class="time-col"><span class="history-time">${formatTime(startTimerMs)}</span></td>
+            <td class="time-col"><span class="history-time">${gameTime(startTimerMs)}</span></td>
             <td class="${winner === 'p2' ? 'game-winner-cell' : ''}"><div class="history-cell p2 initial ${winner === 'p2' ? 'game-winner' : ''}">${orderBadge(order.p2)}<div class="history-lp">8000</div></div></td>
           </tr>`);
 
         let shownTurn = 1;
-        (entriesByGameSeq.get(start.gameSeq) || []).forEach(h => {
+        gameEntries.forEach(h => {
             const turn = Math.max(1, Math.trunc(h.turn || 1));
             if (shownTurn !== turn) {
               pushTurnRow(turn, start.gameSeq);
@@ -4732,7 +4994,7 @@ html[data-player-names="off"] .lp-button {
             rows.push(`
               <tr data-game-seq="${start.gameSeq}">
                 <td class="${winner === 'p1' ? 'game-winner-cell' : ''}">${h.player === 'p1' ? cell : '<span class="history-empty-cell">—</span>'}</td>
-                <td class="time-col"><span class="history-time">${formatTime(h.timerMs || 0)}</span></td>
+                <td class="time-col"><span class="history-time">${gameTime(h.timerMs)}</span></td>
                 <td class="${winner === 'p2' ? 'game-winner-cell' : ''}">${h.player === 'p2' ? cell : '<span class="history-empty-cell">—</span>'}</td>
               </tr>`);
           });
@@ -4777,27 +5039,17 @@ html[data-player-names="off"] .lp-button {
         })
         .map(start => Math.max(1, Math.trunc(start?.gameSeq || start?.game || 1))));
     },
-    timerWasUsed(completedGameSeqs) {
-      const hasTimedStart = (Store.state.gameStarts || []).some(start =>
-        completedGameSeqs.has(Math.max(1, Math.trunc(start?.gameSeq || start?.game || 1))) &&
-        (start?.timerUsed === true || Math.max(0, Math.trunc(start?.timerMs || 0)) > 0)
-      );
-      const hasTimedEntry = (Store.state.history || []).some(entry =>
-        completedGameSeqs.has(Math.max(1, Math.trunc(entry?.gameSeq || entry?.game || 1))) &&
-        Math.max(0, Math.trunc(entry?.timerMs || 0)) > 0
-      );
-      return hasTimedStart || hasTimedEntry;
-    },
     prepareClone(cloned, { printMode = false } = {}) {
       const completedGameSeqs = this.completedGameSeqs();
+      const completedFormats = new Set((Store.state.gameStarts || [])
+        .filter(start => completedGameSeqs.has(Math.max(1, Math.trunc(start?.gameSeq || start?.game || 1))))
+        .map(start => gameFormatOf(start)));
+      if (!completedFormats.has('single')) cloned.querySelector('.history-single-row')?.remove();
+      if (!completedFormats.has('match')) cloned.querySelector('.history-bo3-row')?.remove();
       cloned.querySelectorAll('tbody tr[data-game-seq]').forEach(row => {
         const gameSeq = Math.max(1, Math.trunc(Number(row.dataset.gameSeq) || 1));
         if (!completedGameSeqs.has(gameSeq)) row.remove();
       });
-
-      if (!this.timerWasUsed(completedGameSeqs)) {
-        cloned.querySelectorAll('.history-time').forEach(el => { el.textContent = ''; });
-      }
 
       if (!printMode) return;
       const wrap = cloned.querySelector('.history-table-wrap');
@@ -4831,16 +5083,7 @@ html[data-player-names="off"] .lp-button {
       }
       this.prepareClone(cloned, { printMode });
 
-      const pageStyle = document.querySelector('style')?.textContent || '';
-      const fontLinks = [...document.querySelectorAll('link[rel="preconnect"], link[rel="stylesheet"]')]
-        .map(link => link.outerHTML)
-        .join('\n');
-      const root = document.documentElement;
       const attrs = {
-        // Export is always rendered in light mode regardless of the app appearance.
-        mode: 'light',
-        theme: root.dataset.theme || 'standard',
-        font: root.dataset.font || 'system',
         turnOrder: Store.state.settings.turnOrderVisible === false ? 'off' : 'on'
       };
       const title = `${Store.state.names.p1} ${t('versus')} ${Store.state.names.p2} - ${t('history')}`;
@@ -4848,24 +5091,56 @@ html[data-player-names="off"] .lp-button {
       const printScript = printMode ? `<script>window.addEventListener('load',()=>setTimeout(()=>{window.focus();window.print();},250));<\/script>` : '';
 
       return `<!DOCTYPE html>
-<html lang="${escapeHTML(lang)}" data-mode="${escapeHTML(attrs.mode)}" data-theme="${escapeHTML(attrs.theme)}" data-font="${escapeHTML(attrs.font)}" data-turn-order="${escapeHTML(attrs.turnOrder)}" data-dynamic-bg="off" data-bg-pattern="off">
+<html lang="${escapeHTML(lang)}" data-turn-order="${escapeHTML(attrs.turnOrder)}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${escapeHTML(title)}</title>
-${fontLinks}
-<style>${pageStyle}</style>
 <style>
-:root{color-scheme:light!important;}
-html,body{min-height:100%;height:auto;overflow:auto!important;background:var(--bg)!important;color:var(--text)!important;}
+:root{color-scheme:light;--bg:#f3f4f6;--surface:#fff;--surface-2:#e9ebef;--text:#111318;--muted:#666d78;--border:#d9dde3;--accent:#343b47;--accent-contrast:#fff;--p1:#315f8a;--p2:#824f3d;--danger:#b3261e;--success:#2e7d32;--font:-apple-system,BlinkMacSystemFont,"Segoe UI","Yu Gothic","Malgun Gothic",Roboto,Helvetica,Arial,sans-serif;}
+*{box-sizing:border-box;}
+html,body{min-height:100%;height:auto;overflow:auto;background:var(--bg);color:var(--text);}
 body{margin:0;padding:24px;font-family:var(--font);-webkit-print-color-adjust:exact;print-color-adjust:exact;}
 .export-history-shell{width:min(100%,760px);margin:0 auto;}
-.export-history-title{margin:0 0 14px;font-family:var(--display-font);font-size:22px;font-weight:950;color:var(--accent);letter-spacing: .055em;}
+.export-history-title{margin:0 0 14px;font-size:22px;font-weight:900;color:var(--accent);letter-spacing:.055em;}
 .export-history-meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:-6px 0 14px;color:var(--muted);font-size:10px;font-weight:800;}
-.export-history-shell .history-table-wrap{background:var(--surface);box-shadow:none;}
-.export-history-shell .history-table{width:100%;}
-.export-history-shell .history-table tr{break-inside:avoid;page-break-inside:avoid;}
-.export-history-shell .history-table thead{display:table-header-group;}
+.history-table-wrap{overflow:hidden;border:1px solid var(--border);border-radius:16px;background:var(--surface);}
+.history-table{width:100%;border-collapse:collapse;table-layout:fixed;font-variant-numeric:tabular-nums;}
+.history-table tr{break-inside:avoid;page-break-inside:avoid;}
+.history-table thead{display:table-header-group;}
+.history-table th,.history-table td{border-bottom:1px solid var(--border);padding:10px 8px;text-align:center;vertical-align:middle;}
+.history-table tr:last-child td{border-bottom:0;}
+.history-table th{font-size:11px;letter-spacing:.095em;font-weight:900;background:#eef0f3;}
+.history-table th.time-col,.history-table td.time-col{width:76px;}
+.history-table th.p1-col,.history-win-row td:first-child{color:var(--p1);}
+.history-table th.p2-col,.history-win-row td:last-child{color:var(--p2);}
+.history-format-row td{padding:8px;background:#111318;color:#fff;font-size:11px;font-weight:900;letter-spacing:.2em;border-top:5px solid var(--bg);border-bottom:0;}
+.history-match-row td{padding:8px 10px;background:#e8ebef;color:var(--accent);font-size:12px;font-weight:900;letter-spacing:.12em;border-top:2px solid #aeb5bf;}
+.history-game-row td{padding:9px 8px;background:var(--accent);color:var(--accent-contrast);font-size:13px;font-weight:900;letter-spacing:.175em;}
+.history-turn-row td{padding:7px 8px;background:#f0f2f5;color:var(--accent);font-size:12px;font-weight:900;letter-spacing:.135em;}
+.history-win-row td{padding:10px 7px;background:#f4f5f7;font-weight:900;vertical-align:middle;}
+.history-win-row .time-col{color:var(--muted);font-size:9px;letter-spacing:.08em;white-space:nowrap;}
+.history-match-stat{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;}
+.history-match-stat-combined{display:grid;gap:2px;}
+.history-match-stat-main{font-size:12px;line-height:1.25;font-weight:900;letter-spacing:.07em;white-space:nowrap;}
+.history-match-stat-game{margin-top:4px;padding-top:5px;border-top:1px solid var(--border);font-size:11px;line-height:1.2;font-weight:900;white-space:nowrap;}
+.history-match-stat-split{font-size:10px;line-height:1.35;font-weight:800;letter-spacing:.035em;color:var(--muted);white-space:nowrap;}
+.history-match-stat-bo3split{margin-top:3px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 6px;text-align:left;}
+.history-match-stat-bo3split span{white-space:nowrap;}
+.history-time{display:block;color:var(--muted);font-size:12px;font-weight:800;}
+.history-cell{min-height:48px;border-radius:10px;padding:7px 6px;display:grid;gap:2px;align-content:end;}
+.history-cell.p1{background:#eef4fa;}.history-cell.p2{background:#f8f0ed;}
+.history-lp{font-size:22px;line-height:1;font-weight:900;letter-spacing:-.005em;}
+.history-cell.initial{min-height:62px;}.history-cell.initial .history-lp{font-size:24px;}
+.history-order{justify-self:center;min-width:54px;padding:3px 8px;border-radius:999px;font-size:9px;line-height:1.1;font-weight:900;letter-spacing:.095em;border:1px solid currentColor;}
+.history-order.first{color:var(--success);background:#edf7ee;}
+html[data-turn-order="off"] .history-order{display:none;}
+.history-delta{font-size:12px;font-weight:900;}.history-delta.pos{color:var(--success);}.history-delta.neg{color:var(--danger);}
+.history-empty-cell{color:#aeb4bd;}
+.history-cell.game-winner{background:#e3f2e5!important;box-shadow:inset 0 0 0 2px #4f8e55;}
+.history-cell.game-winner::before{content:"WIN";display:block;margin-bottom:4px;color:var(--success);font-size:10px;line-height:1;font-weight:900;letter-spacing:.14em;}
+.history-table td.game-winner-cell{background:#edf7ee!important;box-shadow:inset 3px 0 0 #4f8e55;}
+.history-table td.game-winner-cell .history-cell{background:#e3f2e5!important;}
 .export-print-summary{margin-bottom:5mm;}
 .export-game-columns{column-count:2;column-gap:5mm;}
 .export-game-card{display:inline-block;width:100%;margin:0 0 4mm;break-inside:avoid;page-break-inside:avoid;vertical-align:top;}
@@ -4876,72 +5151,16 @@ body{margin:0;padding:24px;font-family:var(--font);-webkit-print-color-adjust:ex
 .export-game-card .history-cell.initial{min-height:38px;}
 .export-game-card .history-cell.initial .history-lp{font-size:17px;}
 .export-game-card .history-delta{font-size:8px;}
-.export-game-card .history-game-row td,.export-game-card .history-match-row td,.export-game-card .history-turn-row td{font-size:8px;padding:4px 3px;}
+.export-game-card .history-format-row td,.export-game-card .history-game-row td,.export-game-card .history-match-row td,.export-game-card .history-turn-row td{font-size:8px;padding:4px 3px;}
 .export-game-card .history-order{font-size:7px;padding:2px 4px;}
 @page{size:A4 portrait;margin:12mm;}
 @media print{
-  html,body{background:var(--bg)!important;}
+  html,body{background:var(--bg);}
   body{padding:0;}
   .export-history-shell{width:100%;max-width:none;}
   .export-history-title{font-size:18px;margin-bottom:10px;}
   .export-history-meta{font-size:9px;margin-bottom:10px;}
   .export-print-summary .history-table th,.export-print-summary .history-table td{padding:6px 4px;}
-}
-
-@media (max-width: 430px) {
-  .game-display { min-width: 36px; gap: 1px; }
-  .game-display .game-label { font-size: 6px; }
-  .game-display .game-number { font-size: 19px; }
-}
-@media (max-width: 360px) {
-  .game-display { min-width: 32px; }
-  .game-display .game-label { font-size: 5px; }
-  .game-display .game-number { font-size: 17px; }
-}
-
-/* LIFE card outer breathing room: preserve existing screen-edge gutters. */
-.screen.life-screen {
-  column-gap: clamp(8px, 1.6vw, 16px);
-  padding-top: clamp(8px, 1.2vh, 14px);
-  padding-bottom: clamp(8px, 1.2vh, 14px);
-}
-
-@media (max-width: 380px), (max-height: 650px) {
-  .screen.life-screen {
-    column-gap: 8px;
-    padding-top: 7px;
-    padding-bottom: 7px;
-  }
-}
-
-@media (orientation: landscape) {
-  .screen.life-screen {
-    column-gap: clamp(10px, 1.4vw, 18px);
-    padding-top: 7px;
-    padding-bottom: 7px;
-  }
-}
-</style>
-
-<style id="lp-center-fix">
-/* Keep LP numerals geometrically centered in each player panel regardless of
-   player-name / FIRST-SECOND / DOMINUS visibility. Status elements remain
-   overlays and no longer change the LP content box. */
-.lp-button {
-  display: grid !important;
-  place-items: center !important;
-  padding: 0 12% !important;
-}
-.player-card.dominus-enabled .lp-button,
-html[data-turn-order="on"] .player-card .lp-button,
-html[data-player-names="off"] .lp-button {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-}
-.lp-number {
-  align-self: center !important;
-  justify-self: center !important;
-  text-align: center !important;
 }
 </style>
 </head>
@@ -6029,8 +6248,8 @@ ${printScript}
       const matchModeEnabled = Store.state.settings.matchModeEnabled === true;
       button.dataset.format = matchModeEnabled ? 'match' : 'single';
       button.textContent = matchModeEnabled ? 'MATCH' : 'SINGLE';
-      button.setAttribute('aria-label', matchModeEnabled ? 'Switch to 1 Duel' : 'Switch to Match');
-      button.title = matchModeEnabled ? 'MATCH — SWITCH TO 1 DUEL' : '1 DUEL — SWITCH TO MATCH';
+      button.setAttribute('aria-label', matchModeEnabled ? 'Switch to Single' : 'Switch to Match');
+      button.title = matchModeEnabled ? 'MATCH — SWITCH TO SINGLE' : 'SINGLE — SWITCH TO MATCH';
     },
     renderTurn() {
       const el = $('#turnDisplay');
@@ -6085,6 +6304,7 @@ ${printScript}
         match: currentMatch,
         format: currentFormat(),
         timerMs: (currentMatch === 1 && currentGame === 1) ? 0 : Timer.currentMs(),
+        timerUsed: Timer.currentMs() > 0,
         turnOrder: { ...Store.state.turnOrder },
         winner: null
       });
