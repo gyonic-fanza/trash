@@ -1481,7 +1481,7 @@ html[data-turn-order="on"] .player-card .lp-button {
 }
 .export-choice-grid {
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
   gap:10px;
   margin-top:12px;
 }
@@ -1573,6 +1573,16 @@ html[data-turn-order="on"] .player-card .lp-button {
   letter-spacing: .135em;
   text-align: center;
   border-bottom: 1px solid var(--border);
+}
+.history-end-row td {
+  padding: 7px 8px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 950;
+  letter-spacing: .135em;
+  text-align: center;
+  border-top: 1px dashed var(--border);
 }
 .history-time {
   display:block;
@@ -2778,7 +2788,7 @@ html[data-player-names="off"] .lp-button {
           <div class="manual-chapter"><h3 data-i18n="manualTimerShortTitle">タイマー</h3><p data-i18n="manualTimer">TIMERを開始すると0:00から計測します。リミットAの初期値はSINGLEが20分、MATCHが40分です。SINGLEはGAME終了時、MATCHは勝者決定時に自動でRESETします。Bは共通の警告開始時間です。</p></div>
           <div class="manual-chapter"><h3 data-i18n="manualControlsShortTitle">操作</h3><p data-i18n="manualHeader">ヘッダーのSINGLE／MATCHで形式を切り替えます。進行中のGAMEはRESETしてから切り替えてください。SWAP、UNDO、RESET、TURNもヘッダーから操作します。</p></div>
           <div class="manual-chapter"><h3 data-i18n="manualUtilityTitle">UTILITY</h3><p data-i18n="manualUtility">UTILITYでコイン／ダイス、トークン、カウンターを使用します。コイン／ダイスの結果はUTILITY内だけに表示します。</p></div>
-          <div class="manual-chapter"><h3 data-i18n="manualLogShortTitle">LOG / EXPORT</h3><p data-i18n="manualHistory">LOGは形式が変わるたびにSINGLE／MATCHを表示します。未使用のTIMERは—で表示し、完了したGAMEだけを書き出します。HTMLは外部依存のない単体ファイル、PDFは2列の印刷画面で出力します。</p></div>
+          <div class="manual-chapter"><h3 data-i18n="manualLogShortTitle">LOG / EXPORT</h3><p data-i18n="manualHistory">LOGは形式が変わるたびにSINGLE／MATCHを表示します。GAME終了時はRESET時のTIMERをENDとして記録し、未使用時は—で表示します。HTML／PDFは完了したGAMEの閲覧用です。CSVはRECORD取込用に勝敗・先攻・形式・対戦日・固定IDだけを出力し、LP履歴は含みません。</p></div>
           <div class="manual-chapter"><h3 data-i18n="manualStorageShortTitle">保存</h3><p data-i18n="manualStorageShort">プレイヤー名とSETTINGSだけを保存します。LP、TURN、TIMER、LOG、GAME／MATCH戦績、UTILITY、MEMOは再読み込み時に初期化します。</p></div>
           <div class="manual-chapter"><h3 data-i18n="manualHomeTitle">ホーム画面から使う</h3><p data-i18n="manualHome">iPhone／iPadではSafariの共有から「ホーム画面に追加」を選びます。Androidでは「追加」または「インストール」を選びます。項目名や対応機能は端末・ブラウザにより異なります。</p></div>
           <div class="manual-chapter"><h3 data-i18n="rightsTitle">権利・利用</h3><p data-i18n="rightsNotice">本ツールのソースコードおよび独自制作部分について、制作者は著作権その他の権利を主張しません。必要に応じて自由にダウンロード・改変・再配布してください。遊戯王OCGを含む第三者の名称・商標等の権利は各権利者に帰属します。</p></div>
@@ -2793,6 +2803,14 @@ html[data-player-names="off"] .lp-button {
         <summary data-i18n="settingsChangelog">CHANGELOG / 更新履歴</summary>
         <div class="settings-section-body changelog-section-body">
           <div class="manual-version manual-changelog changelog-standalone">
+            <p><strong>v1.3.6</strong> <span class="manual-version-date" data-i18n="manualVersionDateV136">2026/09/24</span></p>
+            <ul>
+              <li data-i18n="manualChangelogV136A">固定ID・対戦日付きのRECORD連携用戦績CSV出力を追加</li>
+            </ul>
+            <p><strong>v1.3.5</strong> <span class="manual-version-date" data-i18n="manualVersionDateV135">2026/09/13</span></p>
+            <ul>
+              <li data-i18n="manualChangelogV135A">RESET時の最終TIMERをGAMEのENDとして記録</li>
+            </ul>
             <p><strong>v1.3.4</strong> <span class="manual-version-date" data-i18n="manualVersionDateV134">2026/09/11</span></p>
             <ul>
               <li data-i18n="manualChangelogV134A">LOGの形式切替地点へSINGLE／MATCH見出しを追加</li>
@@ -2882,6 +2900,20 @@ html[data-player-names="off"] .lp-button {
   const STORAGE_KEY = 'ocg-life-counter-v1';
   const MAX_UTILITY_COUNT = 20;
   const PLAYERS = Object.freeze(['p1', 'p2']);
+  const localDateStamp = (date = new Date()) => {
+    const pad = value => String(value).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+  };
+  const createRecordId = () => {
+    if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID();
+    const bytes = new Uint8Array(16);
+    if (globalThis.crypto?.getRandomValues) globalThis.crypto.getRandomValues(bytes);
+    else for (let i = 0; i < bytes.length; i += 1) bytes[i] = Math.floor(Math.random() * 256);
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    const hex = [...bytes].map(value => value.toString(16).padStart(2, '0'));
+    return `${hex.slice(0,4).join('')}-${hex.slice(4,6).join('')}-${hex.slice(6,8).join('')}-${hex.slice(8,10).join('')}-${hex.slice(10).join('')}`;
+  };
 
   const defaults = {
     lp: { p1: 8000, p2: 8000 },
@@ -2890,7 +2922,7 @@ html[data-player-names="off"] .lp-button {
     game: 1,
     gameSeq: 1,
     match: 1,
-    gameStarts: [{ game: 1, gameSeq: 1, match: 1, format: 'single', timerMs: 0, timerUsed: false, turnOrder: { p1: 'first', p2: 'second' }, winner: null }],
+    gameStarts: [{ game: 1, gameSeq: 1, match: 1, format: 'single', recordId: createRecordId(), playedAt: localDateStamp(), timerMs: 0, timerUsed: false, turnOrder: { p1: 'first', p2: 'second' }, winner: null }],
     matchResults: [],
     wins: { p1: 0, p2: 0 },
     turn: 1,
@@ -4102,72 +4134,134 @@ html[data-player-names="off"] .lp-button {
     I18N[lang].manualChangelogV133A = entry;
   });
 
+  const CSV_EXPORT_LOCALE = {
+    ja:{historyExportCsvDesc:'RECORD取込用の戦績CSV',historyExportCsvDone:'戦績CSVを書き出しました',historyExportCsvEmpty:'出力できる終了済みGAMEがありません'},
+    en:{historyExportCsvDesc:'Battle records for RECORD import',historyExportCsvDone:'Battle record CSV exported',historyExportCsvEmpty:'No completed GAMEs are available to export'},
+    ko:{historyExportCsvDesc:'RECORD 가져오기용 전적 CSV',historyExportCsvDone:'전적 CSV를 내보냈습니다',historyExportCsvEmpty:'내보낼 완료된 GAME이 없습니다'},
+    'zh-CN':{historyExportCsvDesc:'用于RECORD导入的战绩CSV',historyExportCsvDone:'战绩CSV已导出',historyExportCsvEmpty:'没有可导出的已完成GAME'},
+    'zh-TW':{historyExportCsvDesc:'用於RECORD匯入的戰績CSV',historyExportCsvDone:'戰績CSV已匯出',historyExportCsvEmpty:'沒有可匯出的已完成GAME'},
+    fr:{historyExportCsvDesc:'Résultats CSV pour import RECORD',historyExportCsvDone:'CSV des résultats exporté',historyExportCsvEmpty:'Aucune GAME terminée à exporter'},
+    de:{historyExportCsvDesc:'Ergebnis-CSV für RECORD-Import',historyExportCsvDone:'Ergebnis-CSV exportiert',historyExportCsvEmpty:'Keine abgeschlossene GAME zum Exportieren'},
+    it:{historyExportCsvDesc:'Risultati CSV per importazione RECORD',historyExportCsvDone:'CSV dei risultati esportato',historyExportCsvEmpty:'Nessuna GAME conclusa da esportare'},
+    es:{historyExportCsvDesc:'Resultados CSV para importar en RECORD',historyExportCsvDone:'CSV de resultados exportado',historyExportCsvEmpty:'No hay GAME terminados para exportar'},
+    pt:{historyExportCsvDesc:'Resultados CSV para importar no RECORD',historyExportCsvDone:'CSV de resultados exportado',historyExportCsvEmpty:'Não há GAME concluídos para exportar'}
+  };
+  Object.entries(CSV_EXPORT_LOCALE).forEach(([lang, values]) => Object.assign(I18N[lang], values));
+  Object.values(I18N).forEach(dict => { dict.historyExportCsv = 'CSV'; });
+
   const EXPORT_LOG_LOCALE = {
     ja: {
       timerTargetMatchDesc:'MATCHの目標時間', timerTargetSingleDesc:'SINGLEの目標時間',
       resetBody:'LPを8000、TURNを1へ戻します。AUTO WINNERが有効でLP変動がある場合は高い方を勝者にし、同点時だけ選択します。TIMERはSINGLEのGAME終了時、MATCHの勝者決定時に自動でRESETします。LOGと戦績は保持します。',
-      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOGは形式が変わるたびにSINGLE／MATCHを表示します。未使用のTIMERは—で表示し、完了したGAMEだけを書き出します。HTMLは外部依存のない単体ファイル、PDFは2列の印刷画面で出力します。',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOGは形式が変わるたびにSINGLE／MATCHを表示します。GAME終了時はRESET時のTIMERをENDとして記録し、未使用時は—で表示します。完了したGAMEだけを書き出します。HTMLは外部依存のない単体ファイル、PDFは2列の印刷画面で出力します。',
       manualHistoryBody:'LOGはSINGLE／MATCH・GAME・TURN単位で表示し、再読み込みまで保持します。MATCHはG1／G2+とFIRST／SECOND別の戦績を表示します。'
     },
     en: {
       timerTargetMatchDesc:'Target time for MATCH', timerTargetSingleDesc:'Target time for SINGLE',
       resetBody:'Reset LP to 8000 and TURN to 1. With AUTO WINNER enabled after an LP change, the higher LP wins; choose only on a tie. TIMER resets after each SINGLE GAME and when a MATCH winner is decided. LOG and records remain.',
-      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOG inserts SINGLE/MATCH whenever the format changes. Unused TIMER values appear as —, and only completed GAMEs are exported. HTML is a standalone file with no external dependency; PDF opens a two-column print view.',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOG inserts SINGLE/MATCH whenever the format changes. At GAME end, the TIMER value at RESET is recorded as END; an unused TIMER appears as —. Only completed GAMEs are exported. HTML is standalone; PDF opens a two-column print view.',
       manualHistoryBody:'LOG is grouped by SINGLE/MATCH, GAME, and TURN and remains until reload. MATCH records include G1/G2+ splits by FIRST/SECOND.'
     },
     ko: {
       timerTargetMatchDesc:'MATCH 목표 시간', timerTargetSingleDesc:'SINGLE 목표 시간',
       resetBody:'LP를 8000, TURN을 1로 되돌립니다. LP 변동 후 AUTO WINNER가 켜져 있으면 LP가 높은 쪽이 승리하며, 동점일 때만 선택합니다. TIMER는 SINGLE의 GAME 종료 시와 MATCH 승자 결정 시 자동 RESET됩니다. LOG와 전적은 유지됩니다.',
-      manualLogShortTitle:'LOG / EXPORT', manualHistory:'형식이 바뀔 때마다 LOG에 SINGLE/MATCH를 표시합니다. 사용하지 않은 TIMER는 —로 표시하고 완료된 GAME만 내보냅니다. HTML은 외부 의존성이 없는 단일 파일이며 PDF는 2열 인쇄 화면으로 출력합니다.',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'형식이 바뀔 때마다 LOG에 SINGLE/MATCH를 표시합니다. GAME 종료 시 RESET 시점의 TIMER를 END로 기록하며, 미사용 시 —로 표시합니다. 완료된 GAME만 내보냅니다. HTML은 독립 파일이고 PDF는 2열 인쇄 화면입니다.',
       manualHistoryBody:'LOG는 SINGLE/MATCH, GAME, TURN 단위로 표시하며 새로고침 전까지 유지합니다. MATCH 전적은 G1/G2+와 FIRST/SECOND별로 표시합니다.'
     },
     'zh-CN': {
       timerTargetMatchDesc:'MATCH目标时间', timerTargetSingleDesc:'SINGLE目标时间',
       resetBody:'将LP恢复为8000、TURN恢复为1。LP变化后启用AUTO WINNER时，LP较高者获胜；仅在同分时选择。TIMER在SINGLE的GAME结束时及MATCH确定胜者时自动RESET。LOG与战绩保留。',
-      manualLogShortTitle:'LOG / EXPORT', manualHistory:'每次形式变化时，LOG都会显示SINGLE/MATCH。未使用的TIMER显示为—，且仅导出已完成的GAME。HTML为无外部依赖的独立文件；PDF使用双栏打印视图。',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'每次形式变化时，LOG都会显示SINGLE/MATCH。GAME结束时将RESET时的TIMER记录为END；未使用时显示—。仅导出已完成的GAME。HTML为独立文件；PDF使用双栏打印视图。',
       manualHistoryBody:'LOG按SINGLE/MATCH、GAME和TURN显示，并保留至刷新。MATCH战绩按G1/G2+及FIRST/SECOND分类。'
     },
     'zh-TW': {
       timerTargetMatchDesc:'MATCH目標時間', timerTargetSingleDesc:'SINGLE目標時間',
       resetBody:'將LP恢復為8000、TURN恢復為1。LP變化後啟用AUTO WINNER時，LP較高者獲勝；僅在同分時選擇。TIMER在SINGLE的GAME結束時及MATCH確定勝者時自動RESET。LOG與戰績保留。',
-      manualLogShortTitle:'LOG / EXPORT', manualHistory:'每次形式變化時，LOG都會顯示SINGLE/MATCH。未使用的TIMER顯示為—，且僅匯出已完成的GAME。HTML為無外部依賴的獨立檔案；PDF使用雙欄列印畫面。',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'每次形式變化時，LOG都會顯示SINGLE/MATCH。GAME結束時將RESET時的TIMER記錄為END；未使用時顯示—。僅匯出已完成的GAME。HTML為獨立檔案；PDF使用雙欄列印畫面。',
       manualHistoryBody:'LOG依SINGLE/MATCH、GAME和TURN顯示，並保留至重新整理。MATCH戰績依G1/G2+及FIRST/SECOND分類。'
     },
     fr: {
       timerTargetMatchDesc:'Temps cible de MATCH', timerTargetSingleDesc:'Temps cible de SINGLE',
       resetBody:'Remet LP à 8000 et TURN à 1. Si AUTO WINNER est actif après une variation de LP, les LP les plus élevés gagnent ; choisissez seulement en cas d’égalité. TIMER se RESET après chaque GAME en SINGLE et lorsque le gagnant du MATCH est décidé. LOG et résultats restent.',
-      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOG insère SINGLE/MATCH à chaque changement de format. Un TIMER inutilisé apparaît comme — et seules les GAME terminées sont exportées. Le HTML est autonome et sans dépendance externe ; le PDF ouvre une vue d’impression sur deux colonnes.',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOG insère SINGLE/MATCH à chaque changement de format. À la fin d’une GAME, le TIMER au RESET est enregistré comme END ; s’il est inutilisé, — apparaît. Seules les GAME terminées sont exportées. HTML est autonome ; PDF utilise deux colonnes.',
       manualHistoryBody:'LOG est regroupé par SINGLE/MATCH, GAME et TURN et reste jusqu’au rechargement. Les résultats MATCH distinguent G1/G2+ et FIRST/SECOND.'
     },
     de: {
       timerTargetMatchDesc:'Zielzeit für MATCH', timerTargetSingleDesc:'Zielzeit für SINGLE',
       resetBody:'Setzt LP auf 8000 und TURN auf 1. Ist AUTO WINNER nach einer LP-Änderung aktiv, gewinnt der höhere LP-Wert; nur bei Gleichstand wird gewählt. TIMER wird nach jeder GAME in SINGLE und bei der Entscheidung des MATCH-Siegers RESET. LOG und Ergebnisse bleiben.',
-      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOG fügt bei jedem Formatwechsel SINGLE/MATCH ein. Ein ungenutzter TIMER erscheint als —; exportiert werden nur abgeschlossene GAMEs. HTML ist eine eigenständige Datei ohne externe Abhängigkeit; PDF öffnet eine zweispaltige Druckansicht.',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOG fügt bei jedem Formatwechsel SINGLE/MATCH ein. Am GAME-Ende wird der TIMER beim RESET als END gespeichert; ungenutzt erscheint —. Nur abgeschlossene GAMEs werden exportiert. HTML ist eigenständig; PDF nutzt zwei Spalten.',
       manualHistoryBody:'LOG ist nach SINGLE/MATCH, GAME und TURN gegliedert und bleibt bis zum Neuladen erhalten. MATCH-Ergebnisse werden nach G1/G2+ und FIRST/SECOND getrennt.'
     },
     it: {
       timerTargetMatchDesc:'Tempo obiettivo per MATCH', timerTargetSingleDesc:'Tempo obiettivo per SINGLE',
       resetBody:'Riporta LP a 8000 e TURN a 1. Con AUTO WINNER attivo dopo una variazione LP, vince chi ha più LP; scegli solo in caso di parità. TIMER esegue RESET dopo ogni GAME in SINGLE e quando viene deciso il vincitore del MATCH. LOG e risultati restano.',
-      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOG inserisce SINGLE/MATCH a ogni cambio di formato. Un TIMER non usato appare come — e vengono esportate solo le GAME concluse. HTML è un file autonomo senza dipendenze esterne; PDF apre una vista di stampa a due colonne.',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOG inserisce SINGLE/MATCH a ogni cambio di formato. Alla fine della GAME, il TIMER al RESET viene registrato come END; se non usato appare —. Si esportano solo GAME concluse. HTML è autonomo; PDF usa due colonne.',
       manualHistoryBody:'LOG è raggruppato per SINGLE/MATCH, GAME e TURN e resta fino al ricaricamento. I risultati MATCH distinguono G1/G2+ e FIRST/SECOND.'
     },
     es: {
       timerTargetMatchDesc:'Tiempo objetivo para MATCH', timerTargetSingleDesc:'Tiempo objetivo para SINGLE',
       resetBody:'Devuelve LP a 8000 y TURN a 1. Con AUTO WINNER activo tras un cambio de LP, gana quien tenga más LP; solo se elige en caso de empate. TIMER hace RESET después de cada GAME en SINGLE y cuando se decide el ganador del MATCH. LOG y resultados permanecen.',
-      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOG inserta SINGLE/MATCH cada vez que cambia el formato. Un TIMER sin usar aparece como — y solo se exportan los GAME terminados. HTML es un archivo independiente sin dependencias externas; PDF abre una vista de impresión en dos columnas.',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOG inserta SINGLE/MATCH al cambiar el formato. Al terminar un GAME, el TIMER del RESET se registra como END; si no se usó aparece —. Solo se exportan GAME terminados. HTML es independiente; PDF usa dos columnas.',
       manualHistoryBody:'LOG se agrupa por SINGLE/MATCH, GAME y TURN y permanece hasta recargar. Los resultados MATCH se dividen por G1/G2+ y FIRST/SECOND.'
     },
     pt: {
       timerTargetMatchDesc:'Tempo-alvo do MATCH', timerTargetSingleDesc:'Tempo-alvo do SINGLE',
       resetBody:'Retorna LP a 8000 e TURN a 1. Com AUTO WINNER ativo após mudança de LP, vence quem tiver mais LP; selecione apenas em caso de empate. TIMER faz RESET após cada GAME em SINGLE e quando o vencedor do MATCH é decidido. LOG e resultados permanecem.',
-      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOG insere SINGLE/MATCH sempre que o formato muda. Um TIMER não usado aparece como — e apenas GAME concluídos são exportados. HTML é um arquivo independente sem dependências externas; PDF abre uma visualização de impressão em duas colunas.',
+      manualLogShortTitle:'LOG / EXPORT', manualHistory:'LOG insere SINGLE/MATCH quando o formato muda. Ao fim do GAME, o TIMER no RESET é registrado como END; sem uso aparece —. Apenas GAME concluídos são exportados. HTML é independente; PDF usa duas colunas.',
       manualHistoryBody:'LOG é agrupado por SINGLE/MATCH, GAME e TURN e permanece até recarregar. Os resultados MATCH são separados por G1/G2+ e FIRST/SECOND.'
     }
   };
   Object.entries(EXPORT_LOG_LOCALE).forEach(([lang, values]) => Object.assign(I18N[lang], values));
+  const CSV_MANUAL_APPEND = {
+    ja:' CSVはRECORD取込用に勝敗・先攻・形式・対戦日・固定IDだけを出力し、LP残量・変動履歴・TURN操作は含みません。',
+    en:' CSV exports only the result, first player, format, play date, and fixed ID for RECORD import; LP values, LP history, and TURN operations are excluded.',
+    ko:' CSV는 RECORD 가져오기용으로 승패, 선공, 형식, 대전 날짜, 고정 ID만 내보내며 LP 잔량·변동 기록·TURN 조작은 포함하지 않습니다.',
+    'zh-CN':' CSV仅为RECORD导入输出胜负、先攻、形式、对战日期和固定ID，不包含LP余量、变动记录及TURN操作。',
+    'zh-TW':' CSV僅為RECORD匯入輸出勝負、先攻、形式、對戰日期和固定ID，不包含LP餘量、變動記錄及TURN操作。',
+    fr:' Le CSV destiné à RECORD contient uniquement résultat, premier joueur, format, date et ID fixe ; les LP, variations et actions TURN sont exclus.',
+    de:' CSV enthält für RECORD nur Ergebnis, Startspieler, Format, Spieldatum und feste ID; LP-Werte, Änderungen und TURN-Aktionen fehlen.',
+    it:' Il CSV per RECORD include solo risultato, primo giocatore, formato, data e ID fisso; LP, variazioni e azioni TURN sono esclusi.',
+    es:' El CSV para RECORD incluye solo resultado, primer jugador, formato, fecha e ID fijo; excluye LP, cambios y acciones TURN.',
+    pt:' O CSV para RECORD inclui apenas resultado, primeiro jogador, formato, data e ID fixo; exclui LP, alterações e ações TURN.'
+  };
+  Object.entries(CSV_MANUAL_APPEND).forEach(([lang, text]) => { I18N[lang].manualHistory += text; });
   Object.values(I18N).forEach(dict => {
     dict.timerTargetSingle = 'SINGLE LIMIT A';
     dict.timerTargetMatch = 'MATCH LIMIT A';
+  });
+
+  const CHANGELOG_V136 = {
+    ja:['固定ID・対戦日付きのRECORD連携用戦績CSV出力を追加'],
+    en:['Added RECORD-compatible battle CSV export with fixed IDs and play dates'],
+    ko:['고정 ID와 대전 날짜가 포함된 RECORD 연동 전적 CSV 내보내기 추가'],
+    'zh-CN':['新增含固定ID及对战日期的RECORD联动战绩CSV导出'],
+    'zh-TW':['新增含固定ID及對戰日期的RECORD連動戰績CSV匯出'],
+    fr:['Ajout de l’export CSV des résultats pour RECORD avec ID fixes et dates'],
+    de:['Ergebnis-CSV für RECORD mit festen IDs und Spieldaten ergänzt'],
+    it:['Aggiunto export CSV risultati per RECORD con ID fissi e date'],
+    es:['Añadida exportación CSV de resultados para RECORD con ID fijos y fechas'],
+    pt:['Adicionada exportação CSV de resultados para RECORD com IDs fixos e datas']
+  };
+  Object.entries(CHANGELOG_V136).forEach(([lang, entries]) => {
+    I18N[lang].manualVersionDateV136 = '2026/09/24';
+    entries.forEach((entry, index) => { I18N[lang][`manualChangelogV136${String.fromCharCode(65 + index)}`] = entry; });
+  });
+
+  const CHANGELOG_V135 = {
+    ja:['RESET時の最終TIMERをGAMEのENDとして記録'],
+    en:['Recorded the final TIMER at RESET as the GAME END'],
+    ko:['RESET 시 최종 TIMER를 GAME END로 기록'],
+    'zh-CN':['将RESET时的最终TIMER记录为GAME END'],
+    'zh-TW':['將RESET時的最終TIMER記錄為GAME END'],
+    fr:['Enregistrement du TIMER final au RESET comme END de la GAME'],
+    de:['Finalen TIMER beim RESET als GAME END aufgezeichnet'],
+    it:['Registrato il TIMER finale al RESET come END della GAME'],
+    es:['Registrado el TIMER final al RESET como END del GAME'],
+    pt:['Registrado o TIMER final no RESET como END do GAME']
+  };
+  Object.entries(CHANGELOG_V135).forEach(([lang, entries]) => {
+    I18N[lang].manualVersionDateV135 = '2026/09/13';
+    entries.forEach((entry, index) => { I18N[lang][`manualChangelogV135${String.fromCharCode(65 + index)}`] = entry; });
   });
 
   const CHANGELOG_V134 = {
@@ -4190,6 +4284,7 @@ html[data-player-names="off"] .lp-button {
   const LOCALIZED_EXPLANATION_KEYS = new Set([
     'creator', 'savedBrowser', 'memoPlaceholder', 'tapToCalculate', 'counterEmpty',
     'keepOneToken', 'enterNumber', 'clearSettingsDone', 'historyExportHtmlDone',
+    'historyExportCsvDone', 'historyExportCsvEmpty',
     'historyExportPopupBlocked', 'memoCleared', 'noChange', 'noUndo',
     'orientationLockFailed', 'orientationLocked', 'orientationUnlocked',
     'orientationUnsupported', 'playersSwapped', 'resetBoth', 'resetLP', 'rolling',
@@ -4381,6 +4476,9 @@ html[data-player-names="off"] .lp-button {
         endedGame.gameSeq = resetGameSeq;
         endedGame.match = resetMatch;
         endedGame.format = matchModeEnabled ? 'match' : 'single';
+        if (!endedGame.recordId) endedGame.recordId = createRecordId();
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(endedGame.playedAt || '')) endedGame.playedAt = localDateStamp();
+        endedGame.endTimerMs = resetAt;
         endedGame.timerUsed = resetAt > 0 || Store.state.history.some(entry =>
           Math.max(1, Math.trunc(entry?.gameSeq || entry?.game || 1)) === resetGameSeq &&
           Math.max(0, Math.trunc(entry?.timerMs || 0)) > 0
@@ -4452,11 +4550,14 @@ html[data-player-names="off"] .lp-button {
       Store.state.game = nextGame;
       Store.state.gameSeq = resetGameSeq + 1;
       Store.state.match = nextMatch;
+      const continuesCurrentMatch = matchModeEnabled && !matchWinner;
       Store.state.gameStarts.push({
         game: Store.state.game,
         gameSeq: Store.state.gameSeq,
         match: Store.state.match,
         format: matchModeEnabled ? 'match' : 'single',
+        recordId: continuesCurrentMatch && endedGame?.recordId ? endedGame.recordId : createRecordId(),
+        playedAt: continuesCurrentMatch && endedGame?.playedAt ? endedGame.playedAt : localDateStamp(),
         timerMs: resetTimer ? 0 : resetAt,
         timerUsed: !resetTimer && resetAt > 0,
         turnOrder: { ...Store.state.turnOrder },
@@ -4725,6 +4826,8 @@ html[data-player-names="off"] .lp-button {
       start.format = format;
       start.game = 1;
       start.match = 1;
+      if (!start.recordId) start.recordId = createRecordId();
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(start.playedAt || '')) start.playedAt = localDateStamp();
       Store.state.game = 1;
       Store.state.match = 1;
     },
@@ -4748,6 +4851,8 @@ html[data-player-names="off"] .lp-button {
           gameSeq: Math.max(1, Math.trunc(Store.state.gameSeq || 1)),
           match: 1,
           format: targetFormat,
+          recordId: createRecordId(),
+          playedAt: localDateStamp(),
           timerMs: 0,
           turnOrder: { ...Store.state.turnOrder },
           winner: null
@@ -4771,11 +4876,14 @@ html[data-player-names="off"] .lp-button {
         gameSeq: Math.max(1, Math.trunc(Store.state.gameSeq || 1)),
         match: Store.state.match,
         format: targetFormat,
+        recordId: createRecordId(),
+        playedAt: localDateStamp(),
         timerMs: 0,
         timerUsed: false,
         turnOrder: { ...Store.state.turnOrder },
         winner: null
       });
+      delete start.endTimerMs;
       Store.state.lastChange = { p1: null, p2: null };
       Store.state.turn = 1;
       Timer.reset();
@@ -4998,6 +5106,17 @@ html[data-player-names="off"] .lp-button {
                 <td class="${winner === 'p2' ? 'game-winner-cell' : ''}">${h.player === 'p2' ? cell : '<span class="history-empty-cell">—</span>'}</td>
               </tr>`);
           });
+
+        if (Object.prototype.hasOwnProperty.call(start, 'endTimerMs')) {
+          const endTimerMs = Math.max(0, Math.trunc(start.endTimerMs || 0));
+          const lastEntryTimerMs = gameEntries.length
+            ? Math.max(0, Math.trunc(gameEntries[gameEntries.length - 1]?.timerMs || 0))
+            : null;
+          const duplicatesLastTime = lastEntryTimerMs !== null &&
+            Math.floor(lastEntryTimerMs / 1000) === Math.floor(endTimerMs / 1000);
+          const endTime = duplicatesLastTime ? '' : ` · ${gameTime(endTimerMs)}`;
+          rows.push(`<tr class="history-end-row" data-game-seq="${start.gameSeq}"><td colspan="3">END${endTime}</td></tr>`);
+        }
       });
 
       root.innerHTML = `
@@ -5029,6 +5148,67 @@ html[data-player-names="off"] .lp-button {
     filename(ext) {
       const localizedLabel = String(t('history')).replace(/[^\p{L}\p{N}]+/gu, '_').replace(/^_+|_+$/g, '') || 'LOG';
       return `OCG_${localizedLabel}_${this.timestamp()}.${ext}`;
+    },
+    csvFilename() {
+      return `OCG_RECORD_${this.timestamp()}.csv`;
+    },
+    ensureCsvRecordMetadata() {
+      const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+      const matchMetadata = new Map();
+      const starts = [...(Store.state.gameStarts || [])].sort((a, b) =>
+        Math.max(1, Math.trunc(a?.gameSeq || a?.game || 1)) - Math.max(1, Math.trunc(b?.gameSeq || b?.game || 1))
+      );
+
+      starts.forEach(start => {
+        const format = gameFormatOf(start);
+        if (format === 'match') {
+          const key = Math.max(1, Math.trunc(start?.match || 1));
+          let metadata = matchMetadata.get(key);
+          if (!metadata) {
+            metadata = {
+              recordId: uuidPattern.test(start?.recordId || '') ? start.recordId : createRecordId(),
+              playedAt: datePattern.test(start?.playedAt || '') ? start.playedAt : localDateStamp()
+            };
+            matchMetadata.set(key, metadata);
+          }
+          start.recordId = metadata.recordId;
+          start.playedAt = metadata.playedAt;
+          return;
+        }
+        if (!uuidPattern.test(start?.recordId || '')) start.recordId = createRecordId();
+        if (!datePattern.test(start?.playedAt || '')) start.playedAt = localDateStamp();
+      });
+    },
+    csvRows() {
+      this.ensureCsvRecordMetadata();
+      return [...(Store.state.gameStarts || [])]
+        .sort((a, b) => Math.max(1, Math.trunc(a?.gameSeq || a?.game || 1)) - Math.max(1, Math.trunc(b?.gameSeq || b?.game || 1)))
+        .flatMap(start => {
+          const rawWinner = String(start?.winner || '').toUpperCase();
+          const winner = rawWinner === 'P1' ? 'p1' : rawWinner === 'P2' ? 'p2' : rawWinner === 'DRAW' ? 'DRAW' : null;
+          if (!winner) return [];
+          const format = gameFormatOf(start) === 'match' ? 'MATCH' : 'SINGLE';
+          return [[
+            start.recordId,
+            start.playedAt,
+            format,
+            format === 'MATCH' ? Math.max(1, Math.trunc(start?.game || 1)) : 1,
+            start?.turnOrder?.p1 === 'first' ? 'p1' : 'p2',
+            winner
+          ]];
+        });
+    },
+    csvText(dataRows = this.csvRows()) {
+      const quote = value => {
+        const text = String(value ?? '');
+        return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+      };
+      const rows = [
+        ['recordId', 'playedAt', 'format', 'gameNumber', 'firstPlayer', 'winner'],
+        ...dataRows
+      ];
+      return rows.map(row => row.map(quote).join(',')).join('\r\n');
     },
     completedGameSeqs() {
       const currentSeq = Math.max(1, Math.trunc(Store.state.gameSeq || 1));
@@ -5118,6 +5298,7 @@ body{margin:0;padding:24px;font-family:var(--font);-webkit-print-color-adjust:ex
 .history-match-row td{padding:8px 10px;background:#e8ebef;color:var(--accent);font-size:12px;font-weight:900;letter-spacing:.12em;border-top:2px solid #aeb5bf;}
 .history-game-row td{padding:9px 8px;background:var(--accent);color:var(--accent-contrast);font-size:13px;font-weight:900;letter-spacing:.175em;}
 .history-turn-row td{padding:7px 8px;background:#f0f2f5;color:var(--accent);font-size:12px;font-weight:900;letter-spacing:.135em;}
+.history-end-row td{padding:7px 8px;background:#f4f5f7;color:var(--muted);font-size:11px;font-weight:900;letter-spacing:.135em;border-top:1px dashed var(--border);}
 .history-win-row td{padding:10px 7px;background:#f4f5f7;font-weight:900;vertical-align:middle;}
 .history-win-row .time-col{color:var(--muted);font-size:9px;letter-spacing:.08em;white-space:nowrap;}
 .history-match-stat{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;}
@@ -5151,7 +5332,7 @@ html[data-turn-order="off"] .history-order{display:none;}
 .export-game-card .history-cell.initial{min-height:38px;}
 .export-game-card .history-cell.initial .history-lp{font-size:17px;}
 .export-game-card .history-delta{font-size:8px;}
-.export-game-card .history-format-row td,.export-game-card .history-game-row td,.export-game-card .history-match-row td,.export-game-card .history-turn-row td{font-size:8px;padding:4px 3px;}
+.export-game-card .history-format-row td,.export-game-card .history-game-row td,.export-game-card .history-match-row td,.export-game-card .history-turn-row td,.export-game-card .history-end-row td{font-size:8px;padding:4px 3px;}
 .export-game-card .history-order{font-size:7px;padding:2px 4px;}
 @page{size:A4 portrait;margin:12mm;}
 @media print{
@@ -5190,6 +5371,24 @@ ${printScript}
       setTimeout(() => URL.revokeObjectURL(url), 1200);
       toast(t('historyExportHtmlDone'));
     },
+    downloadCsv() {
+      const rows = this.csvRows();
+      if (!rows.length) {
+        toast(t('historyExportCsvEmpty'));
+        return false;
+      }
+      const blob = new Blob(['\ufeff', this.csvText(rows)], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = this.csvFilename();
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1200);
+      toast(t('historyExportCsvDone'));
+      return true;
+    },
     printPdf() {
       const popup = window.open('', '_blank');
       if (!popup) {
@@ -5216,6 +5415,10 @@ ${printScript}
               <strong>${escapeHTML(t('historyExportPdf'))}</strong>
               <span>${escapeHTML(t('historyExportPdfDesc'))}</span>
             </button>
+            <button type="button" class="export-choice-btn" id="exportHistoryCsv">
+              <strong>${escapeHTML(t('historyExportCsv'))}</strong>
+              <span>${escapeHTML(t('historyExportCsvDesc'))}</span>
+            </button>
           </div>
           <div class="confirm-text" style="margin-top:12px">${escapeHTML(t('historyExportPdfHint'))}</div>
         </div>
@@ -5227,6 +5430,9 @@ ${printScript}
         $('#exportHistoryPdf')?.addEventListener('click', () => {
           this.printPdf();
           Modal.close();
+        });
+        $('#exportHistoryCsv')?.addEventListener('click', () => {
+          if (this.downloadCsv()) Modal.close();
         });
       });
     }
@@ -6303,6 +6509,8 @@ ${printScript}
         gameSeq: currentGameSeq,
         match: currentMatch,
         format: currentFormat(),
+        recordId: createRecordId(),
+        playedAt: localDateStamp(),
         timerMs: (currentMatch === 1 && currentGame === 1) ? 0 : Timer.currentMs(),
         timerUsed: Timer.currentMs() > 0,
         turnOrder: { ...Store.state.turnOrder },
